@@ -1,0 +1,74 @@
+<div class="bg-white rounded-lg shadow p-6">
+  <h1 class="text-2xl font-bold mb-6">Search Discogs</h1>
+  
+  <% if !current_user.discogs_authenticated? %>
+    <div class="bg-yellow-100 p-4 rounded-md mb-6">
+      <p class="text-yellow-800">
+        You need to connect your Discogs account before searching.
+        <%= link_to "Go to your account settings", edit_user_registration_path, class: "font-medium underline" %>
+        to add your Discogs username and personal access token.
+      </p>
+    </div>
+  <% end %>
+  
+  <%= form_with url: search_discogs_albums_path, method: :get, class: "mb-6" do |f| %>
+    <div class="flex">
+      <%= f.text_field :query, value: @query, placeholder: "Search albums on Discogs...", class: "flex-grow px-3 py-2 border border-gray-300 rounded-l-md", required: true %>
+      <%= f.submit "Search", class: "px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700" %>
+    </div>
+  <% end %>
+  
+  <% if @results && @results.results.any? %>
+    <h2 class="text-lg font-semibold mb-4">Search Results</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <% @results.results.each do |result| %>
+        <div class="border rounded-lg overflow-hidden flex">
+          <% if result.thumb.present? %>
+            <img src="<%= result.thumb %>" alt="<%= result.title %>" class="w-20 h-20 object-cover" />
+          <% else %>
+            <div class="w-20 h-20 bg-gray-200 flex items-center justify-center">
+              <span class="text-gray-400 text-xs">No Cover</span>
+            </div>
+          <% end %>
+          
+          <div class="p-3 flex-grow">
+            <h3 class="font-medium text-sm"><%= result.title %></h3>
+            <p class="text-xs text-gray-600">
+              <% if result.year.present? %>
+                <%= result.year %> · 
+              <% end %>
+              <% if result.format.present? %>
+                <%= result.format.join(", ") %>
+              <% end %>
+            </p>
+            
+            <%= link_to "Import", import_from_discogs_albums_path(discogs_id: result.id, query: @query), method: :post, class: "mt-2 inline-block px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    
+    <% if @results.pagination.pages > 1 %>
+      <div class="mt-6 flex justify-center">
+        <div class="inline-flex rounded-md shadow">
+          <% if @results.pagination.page > 1 %>
+            <%= link_to "Previous", search_discogs_albums_path(query: @query, page: @results.pagination.page - 1), class: "px-4 py-2 bg-white text-gray-700 rounded-l-md border border-gray-300 hover:bg-gray-50" %>
+          <% end %>
+          
+          <span class="px-4 py-2 bg-gray-100 text-gray-700 border-t border-b border-gray-300">
+            Page <%= @results.pagination.page %> of <%= @results.pagination.pages %>
+          </span>
+          
+          <% if @results.pagination.page < @results.pagination.pages %>
+            <%= link_to "Next", search_discogs_albums_path(query: @query, page: @results.pagination.page + 1), class: "px-4 py-2 bg-white text-gray-700 rounded-r-md border border-gray-300 hover:bg-gray-50" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  <% elsif @query.present? %>
+    <div class="bg-gray-100 p-6 rounded-lg text-center">
+      <p class="text-gray-600">No results found for "<%= @query %>".</p>
+    </div>
+  <% end %>
+</div>
