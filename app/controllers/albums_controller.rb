@@ -1,4 +1,5 @@
 class AlbumsController < ApplicationController
+  include Pagy::Backend
   before_action :set_album, only: [:show, :edit, :update, :destroy, :refresh_from_discogs]
   
   def index

@@ -19,13 +19,13 @@ Rails.application.routes.draw do
     collection do
       get :search_discogs
       post :import_from_discogs
-      post :sync_collection
+      get :sync_collection
     end
     
     member do
-      post :refresh_from_discogs
+      get :refresh_from_discogs
     end
   end
 
-  post '/discogs/authenticate', to: 'discogs#authenticate', as: :authenticate_discogs
+  get '/discogs/authenticate', to: 'discogs#authenticate', as: :authenticate_discogs
 end
