@@ -1,24 +1,76 @@
-# README
+# Vinyl Collection Manager
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+**Vinyl Collection Manager** is a web application designed to help users catalog and manage their vinyl record collections efficiently.
 
-Things you may want to cover:
+## Features
 
-* Ruby version
+- **Collection Management**: Add, edit, and delete records in your collection.
+- **Search Functionality**: Quickly find records by artist, album title, or genre.
+- **User Authentication**: Secure login system to protect your collection data.
+- **Responsive Design**: Accessible on various devices, including desktops, tablets, and smartphones.
+- **Discogs integration**: Collection sync with [discogs.com](https://www.discogs.com/).
 
-* System dependencies
+## Getting Started
 
-* Configuration
+### Prerequisites
 
-* Database creation
+- **Ruby**: Version 3.2 or higher.
+- **Rails**: Version 8.0 or higher.
+- **PostgreSQL**: Ensure you have PostgreSQL installed and running.
 
-* Database initialization
+### Installation
 
-* How to run the test suite
+1. **Clone the Repository**:
 
-* Services (job queues, cache servers, search engines, etc.)
+   ```bash
+   git clone https://github.com/csalasb86/vinyl-collection-manager.git
+   cd vinyl-collection-manager
+   ```
 
-* Deployment instructions
+2. **Install Dependencies**:
 
-* ...
+   ```bash
+   bundle install
+   ```
+
+3. **Set Up the Database**:
+
+   ```bash
+   bin/rails db:create
+   bin/rails db:migrate
+   bin/rails db:seed
+   ```
+
+4. **Start the Server**:
+
+   ```bash
+   bin/rails server
+   ```
+
+   Access the application at `http://localhost:3000`.
+
+## Running Tests
+
+To run the test suite:
+
+```bash
+bin/rails test
+```
+
+## Deployment
+
+For deployment instructions, please refer to the [official Rails deployment guide](https://guides.rubyonrails.org/deployment.html).
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and create a pull request with your changes.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Thanks to the open-source community for various gems and tools utilized in this project.
+
+For more information, visit the [GitHub repository](https://github.com/csalasb86/vinyl-collection-manager).
