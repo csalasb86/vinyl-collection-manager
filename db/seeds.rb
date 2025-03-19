@@ -10,7 +10,7 @@
 User.create!(
   email: ENV['DEFAULT_USER_NAME'],
   password: ENV['DEFAULT_USER_PASSWORD'],
-  password_confirmation:ENV['DEFAULT_USER_PASSWORD']
+  password_confirmation: ENV['DEFAULT_USER_PASSWORD']
 )
 
 puts "Created default user: #{ENV['DEFAULT_USER_NAME']} with password: #{ENV['DEFAULT_USER_PASSWORD']}"

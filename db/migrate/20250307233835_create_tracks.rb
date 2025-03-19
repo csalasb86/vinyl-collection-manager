@@ -6,10 +6,10 @@ class CreateTracks < ActiveRecord::Migration[8.0]
       t.string :position, null: false
       t.integer :position_index
       t.string :duration
-      
+
       t.timestamps
     end
-    
-    add_index :tracks, [:album_id, :position], unique: true
+
+    add_index :tracks, [ :album_id, :position ], unique: true
   end
 end

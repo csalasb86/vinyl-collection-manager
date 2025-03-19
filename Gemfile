@@ -17,20 +17,20 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 # Frontend gems
-gem 'sprockets-rails'
-gem 'tailwindcss-rails'
+gem "sprockets-rails"
+gem "tailwindcss-rails"
 
 # Authentication
-gem 'devise', '~> 4.9'
+gem "devise", "~> 4.9"
 
 # HTTP requests
-gem 'faraday', '~> 2.7'
+gem "faraday", "~> 2.7"
 
 # Discogs API client
-gem 'discogs-wrapper', '~> 2.5'
+gem "discogs-wrapper", "~> 2.5"
 
 # Pagination
-gem 'pagy', '~> 6.0'
+gem "pagy", "~> 6.0"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
@@ -69,8 +69,8 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-  gem 'annotate'
-  gem 'dotenv-rails'
+  gem "annotate"
+  gem "dotenv-rails"
 end
 
 group :test do
