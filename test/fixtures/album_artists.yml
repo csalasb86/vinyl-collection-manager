@@ -1,0 +1,6 @@
+album_artist_one:
+  album: sample_album
+  artist: john
+album_artist_two:
+  album: sample_album
+  artist: paul
