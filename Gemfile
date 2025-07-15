@@ -24,7 +24,7 @@ gem "tailwindcss-rails"
 gem "devise", "~> 4.9"
 
 # HTTP requests
-gem "faraday", "~> 2.7"
+gem "faraday", "~> 2.13"
 
 # Discogs API client
 gem "discogs-wrapper", "~> 2.5"
