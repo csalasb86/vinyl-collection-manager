@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "rebornix.ruby",
+    "shopify.ruby-lsp",
+    "bradlc.vscode-tailwindcss",
+    "formulahendry.auto-rename-tag",
+    "ms-vscode.vscode-json",
+    "editorconfig.editorconfig"
+  ]
+}
