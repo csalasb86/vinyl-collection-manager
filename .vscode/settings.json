@@ -1,0 +1,40 @@
+{
+  "ruby.rubocop.suppressRubocopWarnings": true,
+  "ruby.rubocop.onSave": false,
+  "ruby.rubocop.executePath": "./bin/",
+  "ruby.rubocop.configFilePath": ".rubocop.yml",
+  "files.associations": {
+    "*.html.erb": "erb",
+    "*.erb": "erb"
+  },
+  "emmet.includeLanguages": {
+    "erb": "html"
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/tmp": true,
+    "**/log": true,
+    "**/storage": true
+  },
+  "[erb]": {
+    "editor.defaultFormatter": "vscode.html-language-features",
+    "ruby.rubocop.enable": false
+  },
+  "[ruby]": {
+    "editor.defaultFormatter": "rebornix.ruby",
+    "ruby.rubocop.enable": true
+  },
+  "ruby.lint": {
+    "rubocop": {
+      "lint": true,
+      "rails": true
+    }
+  },
+  "ruby.format": "rubocop",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file"
+}

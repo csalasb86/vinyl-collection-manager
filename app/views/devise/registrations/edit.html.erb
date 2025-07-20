@@ -57,7 +57,7 @@
             <p class="text-yellow-600 mb-2">Not connected to Discogs</p>
           <% end %>
           
-          <%= link_to "Test Discogs Connection", authenticate_discogs_path, method: :post, class: "inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" %>
+          <%= link_to "Test Discogs Connection", authenticate_discogs_path, data: { turbo_method: :post }, class: "inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" %>
         </div>
       <% end %>
     </div>
