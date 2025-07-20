@@ -25,20 +25,23 @@ bin/rails db:setup               # Complete database setup (create + migrate + s
 bin/rails db:reset               # Drop and recreate database
 ```
 
-### Testing
+### Testing & Coverage
 
 ```bash
-bin/rails test                   # Run all tests
+bin/rails test                   # Run all tests with SimpleCov coverage (86.84%)
 bin/rails test:system            # Run system tests (Capybara + Selenium)
 ```
+
+**IMPORTANT**: Always run tests before committing code. SimpleCov generates coverage reports in `/coverage/index.html` with 80% minimum threshold.
 
 ### Code Quality & Security
 
 ```bash
-bin/rubocop                      # Check and fix Ruby code style (Rails Omakase style guide)
-bin/rubocop --auto-correct       # Automatically fix style issues
+bin/rubocop --autocorrect        # Check and fix Ruby code style (Rails Omakase style guide)
 bin/brakeman                     # Security vulnerability scanner
 ```
+
+**IMPORTANT**: Always run `bin/rubocop --autocorrect` before committing code to ensure style compliance.
 
 ### Asset Management
 
@@ -99,7 +102,7 @@ User (separate, manages Discogs integration)
 - **Frontend**: TailwindCSS, Stimulus, Turbo
 - **Background Jobs**: Solid Queue (Rails 8.0 default)
 - **Pagination**: Pagy (~> 9.3)
-- **Development**: RuboCop Rails Omakase, Brakeman, Web Console
+- **Development & Testing**: RuboCop Rails Omakase, Brakeman, SimpleCov, Web Console
 
 ### Frontend Architecture
 
@@ -128,17 +131,23 @@ User (separate, manages Discogs integration)
 
 Always create migrations for schema changes and run `bin/rails db:migrate` after pulling changes.
 
-### Code Style
+### Code Quality Standards
 
-The project uses RuboCop Rails Omakase configuration. Run `bin/rubocop --auto-correct` before committing.
+**MANDATORY BEFORE EVERY COMMIT:**
 
-### Security
+1. **Tests**: Run `bin/rails test` - All tests must pass with ≥80% coverage
+2. **Linting**: Run `bin/rubocop --autocorrect` - No style violations allowed
+3. **Security**: Run `bin/brakeman` when modifying authentication or API integrations
 
-Run `bin/brakeman` regularly to check for security vulnerabilities, especially when modifying authentication or API integrations.
+The project uses RuboCop Rails Omakase configuration for consistent code style.
 
-### Test Requirements
+### Test Coverage & Requirements
 
-System tests require Selenium WebDriver. Ensure Capybara and Selenium gems are available when running `bin/rails test:system`.
+- **Coverage Tool**: SimpleCov with 80% minimum threshold
+- **Current Coverage**: 86.84% (198/228 lines)
+- **Reports**: Generated in `/coverage/index.html` after test runs
+- **System Tests**: Require Selenium WebDriver (Capybara + Selenium gems)
+- **Parallel Tests**: Disabled for SimpleCov compatibility
 
 ### Discogs API Guidelines
 
