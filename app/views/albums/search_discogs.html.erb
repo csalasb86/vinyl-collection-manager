@@ -18,14 +18,14 @@
     </div>
   <% end %>
   
-  <% if @results && @results.results.any? %>
+  <% if @results && @results.respond_to?(:results) && @results.results.any? %>
     <h2 class="text-lg font-semibold mb-4">Search Results</h2>
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <% @results.results.each do |result| %>
         <div class="border rounded-lg overflow-hidden flex">
           <% if result.thumb.present? %>
-            <img src="<%= result.thumb %>" alt="<%= result.title %>" class="w-20 h-20 object-cover" />
+            <%= image_tag result.thumb, alt: result.title, class: "w-20 h-20 object-cover" %>
           <% else %>
             <div class="w-20 h-20 bg-gray-200 flex items-center justify-center">
               <span class="text-gray-400 text-xs">No Cover</span>
@@ -33,7 +33,7 @@
           <% end %>
           
           <div class="p-3 flex-grow">
-            <h3 class="font-medium text-sm"><%= result.title %></h3>
+            <h3 class="font-medium text-sm"><%= h result.title %></h3>
             <p class="text-xs text-gray-600">
               <% if result.year.present? %>
                 <%= result.year %> · 
@@ -43,7 +43,7 @@
               <% end %>
             </p>
             
-            <%= link_to "Import", import_from_discogs_albums_path(discogs_id: result.id, query: @query), method: :post, class: "mt-2 inline-block px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700" %>
+            <%= link_to "Import", import_from_discogs_albums_path(discogs_id: result.id, query: @query), data: { turbo_method: :post }, class: "mt-2 inline-block px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700" %>
           </div>
         </div>
       <% end %>
@@ -68,7 +68,7 @@
     <% end %>
   <% elsif @query.present? %>
     <div class="bg-gray-100 p-6 rounded-lg text-center">
-      <p class="text-gray-600">No results found for "<%= @query %>".</p>
+      <p class="text-gray-600">No results found for "<%= h @query %>".</p>
     </div>
   <% end %>
 </div>

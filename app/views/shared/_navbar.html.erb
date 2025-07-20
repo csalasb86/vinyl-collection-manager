@@ -8,7 +8,7 @@
         <div class="ml-10 flex items-baseline space-x-4">
           <%= link_to "Albums", albums_path, class: "hover:bg-gray-700 px-3 py-2 rounded-md" %>
           <%= link_to "Search Discogs", search_discogs_albums_path, class: "hover:bg-gray-700 px-3 py-2 rounded-md" %>
-          <%= link_to "Sync Collection", sync_collection_albums_path, method: :post, class: "hover:bg-gray-700 px-3 py-2 rounded-md" %>
+          <%= link_to "Sync Collection", sync_collection_albums_path, data: { turbo_method: :post }, class: "hover:bg-gray-700 px-3 py-2 rounded-md" %>
           
           <% if user_signed_in? %>
             <% if current_user.discogs_authenticated? %>
