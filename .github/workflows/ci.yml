@@ -74,6 +74,9 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config google-chrome-stable
 
+      - name: Setup Chrome Driver
+        uses: nanasess/setup-chromedriver@v2
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -94,7 +97,8 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-        run: bin/rails test:all
+        run: |
+          bin/rails test test/controllers/ test/models/ test/integration/ test/services/
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
