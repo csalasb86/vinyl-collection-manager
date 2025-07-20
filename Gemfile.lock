@@ -118,6 +118,7 @@ GEM
       hashie (~> 3.0)
       httparty (~> 0.14)
       oauth (~> 0.5.1)
+    docile (1.4.1)
     dotenv (3.1.8)
     dotenv-rails (3.1.8)
       dotenv (= 3.1.8)
@@ -348,6 +349,12 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    simplecov (0.22.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.13.2)
+    simplecov_json_formatter (0.1.4)
     solid_cable (3.0.11)
       actioncable (>= 7.2)
       activejob (>= 7.2)
@@ -458,6 +465,7 @@ DEPENDENCIES
   rails (~> 8.0.2)
   rubocop-rails-omakase
   selenium-webdriver
+  simplecov
   solid_cable
   solid_cache
   solid_queue
