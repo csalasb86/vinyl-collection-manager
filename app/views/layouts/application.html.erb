@@ -18,7 +18,9 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <% unless Rails.env.test? %>
+      <%= stylesheet_link_tag "tailwind", "data-turbo-track" => "reload" %>
+    <% end %>
     <%= javascript_importmap_tags %>
   </head>
 
