@@ -23,7 +23,7 @@ jobs:
       pull-requests: read
       issues: read
       id-token: write
-      actions: read # Required for Claude to read CI results on PRs
+      # actions: read # Uncomment if Claude needs to read CI results on PRs
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -36,9 +36,13 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 
-          # This is an optional setting that allows Claude to read CI results on PRs
-          additional_permissions: |
-            actions: read
+          # Custom instructions for Rails project
+          custom_instructions: |
+            This is a Rails 8.0 vinyl collection manager with Discogs API integration.
+            Follow Rails conventions and the project's coding standards from CLAUDE.md.
+            Use RuboCop Rails Omakase style guide.
+            Run security checks with Brakeman for authentication and API integrations.
+            Test with bin/rails test and ensure migrations are safe.
           
           # Optional: Specify model (defaults to Claude Sonnet 4, uncomment for Claude Opus 4)
           # model: "claude-opus-4-20250514"
@@ -49,8 +53,8 @@ jobs:
           # Optional: Trigger when specific user is assigned to an issue
           # assignee_trigger: "claude-bot"
           
-          # Optional: Allow Claude to run specific commands
-          # allowed_tools: "Bash(npm install),Bash(npm run build),Bash(npm run test:*),Bash(npm run lint:*)"
+          # Rails-specific tools for development tasks
+          allowed_tools: "Bash(bin/rubocop),Bash(bin/rails test),Bash(bin/brakeman),Bash(bin/rails db:migrate),Bash(bin/rails db:reset)"
           
           # Optional: Add custom instructions for Claude to customize its behavior for your project
           # custom_instructions: |
