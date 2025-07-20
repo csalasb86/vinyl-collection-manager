@@ -1,74 +1,146 @@
-<div class="max-w-md mx-auto bg-white rounded-lg shadow p-6">
-  <h2 class="text-2xl font-bold mb-6">Account Settings</h2>
-  
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+  <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Edit Account</h2>
+
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-6" }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
-    
+
     <div>
       <%= f.label :email, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= f.email_field :email, autocomplete: "email", class: "w-full px-3 py-2 border border-gray-300 rounded-md" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
     </div>
-    
+
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-      <div class="bg-yellow-100 p-3 rounded-md">
-        <p class="text-yellow-800 text-sm">Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
-      </div>
-    <% end %>
-    
-    <div>
-      <%= f.label :password, "New Password", class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= f.password_field :password, autocomplete: "new-password", class: "w-full px-3 py-2 border border-gray-300 rounded-md" %>
-      <p class="text-xs text-gray-500 mt-1">Leave blank if you dont want to change it</p>
-    </div>
-    
-    <div>
-      <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w-full px-3 py-2 border border-gray-300 rounded-md" %>
-    </div>
-    
-    <div>
-      <%= f.label :current_password, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= f.password_field :current_password, autocomplete: "current-password", class: "w-full px-3 py-2 border border-gray-300 rounded-md" %>
-      <p class="text-xs text-gray-500 mt-1">We need your current password to confirm your changes</p>
-    </div>
-    
-    <div class="pt-4 border-t">
-      <h3 class="text-lg font-semibold mb-4">Discogs Integration</h3>
-      
-      <div class="mb-4">
-        <%= f.label :discogs_username, class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_field :discogs_username, class: "w-full px-3 py-2 border border-gray-300 rounded-md" %>
-      </div>
-      
-      <div class="mb-4">
-        <%= f.label :discogs_token, class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_field :discogs_token, class: "w-full px-3 py-2 border border-gray-300 rounded-md" %>
-        <p class="text-xs text-gray-500 mt-1">
-          You can generate a personal access token in your 
-          <a href="https://www.discogs.com/settings/developers" target="_blank" class="text-blue-600 hover:underline">Discogs developer settings</a>
+      <div class="bg-yellow-50 border border-yellow-200 rounded-md p-3">
+        <p class="text-sm text-yellow-800">
+          <span class="font-medium">Pending confirmation:</span> Currently waiting confirmation for <%= resource.unconfirmed_email %>
         </p>
       </div>
-      
-      <% if resource.discogs_username.present? && resource.discogs_token.present? %>
-        <div class="mb-4">
-          <% if resource.discogs_authenticated? %>
-            <p class="text-green-600 mb-2">✓ Connected to Discogs as <%= resource.discogs_username %></p>
-          <% else %>
-            <p class="text-yellow-600 mb-2">Not connected to Discogs</p>
-          <% end %>
-          
-          <%= link_to "Test Discogs Connection", authenticate_discogs_path, data: { turbo_method: :post }, class: "inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" %>
-        </div>
+    <% end %>
+
+    <div>
+      <%= f.label :password, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <p class="text-xs text-gray-500 mb-1">(leave blank if you don't want to change it)</p>
+      <%= f.password_field :password, autocomplete: "new-password", class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+      <% if @minimum_password_length %>
+        <p class="text-xs text-gray-500 mt-1"><%= @minimum_password_length %> characters minimum</p>
       <% end %>
     </div>
-    
-    <div class="flex justify-end">
-      <%= f.submit "Update", class: "px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" %>
+
+    <div>
+      <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+    </div>
+
+    <div>
+      <%= f.label :current_password, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <p class="text-xs text-gray-500 mb-1">(we need your current password to confirm your changes)</p>
+      <%= f.password_field :current_password, autocomplete: "current-password", class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+    </div>
+
+    <!-- Discogs Configuration Section -->
+    <div class="bg-gray-50 border border-gray-200 rounded-md p-4">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">Discogs Integration</h3>
+      
+      <div class="space-y-4">
+        <div>
+          <%= f.label :discogs_username, "Discogs Username", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.text_field :discogs_username, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder: "Enter your Discogs username" %>
+          <p class="text-xs text-gray-500 mt-1">Your Discogs username for collection synchronization</p>
+        </div>
+
+        <div>
+          <%= f.label :discogs_token, "Discogs API Token", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.text_field :discogs_token, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder: "Enter your Discogs API token" %>
+          <p class="text-xs text-gray-500 mt-1">Get your token from <a href="https://www.discogs.com/settings/developers" target="_blank" class="text-blue-600 hover:text-blue-800 underline">Discogs Developer Settings</a></p>
+        </div>
+
+        <% if resource.discogs_username.present? && resource.discogs_token.present? %>
+          <% if current_user.discogs_authenticated? %>
+            <div class="bg-green-50 border border-green-200 rounded-md p-3">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm text-green-800">
+                    <span class="font-medium">✓ Connected to Discogs as <%= resource.discogs_username %></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          <% else %>
+            <div class="bg-yellow-50 border border-yellow-200 rounded-md p-3">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm text-yellow-800">
+                    <span class="font-medium">Not connected to Discogs</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          
+          <div class="mt-3">
+            <%= link_to "Test Discogs Connection", authenticate_discogs_path, data: { turbo_method: :post }, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200" %>
+          </div>
+        <% else %>
+          <div class="bg-yellow-50 border border-yellow-200 rounded-md p-3">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm text-yellow-800">
+                  <span class="font-medium">Discogs not configured.</span> Add your credentials above to sync your collection.
+                </p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div>
+      <%= f.submit "Update Account", class: "w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200" %>
     </div>
   <% end %>
-  
-  <div class="mt-8 pt-6 border-t">
-    <h3 class="text-lg font-semibold mb-4 text-red-600">Danger Zone</h3>
-    <%= button_to "Delete my account", registration_path(resource_name), data: { confirm: "Are you sure? This cannot be undone!", turbo_confirm: "Are you sure? This cannot be undone!" }, method: :delete, class: "px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700" %>
+
+  <div class="mt-8 pt-6 border-t border-gray-200">
+    <h3 class="text-lg font-medium text-gray-900 mb-4">Danger Zone</h3>
+    
+    <div class="bg-red-50 border border-red-200 rounded-md p-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h4 class="text-sm font-medium text-red-800">Delete Account</h4>
+          <div class="mt-2 text-sm text-red-700">
+            <p>Unhappy with our service? You can delete your account here. This action cannot be undone.</p>
+          </div>
+          <div class="mt-4">
+            <%= button_to "Cancel my account", registration_path(resource_name), 
+                data: { confirm: "Are you sure? This action cannot be undone.", turbo_confirm: "Are you sure? This action cannot be undone." }, 
+                method: :delete,
+                class: "bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 text-center">
+    <%= link_to "← Back", :back, class: "text-gray-600 hover:text-gray-800 underline" %>
   </div>
 </div>

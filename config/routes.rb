@@ -13,7 +13,16 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   devise_for :users
-  root "albums#index"
+  
+  # Authenticated routes
+  authenticated :user do
+    root "albums#index", as: :authenticated_root
+  end
+  
+  # Unauthenticated users go to login
+  devise_scope :user do
+    root "devise/sessions#new"
+  end
 
   resources :albums do
     collection do

@@ -19,34 +19,68 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <% unless Rails.env.test? %>
-      <%= stylesheet_link_tag "tailwind", "data-turbo-track" => "reload" %>
+      <link rel="stylesheet" href="<%= asset_path('tailwind.css') %>" data-turbo-track="reload">
     <% end %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-gray-100 min-h-screen">
-    <%= render 'shared/navbar' %>
-    
-    <% if notice %>
-      <div class="p-4 mb-4 bg-green-100 text-green-800">
-        <%= notice %>
-      </div>
+  <body class="<%= (devise_controller? && !(controller_name == 'registrations' && action_name == 'edit')) ? 'bg-gray-100 min-h-screen flex items-center justify-center' : (user_signed_in? ? 'bg-gray-100 min-h-screen' : 'bg-gray-100 min-h-screen flex items-center justify-center') %>">
+    <% if devise_controller? && !(controller_name == 'registrations' && action_name == 'edit') %>
+      <main class="w-full max-w-md">
+        <% if notice %>
+          <div class="p-4 mb-4 bg-green-100 text-green-800 rounded-md">
+            <%= notice %>
+          </div>
+        <% end %>
+        
+        <% if alert %>
+          <div class="p-4 mb-4 bg-red-100 text-red-800 rounded-md">
+            <%= alert %>
+          </div>
+        <% end %>
+        
+        <%= yield %>
+      </main>
+    <% elsif user_signed_in? %>
+      <%= render 'shared/navbar' %>
+      
+      <% if notice %>
+        <div class="p-4 mb-4 bg-green-100 text-green-800 rounded-md">
+          <%= notice %>
+        </div>
+      <% end %>
+      
+      <% if alert %>
+        <div class="p-4 mb-4 bg-red-100 text-red-800 rounded-md">
+          <%= alert %>
+        </div>
+      <% end %>
+      
+      <main class="container mx-auto px-4 py-6">
+        <%= yield %>
+      </main>
+      
+      <footer class="bg-gray-900 text-white p-6 mt-12">
+        <div class="container mx-auto">
+          <p class="text-center">Vinyl Collection Manager</p>
+        </div>
+      </footer>
+    <% else %>
+      <main class="w-full max-w-md">
+        <% if notice %>
+          <div class="p-4 mb-4 bg-green-100 text-green-800 rounded-md">
+            <%= notice %>
+          </div>
+        <% end %>
+        
+        <% if alert %>
+          <div class="p-4 mb-4 bg-red-100 text-red-800 rounded-md">
+            <%= alert %>
+          </div>
+        <% end %>
+        
+        <%= yield %>
+      </main>
     <% end %>
-    
-    <% if alert %>
-      <div class="p-4 mb-4 bg-red-100 text-red-800">
-        <%= alert %>
-      </div>
-    <% end %>
-    
-    <main class="container mx-auto px-4 py-6">
-      <%= yield %>
-    </main>
-    
-    <footer class="bg-gray-900 text-white p-6 mt-12">
-      <div class="container mx-auto">
-        <p class="text-center">Vinyl Collection Manager</p>
-      </div>
-    </footer>
   </body>
 </html>
