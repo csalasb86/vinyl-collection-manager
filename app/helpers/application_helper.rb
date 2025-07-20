@@ -2,13 +2,10 @@ module ApplicationHelper
   include Pagy::Frontend
 
   def body_css_classes
-    if devise_controller? && !account_edit_page?
-      "bg-gray-100 min-h-screen flex items-center justify-center"
-    elsif user_signed_in?
-      "bg-gray-100 min-h-screen"
-    else
-      "bg-gray-100 min-h-screen flex items-center justify-center"
-    end
+    base_classes = "bg-gray-100 min-h-screen"
+    center_classes = "flex items-center justify-center"
+
+    user_signed_in? && !show_auth_layout? ? base_classes : "#{base_classes} #{center_classes}"
   end
 
   def show_auth_layout?

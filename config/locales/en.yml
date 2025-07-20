@@ -29,3 +29,77 @@
 
 en:
   hello: "Hello world"
+  
+  errors:
+    aria:
+      error_icon: "Error"
+  
+  vinyl_collection:
+    albums:
+      show:
+        edit: "Edit"
+        delete: "Delete"
+        refresh_from_discogs: "Refresh from Discogs"
+        back_to_collection: "Back to Collection"
+        tracklist: "Tracklist"
+        genres: "Genres"
+        notes: "Notes"
+        format: "Format:"
+        year: "Year:"
+        catalog_number: "Catalog #:"
+        discogs_id: "Discogs ID:"
+        no_cover: "No Cover"
+        position: "#"
+        title_header: "Title"
+        duration: "Duration"
+        confirm_delete: "Are you sure you want to delete this album?"
+        aria:
+          view_on_discogs: "View %{title} on Discogs"
+          edit_album: "Edit %{title}"
+          refresh_album: "Refresh %{title} data from Discogs"
+          delete_album: "Delete %{title} from collection"
+          album_tracklist: "Album tracklist"
+    
+    account:
+      edit:
+        title: "Edit Account"
+        discogs_integration: "Discogs Integration"
+        discogs_username: "Discogs Username"
+        discogs_token: "Discogs API Token"
+        update_account: "Update Account"
+        test_connection: "Test Discogs Connection"
+        danger_zone: "Danger Zone"
+        delete_account: "Delete Account"
+        cancel_account: "Cancel my account"
+        
+        help:
+          password_blank: "(leave blank if you don't want to change it)"
+          current_password: "(we need your current password to confirm your changes)"
+          discogs_username: "Your Discogs username for collection synchronization"
+          discogs_token: "Get your token from %{link}"
+          delete_warning: "Unhappy with our service? You can delete your account here. This action cannot be undone."
+          
+        placeholders:
+          discogs_username: "Enter your Discogs username"
+          discogs_token: "Enter your Discogs API token"
+          
+        status:
+          connected: "✓ Connected to Discogs as %{username}"
+          not_connected: "Not connected to Discogs"
+          not_configured: "Discogs not configured."
+          not_configured_help: "Add your credentials above to sync your collection."
+          
+        links:
+          discogs_settings: "Discogs Developer Settings"
+          back: "← Back"
+          
+        confirm:
+          delete_account: "Are you sure? This action cannot be undone."
+          
+        aria:
+          form: "Edit account settings"
+          delete_account: "Permanently delete your account and all data"
+          discogs_settings: "Open Discogs Developer Settings in new tab"
+          success_icon: "Success"
+          warning_icon: "Warning"
+          error_icon: "Error"
