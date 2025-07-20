@@ -93,6 +93,12 @@ jobs:
         run: |
           bin/rails db:create db:migrate db:test:prepare
 
+      - name: Build TailwindCSS
+        env:
+          RAILS_ENV: test
+        run: |
+          rails tailwindcss:build
+
       - name: Run tests
         env:
           RAILS_ENV: test
