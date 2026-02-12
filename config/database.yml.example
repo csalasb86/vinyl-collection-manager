@@ -1,0 +1,26 @@
+# PostgreSQL configuration for Vinyl Collection Manager
+# Copy this file to config/database.yml and customize as needed
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: vinyl_collection_manager_development
+  # Uncomment if you need authentication:
+  #username: your_postgres_username
+  #password: your_postgres_password
+  #host: localhost
+  #port: 5432
+
+test:
+  <<: *default
+  database: vinyl_collection_manager_test
+
+production:
+  <<: *default
+  database: vinyl_collection_manager_production
+  username: vinyl_collection_manager
+  password: <%= ENV["POSTGRES_PASSWORD"] %>

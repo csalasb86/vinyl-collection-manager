@@ -80,4 +80,7 @@ group :test do
 
   # Code coverage analysis [https://github.com/simplecov-ruby/simplecov]
   gem "simplecov", require: false
+
+  # Pin minitest to 5.x for Rails 8.0.x compatibility
+  gem "minitest", "~> 5.25"
 end
