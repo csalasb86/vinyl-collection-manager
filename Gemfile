@@ -21,7 +21,7 @@ gem "sprockets-rails"
 gem "tailwindcss-rails"
 
 # Authentication
-gem "devise", "~> 4.9"
+gem "devise", "~> 5.0"
 
 # HTTP requests
 gem "faraday", "~> 2.13"
