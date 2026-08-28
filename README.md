@@ -3,7 +3,7 @@
 [![CI](https://github.com/csalasb86/vinyl-collection-manager/workflows/CI/badge.svg)](https://github.com/csalasb86/vinyl-collection-manager/actions)
 [![Ruby](https://img.shields.io/badge/ruby-3.3.5-red.svg)](https://ruby-lang.org)
 [![Rails](https://img.shields.io/badge/rails-8.0.5-red.svg)](https://rubyonrails.org)
-[![Test Coverage](https://img.shields.io/badge/coverage-90.58%25-brightgreen.svg)](https://github.com/csalasb86/vinyl-collection-manager)
+[![Test Coverage](https://img.shields.io/badge/coverage-92.75%25-brightgreen.svg)](https://github.com/csalasb86/vinyl-collection-manager)
 [![Code Style](https://img.shields.io/badge/code_style-rubocop_rails_omakase-blue.svg)](https://github.com/rails/rubocop-rails-omakase)
 [![Security](https://img.shields.io/badge/security-brakeman-green.svg)](https://brakemanscanner.org)
 
@@ -28,6 +28,13 @@
   - Propshaft asset pipeline
 - **🎨 Frontend Technologies**: Stimulus controllers, Turbo for SPA-like experience, importmap-rails
 - **📊 Data Model**: Normalized schema with many-to-many artist-album relationships and comprehensive track listings
+
+## Design
+
+The interface follows **Crate**, a dark-first direction where the cover art is
+the interface and the chrome stays out of its way. The system, its rules and
+the tests that keep them honest are in [docs/design/README.md](docs/design/README.md);
+the original proposal is kept as a dated snapshot alongside it.
 
 ## Getting Started
 
@@ -86,7 +93,7 @@ bin/jobs              # Start Solid Queue processor
 
 ### Running Tests
 
-The project uses **SimpleCov** for test coverage analysis with an **80% minimum threshold**. Current coverage: **90.58%**.
+The project uses **SimpleCov** for test coverage analysis with an **80% minimum threshold**. Current coverage: **92.75%**.
 
 ```bash
 # Run all tests with coverage report
@@ -182,7 +189,7 @@ The application includes Docker configuration and can be deployed to any contain
 
 ### Development & Testing
 
-- **Testing**: Minitest with SimpleCov (90.58% coverage)
+- **Testing**: Minitest with SimpleCov (92.75% coverage)
 - **System Testing**: Capybara + Selenium WebDriver
 - **Code Style**: RuboCop Rails Omakase
 - **Security**: Brakeman static analysis
@@ -198,7 +205,7 @@ Contributions are welcome! Please follow these guidelines:
    - Run `bin/rubocop --autocorrect` for style compliance
    - Run `bin/brakeman` for security scanning
    - Ensure tests pass with `bin/rails test`
-   - Maintain or improve test coverage (currently 90.58%)
+   - Maintain or improve test coverage (currently 92.75%)
 
 3. **Write tests** for new features and bug fixes
 

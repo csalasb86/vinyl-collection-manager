@@ -1,0 +1,1518 @@
+<title>Crate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400..600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+/* ============================================================
+   TOKENS — light is the base; dark redefines only the values
+   ============================================================ */
+:root {
+  --bg:            #F1F0EC;
+  --surface:       #FFFFFF;
+  --surface-2:     #F8F7F4;
+  --surface-3:     #EAE8E2;
+  --line:          #E0DDD6;
+  --line-strong:   #C6C1B7;
+  --fg:            #171614;
+  --fg-muted:      #605C54;
+  --fg-subtle:     #8B857A;
+  --accent:        #8A6218;
+  --accent-hover:  #6E4E12;
+  --accent-fg:     #FFFFFF;
+  --accent-soft:   #F2E7CF;
+  --ok:            #1D6B41;
+  --ok-soft:       #DEEEE3;
+  --danger:        #A3271F;
+  --danger-soft:   #F6E2DF;
+  --shadow:        0 1px 2px rgba(23,22,20,.06), 0 8px 24px -12px rgba(23,22,20,.18);
+  --shadow-lift:   0 2px 4px rgba(23,22,20,.08), 0 18px 40px -18px rgba(23,22,20,.28);
+
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-ui:      "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --r:  3px;   /* sleeve corner — square, like the object */
+  --r-pill: 999px;
+  --measure: 68ch;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:            #121110;
+    --surface:       #1A1917;
+    --surface-2:     #221F1D;
+    --surface-3:     #2B2825;
+    --line:          #302D29;
+    --line-strong:   #46403A;
+    --fg:            #EFEBE4;
+    --fg-muted:      #A39D93;
+    --fg-subtle:     #7A746B;
+    --accent:        #E0A951;
+    --accent-hover:  #EFBC6B;
+    --accent-fg:     #1A1300;
+    --accent-soft:   #2C2418;
+    --ok:            #5FBF87;
+    --ok-soft:       #17281E;
+    --danger:        #F0796C;
+    --danger-soft:   #2E1A18;
+    --shadow:        0 1px 2px rgba(0,0,0,.5), 0 8px 24px -12px rgba(0,0,0,.7);
+    --shadow-lift:   0 2px 4px rgba(0,0,0,.55), 0 18px 40px -18px rgba(0,0,0,.8);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg:            #121110;
+  --surface:       #1A1917;
+  --surface-2:     #221F1D;
+  --surface-3:     #2B2825;
+  --line:          #302D29;
+  --line-strong:   #46403A;
+  --fg:            #EFEBE4;
+  --fg-muted:      #A39D93;
+  --fg-subtle:     #7A746B;
+  --accent:        #E0A951;
+  --accent-hover:  #EFBC6B;
+  --accent-fg:     #1A1300;
+  --accent-soft:   #2C2418;
+  --ok:            #5FBF87;
+  --ok-soft:       #17281E;
+  --danger:        #F0796C;
+  --danger-soft:   #2E1A18;
+  --shadow:        0 1px 2px rgba(0,0,0,.5), 0 8px 24px -12px rgba(0,0,0,.7);
+  --shadow-lift:   0 2px 4px rgba(0,0,0,.55), 0 18px 40px -18px rgba(0,0,0,.8);
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+p { margin: 0; }
+
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { color: var(--accent-hover); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+code, .mono { font-family: var(--font-mono); font-size: 0.86em; }
+
+.wrap {
+  max-width: 1160px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.measure { max-width: var(--measure); }
+
+.skip {
+  position: absolute; left: -9999px;
+  background: var(--accent); color: var(--accent-fg);
+  padding: 10px 16px; z-index: 100; border-radius: var(--r);
+}
+.skip:focus { left: 16px; top: 16px; }
+
+/* ============================================================
+   MASTHEAD
+   ============================================================ */
+.masthead {
+  border-bottom: 1px solid var(--line);
+  padding: clamp(48px, 9vw, 104px) 0 clamp(36px, 6vw, 64px);
+  background:
+    radial-gradient(120% 80% at 88% -10%, var(--accent-soft) 0%, transparent 58%),
+    var(--surface);
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-stretch: 78%;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.eyebrow::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+  max-width: 200px;
+}
+
+.masthead h1 {
+  font-size: clamp(64px, 15vw, 168px);
+  font-weight: 800;
+  font-stretch: 108%;
+  letter-spacing: -0.045em;
+  margin: 20px 0 0;
+  line-height: 0.85;
+}
+
+.deck {
+  font-size: clamp(17px, 2vw, 21px);
+  line-height: 1.5;
+  color: var(--fg-muted);
+  max-width: 60ch;
+  margin-top: 28px;
+}
+.deck strong { color: var(--fg); font-weight: 600; }
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-top: 40px;
+  border-top: 1px solid var(--line);
+}
+.fact {
+  padding: 18px 28px 18px 0;
+  margin-right: 28px;
+  border-right: 1px solid var(--line);
+}
+.fact:last-child { border-right: 0; }
+.fact dt {
+  font-family: var(--font-display);
+  font-stretch: 78%;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  margin-bottom: 4px;
+}
+.fact dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+section { padding: clamp(56px, 8vw, 96px) 0; border-bottom: 1px solid var(--line); }
+section:last-of-type { border-bottom: 0; }
+
+.sec-head { margin-bottom: 40px; }
+.sec-head h2 {
+  font-size: clamp(30px, 4.6vw, 46px);
+  font-weight: 700;
+  margin-top: 14px;
+}
+.sec-head p {
+  color: var(--fg-muted);
+  margin-top: 16px;
+  max-width: var(--measure);
+  font-size: 17px;
+}
+
+/* ============================================================
+   FINDINGS
+   ============================================================ */
+.findings {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.finding {
+  background: var(--surface);
+  padding: 20px 22px;
+  display: grid;
+  grid-template-columns: 128px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 680px) {
+  .finding { grid-template-columns: 1fr; gap: 10px; }
+}
+.finding h3 {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0;
+  margin-bottom: 5px;
+}
+.finding p { color: var(--fg-muted); font-size: 15px; }
+.finding code {
+  background: var(--surface-3);
+  padding: 1px 5px;
+  border-radius: 2px;
+  color: var(--fg);
+}
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-stretch: 78%;
+  font-weight: 600;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.tag.crit  { background: var(--danger-soft); color: var(--danger); }
+.tag.sys   { background: var(--accent-soft); color: var(--accent); }
+.tag.hier  { background: var(--surface-3); color: var(--fg-muted); }
+.tag.a11y  { background: var(--ok-soft); color: var(--ok); }
+
+/* ============================================================
+   PRINCIPLES
+   ============================================================ */
+.principles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
+}
+.principle { border-top: 2px solid var(--fg); padding-top: 18px; }
+.principle h3 {
+  font-size: 21px;
+  font-stretch: 90%;
+  margin-bottom: 10px;
+}
+.principle p { color: var(--fg-muted); font-size: 15.5px; }
+
+/* ============================================================
+   SWATCHES
+   ============================================================ */
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 14px;
+}
+.sw {
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--surface);
+}
+.sw-chip { height: 68px; border-bottom: 1px solid var(--line); }
+.sw-meta { padding: 10px 12px; }
+.sw-name {
+  font-family: var(--font-display);
+  font-stretch: 78%;
+  font-size: 11px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.sw-val {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--fg);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   TYPE SPECIMEN
+   ============================================================ */
+.specimens { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.spec { background: var(--surface); padding: 24px; display: grid; grid-template-columns: 168px 1fr; gap: 24px; align-items: baseline; }
+@media (max-width: 680px) { .spec { grid-template-columns: 1fr; gap: 8px; } }
+.spec-label {
+  font-family: var(--font-display);
+  font-stretch: 78%;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  line-height: 1.5;
+}
+.spec-label span { display: block; font-family: var(--font-mono); font-stretch: normal; letter-spacing: 0; text-transform: none; color: var(--fg-muted); font-size: 11.5px; }
+
+/* ============================================================
+   MOCKUP FRAME
+   ============================================================ */
+.frame-cap {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-family: var(--font-display);
+  font-stretch: 78%;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+.frame-cap b { color: var(--fg); font-weight: 600; }
+
+.frame {
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+  margin-bottom: 44px;
+}
+.frame-scroll { overflow-x: auto; }
+.frame-scroll > * { min-width: 720px; }
+
+/* ============================================================
+   THE PROPOSED APP UI (mockup internals, .vc- prefix)
+   ============================================================ */
+.vc { font-family: var(--font-ui); color: var(--fg); background: var(--bg); }
+
+.vc-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 18px;
+  height: 58px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.vc-mark {
+  display: flex; align-items: center; gap: 9px;
+  font-family: var(--font-display);
+  font-weight: 800; font-stretch: 92%;
+  font-size: 16px; letter-spacing: -0.02em;
+}
+.vc-disc {
+  width: 20px; height: 20px; border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, var(--surface) 0 2.5px, transparent 2.5px),
+    repeating-radial-gradient(circle at 50% 50%, var(--fg) 0 1.4px, var(--fg-subtle) 1.4px 2.4px);
+  flex: none;
+}
+.vc-nav { display: flex; gap: 2px; margin-left: 6px; }
+.vc-nav a {
+  padding: 7px 11px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fg-muted);
+  text-decoration: none;
+  border-radius: var(--r);
+}
+.vc-nav a:hover { background: var(--surface-2); color: var(--fg); }
+.vc-nav a[aria-current] {
+  color: var(--fg);
+  background: var(--surface-3);
+  font-weight: 600;
+}
+.vc-spacer { flex: 1; }
+
+.vc-status {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12.5px; color: var(--fg-muted);
+  padding: 5px 10px 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+}
+.vc-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); flex: none; }
+.vc-dot.off { background: var(--fg-subtle); }
+.vc-status svg { display: block; }
+
+.vc-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--accent-soft); color: var(--accent);
+  display: grid; place-items: center;
+  font-size: 12px; font-weight: 600;
+  border: 1px solid var(--line);
+}
+
+.vc-iconbtn {
+  width: 32px; height: 32px;
+  display: grid; place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--fg-muted);
+}
+
+/* toolbar */
+.vc-toolbar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  flex-wrap: wrap;
+}
+.vc-search {
+  display: flex; align-items: center; gap: 8px;
+  flex: 1; min-width: 220px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 8px 12px;
+  color: var(--fg-subtle);
+  font-size: 14px;
+}
+.vc-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 13px;
+  font-size: 14px; font-weight: 500;
+  font-family: var(--font-ui);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--fg);
+  white-space: nowrap;
+}
+.vc-btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); font-weight: 600; }
+.vc-btn.ghost { background: transparent; border-color: transparent; color: var(--fg-muted); }
+.vc-btn.danger { background: transparent; border-color: var(--line); color: var(--danger); }
+.vc-count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--fg-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+.vc-chips { display: flex; gap: 7px; flex-wrap: wrap; padding: 12px 18px 0; }
+.vc-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12.5px;
+  padding: 4px 8px 4px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  color: var(--fg);
+}
+.vc-chip b { font-weight: 600; }
+.vc-chip .x { color: var(--fg-subtle); font-size: 14px; line-height: 1; }
+.vc-chip.clear { border-style: dashed; color: var(--fg-muted); }
+
+/* grid */
+.vc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: 20px 16px;
+  padding: 20px 18px 26px;
+}
+.vc-card { display: block; text-decoration: none; color: inherit; }
+.vc-art {
+  aspect-ratio: 1;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.vc-card:hover .vc-art { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+.vc-meta { padding-top: 9px; }
+.vc-title {
+  font-size: 13.5px; font-weight: 600; line-height: 1.3;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.vc-artist {
+  font-size: 12.5px; color: var(--fg-muted); line-height: 1.35;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.vc-sub {
+  font-family: var(--font-mono);
+  font-size: 11px; color: var(--fg-subtle);
+  margin-top: 3px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* placeholder sleeve for records with no cover */
+.vc-nocover {
+  width: 100%; height: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  display: grid; place-items: center; align-content: center;
+  gap: 8px; padding: 12px; text-align: center;
+}
+.vc-nocover .d {
+  width: 42px; height: 42px; border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, var(--surface-2) 0 5px, transparent 5px),
+    repeating-radial-gradient(circle at 50% 50%, var(--line-strong) 0 1.5px, transparent 1.5px 4px);
+}
+.vc-nocover span {
+  font-family: var(--font-display); font-stretch: 78%;
+  font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+/* ---- generated sleeve art (no external images) ---- */
+.a1 { background: linear-gradient(103deg, #143049 0 50%, #D9A441 50% 100%); }
+.a2 { background: #EFE7D6; background-image: radial-gradient(circle at 50% 50%, #16150F 0 14%, transparent 14% 22%, #16150F 22% 30%, transparent 30% 38%, #C4462B 38% 47%, transparent 47%); }
+.a3 { background: #17140F; background-image: radial-gradient(circle at 68% 34%, #E2542F 0 33%, transparent 33%); }
+.a4 { background: linear-gradient(#0F5049 0 33%, #E8DDC4 33% 40%, #C4462B 40% 72%, #17140F 72% 100%); }
+.a5 { background: #F0E4CE; background-image: radial-gradient(#B0245C 22%, transparent 23%); background-size: 13px 13px; }
+.a6 { background:
+        linear-gradient(#2A3F8F 0 0) 0 0 / 50% 50% no-repeat,
+        linear-gradient(#E4B93F 0 0) 100% 0 / 50% 50% no-repeat,
+        linear-gradient(#D8452F 0 0) 0 100% / 50% 50% no-repeat,
+        linear-gradient(#15140F 0 0) 100% 100% / 50% 50% no-repeat; }
+.a7 { background: #D9CBA8; background-image: radial-gradient(circle at 50% 118%, #3C4A24 0 62%, transparent 62%); }
+.a8 { background: linear-gradient(96deg, #5B2A72 0 34%, #C63C6A 34% 67%, #E9803A 67% 100%); }
+.a9 { background: #0E1512; background-image: repeating-linear-gradient(0deg, #4FC49A 0 1px, transparent 1px 11px), repeating-linear-gradient(90deg, #4FC49A 0 1px, transparent 1px 11px); }
+.a10 { background: #5A1220; background-image: repeating-conic-gradient(from 0deg at 50% 50%, #E8C24A 0deg 12deg, transparent 12deg 24deg); }
+.a11 { background: linear-gradient(150deg, #1B2E5A 0%, #7C4A9E 52%, #E0705E 100%); }
+.a12 { background: #EDE9E0; background-image: repeating-linear-gradient(75deg, #17140F 0 3px, transparent 3px 14px); }
+
+/* album detail mockup */
+.vc-hero {
+  display: grid;
+  grid-template-columns: 268px 1fr;
+  gap: 34px;
+  padding: 30px 30px 26px;
+  position: relative;
+  isolation: isolate;
+  border-bottom: 1px solid var(--line);
+}
+.vc-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(103deg, #143049 0 50%, #D9A441 50% 100%);
+  filter: blur(58px) saturate(1.5);
+  opacity: .16;
+  z-index: -1;
+}
+@media (max-width: 760px) { .vc-hero { grid-template-columns: 1fr; } }
+
+.vc-hero-art { aspect-ratio: 1; border-radius: 2px; box-shadow: var(--shadow-lift); }
+.vc-hero h1 {
+  font-family: var(--font-display);
+  font-size: 38px; font-weight: 800; font-stretch: 96%;
+  letter-spacing: -0.03em; line-height: 1;
+}
+.vc-hero .by { font-size: 17px; color: var(--fg-muted); margin-top: 8px; }
+.vc-genres { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 16px; }
+.vc-genre {
+  font-size: 12px; padding: 3px 10px;
+  border: 1px solid var(--line-strong); border-radius: var(--r-pill);
+  color: var(--fg-muted);
+}
+
+.vc-liner {
+  margin-top: 22px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+}
+.vc-liner div { padding: 12px 16px 12px 0; border-right: 1px solid var(--line); }
+.vc-liner div:last-child { border-right: 0; }
+.vc-liner dt {
+  font-family: var(--font-display); font-stretch: 78%;
+  font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--fg-subtle); margin-bottom: 3px;
+}
+.vc-liner dd { margin: 0; font-family: var(--font-mono); font-size: 13.5px; font-variant-numeric: tabular-nums; }
+
+.vc-actions { display: flex; gap: 8px; margin-top: 22px; flex-wrap: wrap; }
+.vc-actions .sep { flex: 1; }
+
+.vc-tracks { padding: 24px 30px 30px; }
+.vc-tracks h3 {
+  font-family: var(--font-display); font-stretch: 78%;
+  font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--fg-subtle); margin-bottom: 10px;
+}
+.vc-track {
+  display: grid; grid-template-columns: 44px 1fr auto;
+  gap: 14px; align-items: baseline;
+  padding: 9px 8px; border-bottom: 1px solid var(--line);
+  font-size: 14.5px;
+}
+.vc-track:hover { background: var(--surface-2); }
+.vc-track .pos, .vc-track .dur {
+  font-family: var(--font-mono); font-size: 12.5px; color: var(--fg-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+/* mobile drawer mockup */
+.vc-phone {
+  width: 300px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+}
+.vc-drawer { padding: 10px; display: grid; gap: 2px; background: var(--surface); }
+.vc-drawer a {
+  padding: 12px 12px; font-size: 15px; font-weight: 500;
+  color: var(--fg); text-decoration: none; border-radius: var(--r);
+  display: flex; align-items: center; justify-content: space-between;
+  min-height: 44px;
+}
+.vc-drawer a[aria-current] { background: var(--surface-3); font-weight: 600; }
+.vc-drawer hr { border: 0; border-top: 1px solid var(--line); margin: 8px 4px; }
+
+/* empty state */
+.vc-empty { padding: 56px 30px; text-align: center; display: grid; justify-items: center; gap: 4px; }
+.vc-empty .crate {
+  width: 76px; height: 76px; margin-bottom: 14px;
+  border: 2px solid var(--line-strong); border-radius: var(--r);
+  display: grid; place-items: center;
+  background: var(--surface-2);
+}
+.vc-empty h3 { font-family: var(--font-display); font-size: 22px; font-stretch: 92%; }
+.vc-empty p { color: var(--fg-muted); font-size: 15px; max-width: 42ch; margin: 6px 0 18px; }
+
+/* toast */
+.vc-toast {
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 13px 15px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--ok);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-lift);
+  max-width: 420px;
+  font-size: 14.5px;
+}
+.vc-toast.err { border-left-color: var(--danger); }
+.vc-toast .msg b { display: block; font-weight: 600; margin-bottom: 1px; }
+.vc-toast .msg span { color: var(--fg-muted); font-size: 13.5px; }
+.vc-toast .x { margin-left: auto; color: var(--fg-subtle); font-size: 16px; line-height: 1; }
+
+/* before / after */
+.ba { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 760px) { .ba { grid-template-columns: 1fr; } }
+.ba-col > .frame-cap { margin-bottom: 10px; }
+
+/* the "before" — recreated from the current app */
+.old { background: #f3f4f6; padding: 16px; font-family: ui-sans-serif, system-ui, sans-serif; }
+.old-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.old-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); overflow: hidden; }
+.old-art { aspect-ratio: 1; background: #e5e7eb; display: grid; place-items: center; color: #9ca3af; font-size: 11px; }
+.old-meta { padding: 8px; }
+.old-t { font-size: 12px; font-weight: 600; color: #111827; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.old-a { font-size: 11px; color: #4b5563; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.old-y { font-size: 11px; color: #6b7280; margin-top: 2px; }
+.old-filters { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); padding: 14px; margin-bottom: 14px; }
+.old-filters h4 { font-size: 14px; font-weight: 600; color: #111827; margin: 0 0 10px; font-family: inherit; letter-spacing: 0; }
+.old-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.old-inp { border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 8px; font-size: 11px; color: #6b7280; background: #fff; }
+.old-btns { display: flex; gap: 6px; justify-content: flex-end; margin-top: 10px; }
+.old-b { font-size: 11px; padding: 5px 10px; border-radius: 6px; color: #fff; }
+
+/* ============================================================
+   CHECKLIST
+   ============================================================ */
+.checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px 32px; }
+.check { display: grid; grid-template-columns: 20px 1fr; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.check svg { margin-top: 4px; color: var(--ok); flex: none; }
+.check b { font-weight: 600; font-size: 15px; }
+.check span { display: block; color: var(--fg-muted); font-size: 14px; }
+
+/* ============================================================
+   PHASES
+   ============================================================ */
+.phases { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.phase { background: var(--surface); padding: 22px; display: grid; grid-template-columns: 54px 1fr 128px; gap: 22px; align-items: start; }
+@media (max-width: 760px) { .phase { grid-template-columns: 40px 1fr; } .phase .effort { grid-column: 2; } }
+.phase-n {
+  font-family: var(--font-display); font-weight: 800; font-size: 30px;
+  color: var(--line-strong); line-height: 1; font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+}
+.phase h3 { font-family: var(--font-ui); font-size: 16.5px; font-weight: 600; letter-spacing: 0; margin-bottom: 6px; }
+.phase p { color: var(--fg-muted); font-size: 15px; }
+.phase .files { margin-top: 9px; display: flex; flex-wrap: wrap; gap: 6px; }
+.phase .files code {
+  background: var(--surface-3); color: var(--fg-muted);
+  padding: 2px 7px; border-radius: 2px; font-size: 11.5px;
+}
+.effort {
+  font-family: var(--font-display); font-stretch: 78%;
+  font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--fg-subtle); text-align: right;
+}
+.effort b { display: block; font-size: 15px; color: var(--fg); font-stretch: 90%; letter-spacing: -0.01em; text-transform: none; }
+
+/* ============================================================
+   CODE BLOCK
+   ============================================================ */
+pre {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 20px;
+  overflow-x: auto;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--fg);
+  tab-size: 2;
+}
+pre .c { color: var(--fg-subtle); }
+pre .k { color: var(--accent); }
+pre .v { color: var(--ok); }
+
+/* ============================================================
+   THEME TOGGLE
+   ============================================================ */
+.toggle {
+  position: fixed;
+  right: 20px; bottom: 20px;
+  z-index: 50;
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 9px 14px 9px 11px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-lift);
+  cursor: pointer;
+  color: var(--fg);
+  font-family: var(--font-display);
+  font-stretch: 78%;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: .13em; text-transform: uppercase;
+}
+.toggle:hover { border-color: var(--accent); }
+.toggle svg { display: block; color: var(--accent); }
+
+footer.end {
+  padding: 40px 0 72px;
+  color: var(--fg-subtle);
+  font-size: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+</style>
+
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<div style="max-width:1160px;margin:0 auto;padding:16px 24px 0">
+  <p style="margin:0;padding:12px 16px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:3px;font-size:14px;line-height:1.5;color:var(--fg-muted)">
+    <strong style="color:var(--fg)">Snapshot, 27 August 2026.</strong>
+    This is the proposal as it was pitched and approved, kept for the record.
+    Everything in it has since shipped, so the diagnosis describes problems that
+    are fixed and the roadmap describes work that is done. For what the system
+    actually is today, read <code>docs/design/README.md</code>; the tokens
+    themselves live in <code>app/assets/tailwind/application.css</code>.
+  </p>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">Propuesta de interfaz &middot; Vinyl Collection Manager</p>
+    <h1>Crate</h1>
+    <p class="deck">
+      Una dirección <strong>dark-first</strong> donde la portada es la interfaz: el cromo se desatura
+      para que las carátulas manden. Sistema de tokens, modo claro y oscuro reales, y un plan de
+      cinco fases sobre los archivos que ya tienes.
+    </p>
+    <dl class="facts">
+      <div class="fact"><dt>Hallazgos</dt><dd>12</dd></div>
+      <div class="fact"><dt>Bugs funcionales</dt><dd>2</dd></div>
+      <div class="fact"><dt>Pantallas</dt><dd>5</dd></div>
+      <div class="fact"><dt>Fases</dt><dd>5</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ══════════════════════ DIAGNÓSTICO ══════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Punto de partida</p>
+      <h2>Qué está fallando hoy</h2>
+      <p>
+        Revisé el layout, el navbar, los helpers y las vistas de álbumes. El problema no es solo
+        estético: hay dos fallas funcionales y varias de accesibilidad que conviene arreglar
+        aunque el rediseño no avance.
+      </p>
+    </div>
+
+    <div class="findings">
+      <div class="finding">
+        <span class="tag crit">Funcional</span>
+        <div>
+          <h3>No hay navegación en móvil</h3>
+          <p><code>_navbar.html.erb</code> envuelve todos los enlaces en <code>hidden md:block</code>. Bajo 768&nbsp;px desaparecen Albums, Search Discogs, Sync, Account y Logout — y no hay menú hamburguesa que los reemplace. En un teléfono la app queda sin salida desde la primera pantalla.</p>
+        </div>
+      </div>
+
+      <div class="finding">
+        <span class="tag crit">Funcional</span>
+        <div>
+          <h3>«Sync Collection» dispara sin red de seguridad</h3>
+          <p>Es un POST que recorre toda la colección de Discogs, colocado como un enlace más de la barra, sin confirmación, sin estado de progreso y sin forma de cancelarlo. Un clic accidental arranca una sincronización completa a ciegas.</p>
+        </div>
+      </div>
+
+      <div class="finding">
+        <span class="tag sys">Sistema</span>
+        <div>
+          <h3>Cuatro colores de botón sin semántica</h3>
+          <p>Azul para editar, verde para agregar y refrescar, rojo para borrar, gris para limpiar. No hay jerarquía: en el detalle del álbum, «Refresh from Discogs» pesa visualmente lo mismo que «Delete». El color debería marcar importancia y riesgo, no variedad.</p>
+        </div>
+      </div>
+
+      <div class="finding">
+        <span class="tag sys">Sistema</span>
+        <div>
+          <h3>No existen tokens de diseño</h3>
+          <p>Los colores viven inline en cada vista y cinco strings de clases están guardados en <code>application_helper.rb</code>. Cambiar el azul primario obliga a un find-replace en 26 archivos, y el helper mezcla decisiones de estilo con lógica de presentación.</p>
+        </div>
+      </div>
+
+      <div class="finding">
+        <span class="tag sys">Sistema</span>
+        <div>
+          <h3>Sin modo oscuro</h3>
+          <p>Todo está fijo en <code>bg-white</code> y <code>text-gray-700</code>. Para una app que se mira de noche y cuyo contenido son portadas, el fondo oscuro no es una preferencia: es la presentación correcta del material.</p>
+        </div>
+      </div>
+
+      <div class="finding">
+        <span class="tag hier">Jerarquía</span>
+        <div>
+          <h3>El filtro se come el primer pliegue</h3>
+          <p>Cinco <code>select</code> siempre abiertos ocupan la parte superior de la colección. En móvil hay que hacer scroll para ver el primer disco, y el filtro exige enviar un formulario para aplicarse. La herramienta domina al contenido.</p>
+        </div>
+      </div>
+
+      <div class="finding">
+        <span class="tag hier">Jerarquía</span>
+        <div>
+          <h3>La portada está subdimensionada</h3>
+          <p>El arte de tapa es el contenido real de esta app y aparece como miniatura dentro de una tarjeta blanca con tres líneas de texto apretadas. Los discos sin portada muestran un rectángulo gris con «No Cover», sin identidad alguna.</p>
+        </div>
+      </div>
+
+      <div class="finding">
+        <span class="tag a11y">Accesibilidad</span>
+        <div>
+          <h3>El estado de Discogs se comunica solo por color</h3>
+          <p>«(Discogs Connected)» en verde o amarillo, sin ícono ni forma alternativa. Quien no distingue esos tonos no percibe la diferencia; además el email crudo en la barra rompe el layout con direcciones largas.</p>
+        </div>
+      </div>
+
+      <div class="finding">
+        <span class="tag a11y">Accesibilidad</span>
+        <div>
+          <h3>Los mensajes flash no se anuncian</h3>
+          <p>Sin <code>role="status"</code> ni <code>aria-live</code>, un lector de pantalla nunca los lee. Tampoco se pueden cerrar, no desaparecen solos y empujan el contenido hacia abajo al aparecer.</p>
+        </div>
+      </div>
+
+      <div class="finding">
+        <span class="tag a11y">Accesibilidad</span>
+        <div>
+          <h3>Foco y orientación incompletos</h3>
+          <p>No hay skip link, no hay <code>aria-current</code> en la navegación, y los estilos de <code>:focus</code> solo están definidos para inputs de formulario — botones y enlaces quedan sin indicador visible al navegar con teclado.</p>
+        </div>
+      </div>
+
+      <div class="finding">
+        <span class="tag hier">Tipografía</span>
+        <div>
+          <h3>Ninguna fuente declarada</h3>
+          <p>La app usa la tipografía por defecto del sistema, distinta en cada equipo. Tampoco hay escala: casi todo el texto es <code>text-sm</code> o <code>text-xs</code>, así que nada guía la lectura salvo la negrita ocasional.</p>
+        </div>
+      </div>
+
+      <div class="finding">
+        <span class="tag hier">Consistencia</span>
+        <div>
+          <h3>i18n a medias</h3>
+          <p><code>show.html.erb</code> usa <code>t()</code> para todo; <code>index.html.erb</code> tiene los textos en duro. Media app traducible y media no es peor que ninguna, porque el bug se descubre recién al agregar el segundo idioma.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ DIRECCIÓN ══════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">La dirección</p>
+      <h2>Tres decisiones que ordenan todo lo demás</h2>
+    </div>
+
+    <div class="principles">
+      <div class="principle">
+        <h3>La portada es la interfaz</h3>
+        <p>Un coleccionista reconoce sus discos por la tapa, no por el título. Las carátulas crecen, la tarjeta blanca que las encerraba desaparece y el arte queda apoyado directamente sobre el fondo, con sombra propia. Todo el cromo se desatura para no competir con ellas.</p>
+      </div>
+      <div class="principle">
+        <h3>Liner notes, no dashboard</h3>
+        <p>Los metadatos se leen como la contratapa de un disco: etiquetas condensadas en versalitas, números de catálogo y duraciones en monoespaciada tabular, filas finas separadas por hairlines. Nada de tarjetas dentro de tarjetas.</p>
+      </div>
+      <div class="principle">
+        <h3>Cuadrado, como una funda</h3>
+        <p>Radios de 2 a 3&nbsp;px en toda la app en lugar del <code>rounded-lg</code> genérico. El objeto que esta app cataloga tiene esquinas rectas; la interfaz lo acompaña en vez de suavizarlo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ COLOR ══════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Sistema &middot; Color</p>
+      <h2>Neutros cálidos y un latón como único acento</h2>
+      <p>
+        Los grises tienen una desviación cálida deliberada — un gris neutro puro se lee como
+        descuido. El acento es un latón apagado, tomado del bronce del brazo del tocadiscos y del
+        dorado de las etiquetas: <strong>suficientemente distinto para marcar lo importante,
+        suficientemente sobrio para no pelear con una portada saturada</strong>. Verde y rojo quedan
+        reservados exclusivamente para éxito y peligro, nunca para decorar.
+      </p>
+      <p style="margin-top:12px">
+        Todos los valores de abajo son variables vivas: usa el botón de abajo a la derecha para
+        alternar el tema y ver cómo responde la página completa, mockups incluidos.
+      </p>
+    </div>
+
+    <div class="swatches">
+      <div class="sw"><div class="sw-chip" style="background:var(--bg)"></div><div class="sw-meta"><div class="sw-name">Fondo</div><div class="sw-val" data-token="--bg">—</div></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--surface)"></div><div class="sw-meta"><div class="sw-name">Superficie</div><div class="sw-val" data-token="--surface">—</div></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--surface-3)"></div><div class="sw-meta"><div class="sw-name">Superficie alta</div><div class="sw-val" data-token="--surface-3">—</div></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--line)"></div><div class="sw-meta"><div class="sw-name">Línea</div><div class="sw-val" data-token="--line">—</div></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--fg)"></div><div class="sw-meta"><div class="sw-name">Texto</div><div class="sw-val" data-token="--fg">—</div></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--fg-muted)"></div><div class="sw-meta"><div class="sw-name">Texto suave</div><div class="sw-val" data-token="--fg-muted">—</div></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--accent)"></div><div class="sw-meta"><div class="sw-name">Acento</div><div class="sw-val" data-token="--accent">—</div></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--accent-soft)"></div><div class="sw-meta"><div class="sw-name">Acento suave</div><div class="sw-val" data-token="--accent-soft">—</div></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--ok)"></div><div class="sw-meta"><div class="sw-name">Éxito</div><div class="sw-val" data-token="--ok">—</div></div></div>
+      <div class="sw"><div class="sw-chip" style="background:var(--danger)"></div><div class="sw-meta"><div class="sw-name">Peligro</div><div class="sw-val" data-token="--danger">—</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ TIPOGRAFÍA ══════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Sistema &middot; Tipografía</p>
+      <h2>Tres voces, cada una con un trabajo</h2>
+      <p>
+        Archivo aporta el carácter impreso de una funda; Instrument Sans desaparece para que el
+        texto se lea; IBM&nbsp;Plex Mono alinea todo lo que es un número. Las tres vienen de Google
+        Fonts, se cargan en una sola petición y pesan poco.
+      </p>
+    </div>
+
+    <div class="specimens">
+      <div class="spec">
+        <div class="spec-label">Display<span>Archivo 700–800</span></div>
+        <div>
+          <div style="font-family:var(--font-display);font-weight:800;font-stretch:100%;font-size:clamp(30px,5vw,52px);letter-spacing:-.035em;line-height:1">Songs in the Key of Life</div>
+          <p style="color:var(--fg-muted);font-size:14px;margin-top:10px">Títulos de álbum, encabezados de pantalla y la marca. Eje de ancho variable: se condensa a 78% para etiquetas en versalitas.</p>
+        </div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">Interfaz<span>Instrument Sans 400–600</span></div>
+        <div>
+          <div style="font-size:19px;line-height:1.5;max-width:52ch">Filtra por artista, año, género o formato sin recargar la página. Los filtros activos quedan visibles como chips que puedes quitar de a uno.</div>
+          <p style="color:var(--fg-muted);font-size:14px;margin-top:10px">Cuerpo, botones, etiquetas de formulario, navegación. Mínimo 14&nbsp;px en cualquier texto funcional.</p>
+        </div>
+      </div>
+      <div class="spec">
+        <div class="spec-label">Datos<span>IBM Plex Mono 400–500</span></div>
+        <div>
+          <div class="mono" style="font-size:17px;font-variant-numeric:tabular-nums;line-height:1.7">
+            CL&nbsp;1355 &nbsp;·&nbsp; 1959 &nbsp;·&nbsp; A1 &nbsp;09:22<br>
+            BST&nbsp;84003 &nbsp;·&nbsp; 1957 &nbsp;·&nbsp; B2 &nbsp;07:04
+          </div>
+          <p style="color:var(--fg-muted);font-size:14px;margin-top:10px">Números de catálogo, años, posiciones y duraciones. Cifras tabulares para que las columnas se alineen solas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ PANTALLAS ══════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Pantallas</p>
+      <h2>Cómo se ve aplicado</h2>
+      <p>
+        Todo lo que sigue está construido con los tokens de arriba: no son imágenes, responden al
+        tema en vivo. Las carátulas son composiciones abstractas generadas con CSS, en el lugar
+        donde irían las portadas reales.
+      </p>
+    </div>
+
+    <!-- COLECCIÓN -->
+    <p class="frame-cap"><b>Colección</b> — pantalla principal</p>
+    <div class="frame frame-scroll">
+      <div class="vc">
+        <div class="vc-bar">
+          <div class="vc-mark"><span class="vc-disc"></span> Crate</div>
+          <nav class="vc-nav">
+            <a href="#" aria-current="page">Colección</a>
+            <a href="#">Buscar en Discogs</a>
+            <a href="#">Artistas</a>
+          </nav>
+          <div class="vc-spacer"></div>
+          <span class="vc-status">
+            <span class="vc-dot"></span>
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M3 8.5l3.5 3.5L13 4.5"/></svg>
+            Discogs conectado
+          </span>
+          <span class="vc-iconbtn" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          </span>
+          <span class="vc-avatar">CS</span>
+        </div>
+
+        <div class="vc-toolbar">
+          <div class="vc-search">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            Buscar por título o artista…
+          </div>
+          <button class="vc-btn" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 5h18M6 12h12M10 19h4"/></svg>
+            Filtros
+          </button>
+          <button class="vc-btn" type="button">Añadidos primero</button>
+          <button class="vc-btn primary" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            Añadir disco
+          </button>
+        </div>
+
+        <div class="vc-chips">
+          <span class="vc-chip">Género <b>Jazz</b> <span class="x" aria-hidden="true">&times;</span></span>
+          <span class="vc-chip">Década <b>1970</b> <span class="x" aria-hidden="true">&times;</span></span>
+          <span class="vc-chip clear">Limpiar todo</span>
+          <span class="vc-spacer"></span>
+        </div>
+
+        <div class="vc-grid">
+          <a class="vc-card" href="#"><div class="vc-art a1"></div><div class="vc-meta"><div class="vc-title">Kind of Blue</div><div class="vc-artist">Miles Davis</div><div class="vc-sub">1959 · LP</div></div></a>
+          <a class="vc-card" href="#"><div class="vc-art a8"></div><div class="vc-meta"><div class="vc-title">Remain in Light</div><div class="vc-artist">Talking Heads</div><div class="vc-sub">1980 · LP</div></div></a>
+          <a class="vc-card" href="#"><div class="vc-art a3"></div><div class="vc-meta"><div class="vc-title">Blue Train</div><div class="vc-artist">John Coltrane</div><div class="vc-sub">1957 · LP</div></div></a>
+          <a class="vc-card" href="#"><div class="vc-art a9"></div><div class="vc-meta"><div class="vc-title">Discovery</div><div class="vc-artist">Daft Punk</div><div class="vc-sub">2001 · 2×LP</div></div></a>
+          <a class="vc-card" href="#"><div class="vc-art a10"></div><div class="vc-meta"><div class="vc-title">Songs in the Key of Life</div><div class="vc-artist">Stevie Wonder</div><div class="vc-sub">1976 · 2×LP</div></div></a>
+          <a class="vc-card" href="#"><div class="vc-art a11"></div><div class="vc-meta"><div class="vc-title">Selected Ambient Works 85–92</div><div class="vc-artist">Aphex Twin</div><div class="vc-sub">1992 · 2×LP</div></div></a>
+          <a class="vc-card" href="#"><div class="vc-art a4"></div><div class="vc-meta"><div class="vc-title">Voodoo</div><div class="vc-artist">D&rsquo;Angelo</div><div class="vc-sub">2000 · 2×LP</div></div></a>
+          <a class="vc-card" href="#"><div class="vc-art a2"></div><div class="vc-meta"><div class="vc-title">The Low End Theory</div><div class="vc-artist">A Tribe Called Quest</div><div class="vc-sub">1991 · LP</div></div></a>
+          <a class="vc-card" href="#"><div class="vc-art a7"></div><div class="vc-meta"><div class="vc-title">Rumours</div><div class="vc-artist">Fleetwood Mac</div><div class="vc-sub">1977 · LP</div></div></a>
+          <a class="vc-card" href="#"><div class="vc-art a5"></div><div class="vc-meta"><div class="vc-title">Maiden Voyage</div><div class="vc-artist">Herbie Hancock</div><div class="vc-sub">1965 · LP</div></div></a>
+          <a class="vc-card" href="#"><div class="vc-art"><div class="vc-nocover"><span class="d"></span><span>Sin portada</span></div></div><div class="vc-meta"><div class="vc-title">Marquee Moon</div><div class="vc-artist">Television</div><div class="vc-sub">1977 · LP</div></div></a>
+          <a class="vc-card" href="#"><div class="vc-art a12"></div><div class="vc-meta"><div class="vc-title">Innervisions</div><div class="vc-artist">Stevie Wonder</div><div class="vc-sub">1973 · LP</div></div></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANTES / DESPUÉS -->
+    <p class="frame-cap"><b>Antes y después</b> — el mismo contenido, dos jerarquías</p>
+    <div class="ba" style="margin-bottom:44px">
+      <div class="ba-col">
+        <p class="frame-cap">Hoy</p>
+        <div class="frame" style="margin-bottom:0">
+          <div class="old">
+            <div class="old-filters">
+              <h4>Filter Collection</h4>
+              <div class="old-row">
+                <div class="old-inp">Search title or artist…</div>
+                <div class="old-inp">All Years</div>
+                <div class="old-inp">All Genres</div>
+                <div class="old-inp">All Artists</div>
+                <div class="old-inp">All Formats</div>
+              </div>
+              <div class="old-btns">
+                <span class="old-b" style="background:#2563eb">Filter</span>
+                <span class="old-b" style="background:#e5e7eb;color:#1f2937">Clear</span>
+              </div>
+            </div>
+            <div class="old-grid">
+              <div class="old-card"><div class="old-art">No Cover</div><div class="old-meta"><div class="old-t">Kind of Blue</div><div class="old-a">Miles Davis</div><div class="old-y">1959 · LP</div></div></div>
+              <div class="old-card"><div class="old-art">No Cover</div><div class="old-meta"><div class="old-t">Remain in Light</div><div class="old-a">Talking Heads</div><div class="old-y">1980 · LP</div></div></div>
+              <div class="old-card"><div class="old-art">No Cover</div><div class="old-meta"><div class="old-t">Blue Train</div><div class="old-a">John Coltrane</div><div class="old-y">1957 · LP</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ba-col">
+        <p class="frame-cap">Propuesto</p>
+        <div class="frame" style="margin-bottom:0">
+          <div class="vc">
+            <div class="vc-toolbar">
+              <div class="vc-search">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                Buscar…
+              </div>
+              <button class="vc-btn" type="button">Filtros</button>
+            </div>
+            <div class="vc-grid" style="grid-template-columns:repeat(3,1fr)">
+              <a class="vc-card" href="#"><div class="vc-art a1"></div><div class="vc-meta"><div class="vc-title">Kind of Blue</div><div class="vc-artist">Miles Davis</div><div class="vc-sub">1959 · LP</div></div></a>
+              <a class="vc-card" href="#"><div class="vc-art a8"></div><div class="vc-meta"><div class="vc-title">Remain in Light</div><div class="vc-artist">Talking Heads</div><div class="vc-sub">1980 · LP</div></div></a>
+              <a class="vc-card" href="#"><div class="vc-art a3"></div><div class="vc-meta"><div class="vc-title">Blue Train</div><div class="vc-artist">John Coltrane</div><div class="vc-sub">1957 · LP</div></div></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETALLE -->
+    <p class="frame-cap"><b>Detalle del disco</b> — la portada tiñe la página</p>
+    <div class="frame frame-scroll">
+      <div class="vc">
+        <div class="vc-hero">
+          <div class="vc-hero-art a1"></div>
+          <div>
+            <p class="eyebrow" style="margin-bottom:10px">Columbia · CL 1355</p>
+            <h1>Kind of Blue</h1>
+            <p class="by">Miles Davis</p>
+            <div class="vc-genres">
+              <span class="vc-genre">Jazz</span>
+              <span class="vc-genre">Modal</span>
+              <span class="vc-genre">Cool Jazz</span>
+            </div>
+            <dl class="vc-liner">
+              <div><dt>Año</dt><dd>1959</dd></div>
+              <div><dt>Formato</dt><dd>LP · 12"</dd></div>
+              <div><dt>Catálogo</dt><dd>CL 1355</dd></div>
+              <div><dt>Discogs</dt><dd style="color:var(--accent)">1387137</dd></div>
+            </dl>
+            <div class="vc-actions">
+              <button class="vc-btn primary" type="button">Editar</button>
+              <button class="vc-btn" type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/></svg>
+                Actualizar desde Discogs
+              </button>
+              <span class="sep"></span>
+              <button class="vc-btn danger" type="button">Eliminar</button>
+            </div>
+          </div>
+        </div>
+        <div class="vc-tracks">
+          <h3>Lista de temas</h3>
+          <div class="vc-track"><span class="pos">A1</span><span>So What</span><span class="dur">09:22</span></div>
+          <div class="vc-track"><span class="pos">A2</span><span>Freddie Freeloader</span><span class="dur">09:46</span></div>
+          <div class="vc-track"><span class="pos">A3</span><span>Blue in Green</span><span class="dur">05:37</span></div>
+          <div class="vc-track"><span class="pos">B1</span><span>All Blues</span><span class="dur">11:33</span></div>
+          <div class="vc-track"><span class="pos">B2</span><span>Flamenco Sketches</span><span class="dur">09:26</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MÓVIL + ESTADOS -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:32px;align-items:start">
+      <div>
+        <p class="frame-cap"><b>Móvil</b> — el menú que hoy no existe</p>
+        <div class="vc-phone">
+          <div class="vc">
+            <div class="vc-bar" style="padding:0 12px">
+              <div class="vc-mark" style="font-size:15px"><span class="vc-disc"></span> Crate</div>
+              <div class="vc-spacer"></div>
+              <span class="vc-iconbtn" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 18L19 6M5 6l14 12"/></svg>
+              </span>
+            </div>
+            <nav class="vc-drawer">
+              <a href="#" aria-current="page">Colección <span class="vc-count">1 284</span></a>
+              <a href="#">Buscar en Discogs</a>
+              <a href="#">Artistas</a>
+              <hr>
+              <a href="#">Sincronizar con Discogs</a>
+              <a href="#">Cuenta</a>
+              <a href="#">Cerrar sesión</a>
+              <hr>
+              <div style="padding:6px 12px 10px;display:flex;align-items:center;gap:8px">
+                <span class="vc-status"><span class="vc-dot"></span>Discogs conectado</span>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="frame-cap"><b>Colección vacía</b> — primer inicio</p>
+        <div class="frame">
+          <div class="vc">
+            <div class="vc-empty">
+              <div class="crate">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--fg-subtle)" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="1"/><path d="M3 11h18M8 7V4h8v3"/></svg>
+              </div>
+              <h3>Tu crate está vacío</h3>
+              <p>Importa tu colección de Discogs de una vez, o agrega el primer disco a mano.</p>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+                <button class="vc-btn primary" type="button">Importar desde Discogs</button>
+                <button class="vc-btn" type="button">Añadir a mano</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="frame-cap"><b>Avisos</b> — toast en vez de barra fija</p>
+        <div style="display:grid;gap:10px">
+          <div class="vc-toast">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.4" style="margin-top:2px;flex:none" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>
+            <div class="msg"><b>Colección sincronizada</b><span>Se importaron 42 discos nuevos desde Discogs.</span></div>
+            <span class="x" aria-hidden="true">&times;</span>
+          </div>
+          <div class="vc-toast err">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.4" style="margin-top:2px;flex:none" aria-hidden="true"><path d="M12 7v6M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>
+            <div class="msg"><b>Discogs rechazó el token</b><span>Revisa tu token personal en Cuenta y vuelve a intentarlo.</span></div>
+            <span class="x" aria-hidden="true">&times;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ ACCESIBILIDAD ══════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">No negociable</p>
+      <h2>Accesibilidad como parte del sistema</h2>
+      <p>
+        No es una capa que se agrega al final: cada componente de arriba ya cumple estas reglas.
+        Objetivo WCAG&nbsp;2.2 nivel&nbsp;AA en ambos temas.
+      </p>
+    </div>
+
+    <div class="checks">
+      <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><div><b>Contraste verificado en los dos temas</b><span>Texto normal ≥ 4.5:1, texto grande y bordes ≥ 3:1. Los tokens ya están calculados para cumplirlo.</span></div></div>
+      <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><div><b>Estado nunca solo por color</b><span>«Discogs conectado» lleva punto, check e texto. Los errores llevan ícono además del rojo.</span></div></div>
+      <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><div><b>Avisos anunciados</b><span>Los toasts viven en una región <code>aria-live="polite"</code> — los errores en <code>assertive</code> — y se pueden cerrar.</span></div></div>
+      <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><div><b>Foco visible en todo lo enfocable</b><span>Un solo <code>:focus-visible</code> global con anillo de acento, en vez de estilos sueltos por input.</span></div></div>
+      <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><div><b>Skip link y <code>aria-current</code></b><span>Saltar al contenido en el primer tab; la sección activa marcada en la navegación, no solo pintada.</span></div></div>
+      <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><div><b>Blancos táctiles de 44&nbsp;px</b><span>Cada fila del menú móvil y cada botón de la barra cumplen el mínimo en pantalla táctil.</span></div></div>
+      <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><div><b>Portadas con <code>alt</code> real</b><span>«Portada de <em>Kind of Blue</em>, Miles Davis» en vez de vacío o del nombre del archivo.</span></div></div>
+      <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><div><b><code>prefers-reduced-motion</code> respetado</b><span>Las transiciones de hover y la entrada de los toasts se desactivan si el sistema lo pide.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ PLAN ══════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Ejecución</p>
+      <h2>Cinco fases, cada una desplegable sola</h2>
+      <p>
+        El orden importa: los tokens van primero porque todo lo demás los consume, y los dos bugs
+        funcionales se arreglan temprano para que la app sea usable en móvil aunque el rediseño se
+        detenga a mitad de camino.
+      </p>
+    </div>
+
+    <div class="phases">
+      <div class="phase">
+        <div class="phase-n">01</div>
+        <div>
+          <h3>Tokens y modo oscuro</h3>
+          <p>Definir el sistema completo con <code>@theme inline</code> de Tailwind&nbsp;4, un variante <code>dark</code> por <code>data-theme</code>, controlador Stimulus para el toggle y script inline en el <code>&lt;head&gt;</code> que evita el parpadeo blanco al cargar. Sin cambios visibles todavía: es la base.</p>
+          <div class="files"><code>app/assets/tailwind/application.css</code><code>layouts/application.html.erb</code><code>controllers/theme_controller.js</code></div>
+        </div>
+        <div class="effort">Esfuerzo<b>~3 h</b></div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-n">02</div>
+        <div>
+          <h3>Barra superior y navegación móvil</h3>
+          <p>Cierra el bug de navegación: drawer con hamburguesa bajo 768&nbsp;px, <code>aria-current</code> en la sección activa, estado de Discogs como punto&nbsp;+&nbsp;ícono&nbsp;+&nbsp;texto, menú de cuenta en avatar y confirmación con progreso para «Sincronizar».</p>
+          <div class="files"><code>shared/_navbar.html.erb</code><code>controllers/drawer_controller.js</code></div>
+        </div>
+        <div class="effort">Esfuerzo<b>~4 h</b></div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-n">03</div>
+        <div>
+          <h3>Colección: barra de herramientas y grilla</h3>
+          <p>Los cinco selects pasan a un panel desplegable; la búsqueda queda siempre visible y filtra con debounce dentro de un Turbo&nbsp;Frame, sin recargar. Los filtros activos se muestran como chips removibles. La grilla crece y la portada gana su marcador propio cuando falta.</p>
+          <div class="files"><code>albums/index.html.erb</code><code>albums/_grid.html.erb</code><code>albums_controller.rb</code></div>
+        </div>
+        <div class="effort">Esfuerzo<b>~6 h</b></div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-n">04</div>
+        <div>
+          <h3>Detalle, formularios y estados vacíos</h3>
+          <p>Hero con la portada tiñendo el fondo, metadatos como liner notes, acciones agrupadas por peso — primaria, secundaria y destructiva separada. Estados vacíos distintos para colección nueva y para búsqueda sin resultados.</p>
+          <div class="files"><code>albums/show.html.erb</code><code>albums/_form.html.erb</code><code>albums/search_discogs.html.erb</code></div>
+        </div>
+        <div class="effort">Esfuerzo<b>~5 h</b></div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-n">05</div>
+        <div>
+          <h3>Avisos, accesibilidad y limpieza</h3>
+          <p>Flash convertido en toasts con región <code>aria-live</code>; skip link; barrido de foco y contraste; los helpers de clases salen de <code>application_helper.rb</code> y se vuelven partials o componentes; se completan las traducciones que faltan en <code>index</code>.</p>
+          <div class="files"><code>shared/_flash_messages.html.erb</code><code>application_helper.rb</code><code>config/locales/en.yml</code></div>
+        </div>
+        <div class="effort">Esfuerzo<b>~4 h</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ CÓDIGO ══════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Fase 01, lista para pegar</p>
+      <h2>El sistema en Tailwind 4</h2>
+      <p>
+        <code>@theme inline</code> es la pieza clave: hace que las utilidades de Tailwind apunten a
+        variables CSS en lugar de valores fijos, así <code>bg-surface</code> cambia sola al cambiar
+        el tema. Reemplaza el contenido actual de tu <code>application.css</code>.
+      </p>
+    </div>
+
+<pre><span class="c">/* app/assets/tailwind/application.css */</span>
+@import <span class="v">"tailwindcss"</span>;
+
+<span class="c">/* el variante dark:* pasa a depender de data-theme, no del OS */</span>
+@custom-variant dark (&amp;:where([data-theme=<span class="v">"dark"</span>], [data-theme=<span class="v">"dark"</span>] *));
+
+<span class="c">/* inline = las utilidades apuntan a la variable, no a su valor */</span>
+@theme inline {
+  <span class="k">--color-bg</span>:          var(--bg);
+  <span class="k">--color-surface</span>:     var(--surface);
+  <span class="k">--color-surface-2</span>:   var(--surface-2);
+  <span class="k">--color-line</span>:        var(--line);
+  <span class="k">--color-fg</span>:          var(--fg);
+  <span class="k">--color-fg-muted</span>:    var(--fg-muted);
+  <span class="k">--color-accent</span>:      var(--accent);
+  <span class="k">--color-accent-fg</span>:   var(--accent-fg);
+  <span class="k">--color-ok</span>:          var(--ok);
+  <span class="k">--color-danger</span>:      var(--danger);
+
+  <span class="k">--font-display</span>: <span class="v">"Archivo"</span>, ui-sans-serif, sans-serif;
+  <span class="k">--font-sans</span>:    <span class="v">"Instrument Sans"</span>, ui-sans-serif, sans-serif;
+  <span class="k">--font-mono</span>:    <span class="v">"IBM Plex Mono"</span>, ui-monospace, monospace;
+
+  <span class="k">--radius-sleeve</span>: 3px;
+}
+
+<span class="c">/* claro: la base */</span>
+:root {
+  <span class="k">--bg</span>: #F1F0EC;  <span class="k">--surface</span>: #FFFFFF;  <span class="k">--surface-2</span>: #F8F7F4;
+  <span class="k">--line</span>: #E0DDD6;  <span class="k">--fg</span>: #171614;  <span class="k">--fg-muted</span>: #605C54;
+  <span class="k">--accent</span>: #8A6218;  <span class="k">--accent-fg</span>: #FFFFFF;
+  <span class="k">--ok</span>: #1D6B41;  <span class="k">--danger</span>: #A3271F;
+}
+
+<span class="c">/* oscuro: solo redefine valores, nunca componentes */</span>
+[data-theme=<span class="v">"dark"</span>] {
+  <span class="k">--bg</span>: #121110;  <span class="k">--surface</span>: #1A1917;  <span class="k">--surface-2</span>: #221F1D;
+  <span class="k">--line</span>: #302D29;  <span class="k">--fg</span>: #EFEBE4;  <span class="k">--fg-muted</span>: #A39D93;
+  <span class="k">--accent</span>: #E0A951;  <span class="k">--accent-fg</span>: #1A1300;
+  <span class="k">--ok</span>: #5FBF87;  <span class="k">--danger</span>: #F0796C;
+}
+
+<span class="c">/* un solo anillo de foco para toda la app */</span>
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+</pre>
+
+    <p class="frame-cap" style="margin-top:36px"><b>layouts/application.html.erb</b> — antes de la hoja de estilos, para que no parpadee</p>
+<pre><span class="c">&lt;!-- se ejecuta antes del primer pintado: sin flash blanco --&gt;</span>
+&lt;script&gt;
+  (function () {
+    var t = localStorage.getItem(<span class="v">"theme"</span>);
+    if (t !== <span class="v">"light"</span> &amp;&amp; t !== <span class="v">"dark"</span>) {
+      t = matchMedia(<span class="v">"(prefers-color-scheme: dark)"</span>).matches ? <span class="v">"dark"</span> : <span class="v">"light"</span>;
+    }
+    document.documentElement.dataset.theme = t;
+  })();
+&lt;/script&gt;
+</pre>
+    <p style="color:var(--fg-muted);font-size:15px;margin-top:16px;max-width:var(--measure)">
+      Tu CSP está comentada en <code>content_security_policy.rb</code>, así que el script inline
+      funciona sin nonce. Si la activas más adelante, hay que añadirle <code>nonce: true</code>.
+    </p>
+  </div>
+</section>
+
+<footer class="end">
+  <div class="wrap">
+    <p>Crate — propuesta de dirección visual para Vinyl Collection Manager. Los mockups son HTML vivo construido con los mismos tokens que se proponen para la app; las carátulas son composiciones abstractas generadas con CSS, no portadas reales.</p>
+  </div>
+</footer>
+</main>
+
+<button class="toggle" id="theme-toggle" type="button" aria-pressed="false">
+  <svg id="tt-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"></svg>
+  <span class="tt-label">Tema</span>
+</button>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var btn = document.getElementById("theme-toggle");
+  var label = btn.querySelector(".tt-label");
+  var icon = document.getElementById("tt-icon");
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+
+  var SUN = '<circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>';
+  var MOON = '<path d="M20 14.5A8.3 8.3 0 019.5 4a8.5 8.5 0 1010.5 10.5z"/>';
+
+  function current() {
+    if (root.dataset.theme === "dark" || root.dataset.theme === "light") return root.dataset.theme;
+    return mq.matches ? "dark" : "light";
+  }
+
+  function paintTokens() {
+    var cs = getComputedStyle(root);
+    document.querySelectorAll("[data-token]").forEach(function (el) {
+      var v = cs.getPropertyValue(el.getAttribute("data-token")).trim();
+      if (v) el.textContent = v.toUpperCase();
+    });
+  }
+
+  function paint() {
+    var t = current();
+    var dark = t === "dark";
+    btn.setAttribute("aria-pressed", String(dark));
+    btn.setAttribute("aria-label", dark ? "Cambiar a tema claro" : "Cambiar a tema oscuro");
+    label.textContent = dark ? "Oscuro" : "Claro";
+    icon.innerHTML = dark ? MOON : SUN;
+    paintTokens();
+  }
+
+  btn.addEventListener("click", function () {
+    root.dataset.theme = current() === "dark" ? "light" : "dark";
+    paint();
+  });
+
+  mq.addEventListener("change", function () {
+    if (root.dataset.theme !== "dark" && root.dataset.theme !== "light") paint();
+  });
+
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(paintTokens);
+  paint();
+})();
+</script>

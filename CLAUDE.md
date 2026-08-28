@@ -28,7 +28,7 @@ bin/rails db:reset               # Drop and recreate database
 ### Testing & Coverage
 
 ```bash
-bin/rails test                   # Run all tests with SimpleCov coverage (90.58%)
+bin/rails test                   # Run all tests with SimpleCov coverage (92.75%)
 bin/rails test:system            # Run system tests (Capybara + Selenium)
 ```
 
@@ -104,6 +104,14 @@ User (separate, manages Discogs integration)
 - **Pagination**: Pagy (~> 9.3)
 - **Development & Testing**: RuboCop Rails Omakase, Brakeman, SimpleCov, Web Console
 
+### Design System
+
+The visual direction, its rules and the tests that guard them are documented in
+[docs/design/README.md](docs/design/README.md). Read it before changing views or
+styles. In short: semantic tokens only (never `bg-white` or `text-gray-700`),
+component classes over repeated utility strings, one filled primary button per
+view, 44px touch targets, and every user-facing string from `config/locales/`.
+
 ### Frontend Architecture
 
 - **CSS Framework**: TailwindCSS with Rails asset pipeline
@@ -144,7 +152,7 @@ The project uses RuboCop Rails Omakase configuration for consistent code style.
 ### Test Coverage & Requirements
 
 - **Coverage Tool**: SimpleCov with 80% minimum threshold
-- **Current Coverage**: 90.58% (250/276 lines)
+- **Current Coverage**: 92.75%
 - **Reports**: Generated in `/coverage/index.html` after test runs
 - **System Tests**: Require Selenium WebDriver (Capybara + Selenium gems)
 - **Parallel Tests**: Disabled for SimpleCov compatibility
