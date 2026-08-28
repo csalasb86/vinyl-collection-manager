@@ -9,13 +9,17 @@ class AlbumsController < ApplicationController
     @artist_id = params[:artist_id]
     @format = params[:format]
 
+    @sort = Album::SORTS.key?(params[:sort]) ? params[:sort] : "recent"
+
     albums = Album.all
       .by_query(@q)
       .by_year(@year)
       .by_genre(@genre)
       .by_artist(@artist_id)
       .by_format(@format)
+      .sorted_by(@sort)
       .includes(:artists)
+      .with_attached_cover
 
     @pagy, @albums = pagy(albums, items: 24)
 
@@ -23,6 +27,9 @@ class AlbumsController < ApplicationController
     @genres = Album.pluck(:genre).flatten.uniq.sort
     @artists = Artist.order(:name)
     @formats = Album.distinct.pluck(:format).compact.sort
+
+    # Tells an empty collection apart from a filter that matched nothing.
+    @collection_empty = @pagy.count.zero? && !Album.exists?
   end
 
   def show

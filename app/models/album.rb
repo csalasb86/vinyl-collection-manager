@@ -14,11 +14,40 @@ class Album < ApplicationRecord
 
   scope :by_year, ->(year) { where(year: year) if year.present? }
   scope :by_genre, ->(genre) { where("genre && ARRAY[?]::varchar[]", [ genre ]) if genre.present? }
-  scope :by_artist, ->(artist_id) { joins(:artists).where(artists: { id: artist_id }) if artist_id.present? }
   scope :by_format, ->(format) { where(format: format) if format.present? }
+
+  # Both of these match through artists with a subquery rather than a join on
+  # the outer relation: a join multiplies the row per matching artist, which
+  # showed the same album twice. LEFT JOIN inside so an album with no artist is
+  # still findable by its title.
+  scope :by_artist, ->(artist_id) {
+    where(id: AlbumArtist.where(artist_id: artist_id).select(:album_id)) if artist_id.present?
+  }
+
   scope :by_query, ->(query) {
-    where("title ILIKE ? OR artists.name ILIKE ?", "%#{query}%", "%#{query}%")
-    .joins(:artists) if query.present?
+    next if query.blank?
+
+    like = "%#{query}%"
+    where(id: Album.left_joins(:artists)
+                   .where("albums.title ILIKE :like OR artists.name ILIKE :like", like: like)
+                   .select(:id))
+  }
+
+  # Whitelisted so an ORDER BY can never come from a request parameter.
+  SORTS = {
+    "recent" => "Recently added",
+    "title"  => "Title A\u2013Z",
+    "newest" => "Year, newest first",
+    "oldest" => "Year, oldest first"
+  }.freeze
+
+  scope :sorted_by, ->(key) {
+    case key
+    when "title"  then order(Arel.sql("LOWER(albums.title) ASC"))
+    when "newest" then order(Arel.sql("albums.year DESC NULLS LAST")).order(:title)
+    when "oldest" then order(Arel.sql("albums.year ASC NULLS LAST")).order(:title)
+    else               order(created_at: :desc)
+    end
   }
 
   # Imports a Discogs release.

@@ -1,0 +1,27 @@
+<%# The sleeve is the content: art sits straight on the page ground with its own
+    shadow, instead of inside a card that competes with it. %>
+<%= link_to album, class: "group block rounded-sleeve focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent" do %>
+  <div class="aspect-square rounded-sleeve overflow-hidden shadow transition duration-200 group-hover:-translate-y-1 group-hover:shadow-md">
+    <% if album.cover.attached? %>
+      <%= image_tag album.cover_url, alt: cover_alt(album), loading: "lazy",
+            class: "w-full h-full object-cover" %>
+    <% else %>
+      <div class="w-full h-full flex flex-col items-center justify-center gap-2 bg-surface-2 border border-line">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" class="text-line-strong" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.4"/>
+          <circle cx="12" cy="12" r="5.5" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+          <circle cx="12" cy="12" r="1.6" fill="currentColor"/>
+        </svg>
+        <span class="font-display text-[10px] tracking-widest uppercase text-fg-subtle">No cover</span>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="pt-2.5">
+    <h3 class="text-sm font-semibold leading-snug truncate" title="<%= album.title %>"><%= album.title %></h3>
+    <p class="text-sm text-fg-muted truncate"><%= album.display_artists %></p>
+    <p class="mt-0.5 font-mono text-xs text-fg-subtle tabular-nums">
+      <%= [ album.year, album.format ].compact_blank.join(" · ") %>
+    </p>
+  </div>
+<% end %>

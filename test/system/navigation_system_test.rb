@@ -97,7 +97,7 @@ class NavigationSystemTest < ApplicationSystemTestCase
     assert_selector "[data-dropdown-target=menu]", visible: true
     assert_text @user.email
 
-    find("h1").click
+    find("#main").click
 
     assert_no_selector "[data-dropdown-target=menu]", visible: true
   end

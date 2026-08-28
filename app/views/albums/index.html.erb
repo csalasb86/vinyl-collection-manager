@@ -1,80 +1,93 @@
-<div class="mb-6">
-  <h1 class="text-3xl font-bold mb-6">Your Vinyl Collection</h1>
-  
-  <div class="bg-surface p-4 rounded-sleeve shadow mb-6">
-    <h2 class="text-xl font-semibold mb-4">Filter Collection</h2>
-    
-    <%= form_with url: albums_path, method: :get, class: "space-y-4" do |f| %>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        <div>
-          <%= f.label :q, "Search", class: "block text-sm font-medium text-fg-muted mb-1" %>
-          <%= f.text_field :q, value: @q, placeholder: "Search title or artist...", class: "w-full px-3 py-2 border border-line rounded-sleeve" %>
+<%# The nav already marks this section as current and the grid speaks for
+    itself, so the heading is there for the document outline, not the layout. %>
+<h1 class="sr-only">Your Vinyl Collection</h1>
+
+<%# The toolbar sits outside the frame on purpose: replacing it on every
+    keystroke would take the focus out of the search field. %>
+<div class="relative flex flex-wrap items-start gap-2 mb-5">
+  <%= form_with url: albums_path, method: :get,
+                data: { controller: "autosubmit", turbo_frame: "albums" },
+                class: "contents" do |f| %>
+
+    <label class="flex items-center gap-2 basis-full sm:basis-auto sm:flex-1 min-w-0 px-3 py-2 bg-surface border border-line rounded-sleeve focus-within:border-accent">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="text-fg-subtle shrink-0" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
+      </svg>
+      <span class="sr-only">Search the collection</span>
+      <%= f.search_field :q, value: @q,
+            placeholder: "Search title or artist…",
+            autocomplete: "off",
+            data: { action: "input->autosubmit#debounced" },
+            class: "w-full bg-transparent text-fg placeholder:text-fg-subtle focus:outline-none" %>
+    </label>
+
+    <%# Not auto-opened on a filtered URL: the panel overlays the results, so it
+        would land right on top of the chips it is meant to explain. %>
+    <details>
+      <summary class="flex items-center gap-2 px-3 py-2 rounded-sleeve border border-line bg-surface text-sm text-fg cursor-pointer select-none hover:bg-surface-2 marker:content-none [&::-webkit-details-marker]:hidden">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3 5h18M6 12h12M10 19h4"/>
+        </svg>
+        <%# No count badge here: the toolbar sits outside the frame, so it would
+            go stale the moment a filter is applied. The chips under it are
+            inside the frame and always current. %>
+        Filters
+      </summary>
+
+      <div class="absolute left-0 right-0 top-full z-30 mt-2 p-4 bg-surface border border-line rounded-sleeve shadow-md">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <%= f.label :year, "Year", class: form_label_classes %>
+            <%= f.select :year, options_for_select(@years, @year), { include_blank: "All years" },
+                  data: { action: "change->autosubmit#now" }, class: form_input_classes %>
+          </div>
+          <div>
+            <%= f.label :genre, "Genre", class: form_label_classes %>
+            <%= f.select :genre, options_for_select(@genres, @genre), { include_blank: "All genres" },
+                  data: { action: "change->autosubmit#now" }, class: form_input_classes %>
+          </div>
+          <div>
+            <%= f.label :artist_id, "Artist", class: form_label_classes %>
+            <%= f.select :artist_id, options_from_collection_for_select(@artists, :id, :name, @artist_id), { include_blank: "All artists" },
+                  data: { action: "change->autosubmit#now" }, class: form_input_classes %>
+          </div>
+          <div>
+            <%= f.label :format, "Format", class: form_label_classes %>
+            <%= f.select :format, options_for_select(@formats, @format), { include_blank: "All formats" },
+                  data: { action: "change->autosubmit#now" }, class: form_input_classes %>
+          </div>
         </div>
-        
-        <div>
-          <%= f.label :year, "Year", class: "block text-sm font-medium text-fg-muted mb-1" %>
-          <%= f.select :year, options_for_select(@years, @year), { include_blank: "All Years" }, class: "w-full px-3 py-2 border border-line rounded-sleeve" %>
-        </div>
-        
-        <div>
-          <%= f.label :genre, "Genre", class: "block text-sm font-medium text-fg-muted mb-1" %>
-          <%= f.select :genre, options_for_select(@genres, @genre), { include_blank: "All Genres" }, class: "w-full px-3 py-2 border border-line rounded-sleeve" %>
-        </div>
-        
-        <div>
-          <%= f.label :artist_id, "Artist", class: "block text-sm font-medium text-fg-muted mb-1" %>
-          <%= f.select :artist_id, options_from_collection_for_select(@artists, :id, :name, @artist_id), { include_blank: "All Artists" }, class: "w-full px-3 py-2 border border-line rounded-sleeve" %>
-        </div>
-        
-        <div>
-          <%= f.label :format, "Format", class: "block text-sm font-medium text-fg-muted mb-1" %>
-          <%= f.select :format, options_for_select(@formats, @format), { include_blank: "All Formats" }, class: "w-full px-3 py-2 border border-line rounded-sleeve" %>
+
+        <div class="flex justify-end gap-2 mt-4">
+          <%= link_to "Clear all", path_without_filters,
+                data: { turbo_frame: "_top" },
+                class: "px-3 py-2 rounded-sleeve text-sm text-fg-muted hover:bg-surface-2 hover:text-fg" %>
+          <%# Without JS this button is how filters get applied. %>
+          <%= f.submit "Apply filters", class: "px-3 py-2 rounded-sleeve bg-accent text-accent-fg text-sm font-medium hover:bg-accent-hover cursor-pointer" %>
         </div>
       </div>
-      
-      <div class="flex justify-end">
-        <%= f.submit "Filter", class: "px-4 py-2 bg-accent text-accent-fg rounded-sleeve hover:bg-accent-hover" %>
-        <%= link_to "Clear", albums_path, class: "ml-2 px-4 py-2 bg-surface-3 text-fg rounded-sleeve hover:bg-line" %>
-      </div>
-    <% end %>
-  </div>
-  
-  <div class="flex justify-between items-center mb-4">
-    <p class="text-fg-muted"><%= pluralize(@pagy.count, 'album') %> found</p>
-    <%= link_to "Add New Album", new_album_path, class: "px-4 py-2 bg-ok text-surface rounded-sleeve hover:bg-ok-hover" %>
-  </div>
-  
-  <% if @albums.any? %>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-      <% @albums.each do |album| %>
-        <div class="bg-surface rounded-sleeve shadow overflow-hidden hover:shadow-lg transition duration-300">
-          <%= link_to album do %>
-            <div class="aspect-square overflow-hidden">
-              <% if album.cover.attached? %>
-                <%= image_tag album.cover_url, class: "w-full h-full object-cover" %>
-              <% else %>
-                <div class="w-full h-full bg-surface-3 flex items-center justify-center">
-                  <span class="text-fg-subtle">No Cover</span>
-                </div>
-              <% end %>
-            </div>
-            <div class="p-3">
-              <h3 class="font-semibold text-sm truncate"><%= album.title %></h3>
-              <p class="text-xs text-fg-muted truncate"><%= album.display_artists %></p>
-              <p class="text-xs text-fg-subtle mt-1"><%= [ album.year, album.format ].compact_blank.join(" · ") %></p>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-    
-    <div class="mt-6">
-      <%== pagy_nav(@pagy) %>
-    </div>
-  <% else %>
-    <div class="bg-surface p-6 rounded-sleeve shadow text-center">
-      <p class="text-fg-muted mb-4">No albums found matching your filters.</p>
-      <%= link_to "Clear Filters", albums_path, class: "px-4 py-2 bg-accent text-accent-fg rounded-sleeve hover:bg-accent-hover" %>
+    </details>
+
+    <div>
+      <label class="sr-only" for="sort">Sort by</label>
+      <%= f.select :sort, options_for_select(Album::SORTS.invert, @sort), {},
+            id: "sort",
+            data: { action: "change->autosubmit#now" },
+            class: "max-w-40 sm:max-w-none px-3 py-2 bg-surface border border-line rounded-sleeve text-sm text-fg" %>
     </div>
   <% end %>
+
+  <%# Icon only on a phone, where the label costs a whole toolbar row. The
+      accessible name stays either way. %>
+  <%= link_to new_album_path, aria: { label: "Add album" },
+        class: "inline-flex items-center gap-2 ml-auto px-3 py-2 rounded-sleeve bg-accent text-accent-fg text-sm font-medium hover:bg-accent-hover" do %>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+      <path d="M12 5v14M5 12h14"/>
+    </svg>
+    <span class="hidden sm:inline">Add album</span>
+  <% end %>
 </div>
+
+<%= turbo_frame_tag "albums", data: { turbo_action: "advance" } do %>
+  <%= render "albums/results" %>
+<% end %>
