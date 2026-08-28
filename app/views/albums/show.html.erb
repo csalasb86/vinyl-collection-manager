@@ -121,7 +121,9 @@
             <tbody>
               <% @album.tracks.each do |track| %>
                 <tr class="border-b border-line hover:bg-surface-2">
-                  <td class="py-2.5 pr-4 w-12 font-mono text-xs text-fg-subtle tabular-nums align-baseline"><%= track.position %></td>
+                  <%# w-px plus nowrap: the column shrinks to its widest position instead of
+                      being pinned to a width that wrapped "CD-10" onto two lines. %>
+                  <td class="py-2.5 pr-4 w-px whitespace-nowrap font-mono text-xs text-fg-subtle tabular-nums align-baseline"><%= track.position %></td>
                   <td class="py-2.5 pr-4 align-baseline"><%= track.title %></td>
                   <td class="py-2.5 text-right font-mono text-xs text-fg-subtle tabular-nums align-baseline whitespace-nowrap"><%= track.duration %></td>
                 </tr>

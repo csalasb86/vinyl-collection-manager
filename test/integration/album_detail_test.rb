@@ -85,4 +85,18 @@ class AlbumDetailTest < ActionDispatch::IntegrationTest
     assert_select "img", false, "this album has no cover attached"
     assert_match "No Cover", response.body
   end
+
+  # A fixed-width position column wrapped "CD-10" onto two lines, so a
+  # multi-disc release read with every second row twice as tall.
+  test "a long track position stays on one line" do
+    @album.tracks.create!(title: "El Cantar", position: "CD-10", position_index: 1)
+
+    get album_path(@album)
+
+    cell = css_select("tbody tr td:first-child").first
+    assert_equal "CD-10", cell.text.strip
+    assert_includes cell[:class], "whitespace-nowrap"
+    assert_not_includes cell[:class], "w-12",
+                        "a fixed width is what made it wrap in the first place"
+  end
 end
