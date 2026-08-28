@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_08_28_020221) do
+ActiveRecord::Schema[8.0].define(version: 2026_08_28_150607) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -102,6 +102,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_28_020221) do
     t.string "discogs_username"
     t.string "discogs_token"
     t.datetime "discogs_authenticated_at"
+    t.datetime "discogs_synced_at"
+    t.string "locale"
     t.index ["discogs_username"], name: "index_users_on_discogs_username"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

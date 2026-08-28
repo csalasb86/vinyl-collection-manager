@@ -1,0 +1,265 @@
+es:
+  activerecord:
+    models:
+      album:
+        one: "Disco"
+        other: "Discos"
+      artist:
+        one: "Artista"
+        other: "Artistas"
+      track:
+        one: "Tema"
+        other: "Temas"
+      user:
+        one: "Usuario"
+        other: "Usuarios"
+    attributes:
+      album:
+        title: "Título"
+        year: "Año"
+        format: "Formato"
+        catalog_number: "Número de catálogo"
+        genre: "Géneros"
+        notes: "Notas"
+        cover: "Portada"
+        discogs_id: "ID de Discogs"
+      artist:
+        name: "Nombre"
+      track:
+        title: "Título"
+        position: "Posición"
+        duration: "Duración"
+      user:
+        email: "Correo"
+        password: "Contraseña"
+        password_confirmation: "Confirmación de contraseña"
+        current_password: "Contraseña actual"
+        discogs_username: "Usuario de Discogs"
+        discogs_token: "Token de Discogs"
+
+  hello: "Hola mundo"
+
+  errors:
+    aria:
+      error_icon: "Error"
+
+  vinyl_collection:
+    flash:
+      dismiss: "Cerrar"
+
+    confirm:
+      title: "¿Seguro?"
+      accept: "Sí, continuar"
+      cancel: "Cancelar"
+
+    sync:
+      started: "Sincronizando tu colección de Discogs en segundo plano. Los discos irán apareciendo aquí — recarga en un minuto."
+      not_connected: "Conecta tu cuenta de Discogs antes de sincronizar."
+      last: "Última sincronización hace %{time}"
+      never: "Sin sincronizar"
+      finished:
+        one: "Sincronización terminada. Se importó 1 disco desde Discogs."
+        other: "Sincronización terminada. Se importaron %{count} discos desde Discogs."
+      failed: "La sincronización con Discogs falló: %{error}"
+
+    languages:
+      en: "inglés"
+      es: "español"
+
+    nav:
+      brand: "Vinyl Collection"
+      collection: "Colección"
+      search_discogs: "Buscar en Discogs"
+      sync: "Sincronizar colección"
+      sync_confirm: "¿Sincronizar toda tu colección de Discogs ahora? Puede tardar unos minutos."
+      syncing: "Sincronizando…"
+      account: "Cuenta"
+      log_out: "Cerrar sesión"
+      open_menu: "Abrir menú"
+      account_menu: "Menú de cuenta"
+      switch_theme: "Cambiar tema"
+      discogs_connected: "Discogs conectado"
+      discogs_not_connected: "Discogs sin conectar"
+      language: "Idioma"
+      switch_language: "Cambiar a %{language}"
+
+    albums:
+      unknown_year: "Desconocido"
+
+      sorts:
+        recent: "Añadidos primero"
+        title: "Título A–Z"
+        newest: "Año, más nuevos primero"
+        oldest: "Año, más antiguos primero"
+
+      index:
+        heading: "Tu colección de vinilos"
+        search_label: "Buscar en la colección"
+        search_placeholder: "Buscar por título o artista…"
+        filters: "Filtros"
+        sort_label: "Ordenar por"
+        apply: "Aplicar filtros"
+        clear_all: "Limpiar todo"
+        add: "Añadir disco"
+        all_years: "Todos los años"
+        all_genres: "Todos los géneros"
+        all_artists: "Todos los artistas"
+        all_formats: "Todos los formatos"
+        year: "Año"
+        genre: "Género"
+        artist: "Artista"
+        format: "Formato"
+
+      results:
+        count:
+          one: "1 disco"
+          other: "%{count} discos"
+        remove_filter: "Quitar filtro %{label}: %{value}"
+        filter_search: "Búsqueda"
+        filter_year: "Año"
+        filter_genre: "Género"
+        filter_format: "Formato"
+        filter_artist: "Artista"
+        clear_all: "Limpiar todo"
+        empty_title: "Tu crate está vacío"
+        empty_body: "Importa tu colección de Discogs de una vez, o añade el primer disco a mano."
+        empty_import: "Buscar en Discogs"
+        empty_manual: "Añadir a mano"
+        no_results_title: "Nada coincide con estos filtros"
+        no_results_body: "Prueba otra búsqueda, o quita alguno de los filtros de arriba."
+        no_results_clear: "Limpiar todos los filtros"
+
+      card:
+        no_cover: "Sin portada"
+        cover_alt: "Portada de %{title}, de %{artists}"
+        cover_alt_untitled: "Portada de %{title}"
+
+      form:
+        title: "Título"
+        year: "Año"
+        year_help: "Déjalo en blanco si no conoces el año de la edición."
+        format: "Formato"
+        select_format: "Elige un formato"
+        catalog_number: "Número de catálogo"
+        artists: "Artistas"
+        genres: "Géneros"
+        multiple_help: "Mantén Ctrl o Cmd para elegir más de uno."
+        cover: "Portada"
+        cover_replace: "Elegir un archivo reemplaza la portada actual."
+        cover_hint: "JPEG o PNG; cuadrada funciona mejor."
+        notes: "Notas"
+        create: "Añadir a la colección"
+        update: "Guardar cambios"
+        cancel: "Cancelar"
+        errors:
+          one: "1 problema impidió guardar esto"
+          other: "%{count} problemas impidieron guardar esto"
+
+      new:
+        heading: "Añadir un disco"
+
+      edit:
+        heading: "Editar disco"
+
+      discogs:
+        heading: "Buscar en Discogs"
+        subtitle: "Encuentra una edición en la base de datos de Discogs e impórtala a tu crate."
+        not_connected_html: "Conecta tu cuenta de Discogs antes de buscar. %{link} en los ajustes de tu cuenta."
+        not_connected_link: "Añade tu usuario y token personal"
+        search_label: "Buscar en la base de datos de Discogs"
+        search_placeholder: "Artista, álbum o número de catálogo…"
+        search: "Buscar"
+        results: "Resultados"
+        import: "Importar"
+        importing: "Importando…"
+        import_aria: "Importar %{title}"
+        pages_label: "Páginas de resultados"
+        previous: "Anterior"
+        next: "Siguiente"
+        page_of: "Página %{page} de %{pages}"
+        empty_title: "No se encontraron ediciones"
+        empty_body: "Nada en Discogs coincide con «%{query}». Prueba con el nombre del artista, o con un número de catálogo de la funda."
+
+      show:
+        edit: "Editar"
+        delete: "Eliminar"
+        refresh_from_discogs: "Actualizar desde Discogs"
+        back_to_collection: "Volver a la colección"
+        tracklist: "Lista de temas"
+        genres: "Géneros"
+        notes: "Notas"
+        labels:
+          year: "Año"
+          format: "Formato"
+          catalog: "Catálogo"
+          discogs: "Discogs"
+        no_cover: "Sin portada"
+        position: "#"
+        title_header: "Título"
+        duration: "Duración"
+        confirm_delete: "¿Seguro que quieres eliminar este disco?"
+        aria:
+          view_on_discogs: "Ver %{title} en Discogs"
+          edit_album: "Editar %{title}"
+          refresh_album: "Actualizar los datos de %{title} desde Discogs"
+          delete_album: "Eliminar %{title} de la colección"
+          album_tracklist: "Lista de temas del disco"
+
+    auth:
+      log_in: "Iniciar sesión"
+      sign_up: "Crear cuenta"
+      email: "Correo"
+      password: "Contraseña"
+      password_confirmation: "Confirmar contraseña"
+      current_password: "Contraseña actual"
+      remember_me: "Recordarme"
+      forgot_password: "¿Olvidaste tu contraseña?"
+      send_reset: "Enviarme instrucciones para restablecerla"
+      change_password: "Cambiar mi contraseña"
+      resend_confirmation: "Reenviar instrucciones de confirmación"
+      resend_unlock: "Reenviar instrucciones de desbloqueo"
+      new_password: "Contraseña nueva"
+      confirm_new_password: "Confirmar contraseña nueva"
+      minimum_characters: "Mínimo %{count} caracteres"
+      sign_in_with: "Iniciar sesión con %{provider}"
+      errors:
+        one: "1 error impidió continuar"
+        other: "%{count} errores impidieron continuar"
+
+    account:
+      edit:
+        title: "Editar cuenta"
+        discogs_integration: "Integración con Discogs"
+        discogs_username: "Usuario de Discogs"
+        discogs_token: "Token de API de Discogs"
+        update_account: "Actualizar cuenta"
+        test_connection: "Probar conexión con Discogs"
+        danger_zone: "Zona de riesgo"
+        delete_account: "Eliminar cuenta"
+        cancel_account: "Dar de baja mi cuenta"
+        help:
+          password_blank: "(déjalo en blanco si no quieres cambiarla)"
+          current_password: "(necesitamos tu contraseña actual para confirmar los cambios)"
+          discogs_username: "Tu usuario de Discogs para sincronizar la colección"
+          discogs_token: "Consigue tu token en %{link}"
+          delete_warning: "¿No te convence el servicio? Puedes eliminar tu cuenta aquí. Esta acción no se puede deshacer."
+        placeholders:
+          discogs_username: "Escribe tu usuario de Discogs"
+          discogs_token: "Escribe tu token de API de Discogs"
+        status:
+          connected: "✓ Conectado a Discogs como %{username}"
+          not_connected: "Sin conexión a Discogs"
+          not_configured: "Discogs sin configurar."
+          not_configured_help: "Añade tus credenciales arriba para sincronizar tu colección."
+        links:
+          discogs_settings: "Ajustes de desarrollador de Discogs"
+          back: "← Volver"
+        confirm:
+          delete_account: "¿Seguro? Esta acción no se puede deshacer."
+        aria:
+          form: "Editar ajustes de la cuenta"
+          delete_account: "Eliminar permanentemente tu cuenta y todos tus datos"
+          discogs_settings: "Abrir los ajustes de desarrollador de Discogs en una pestaña nueva"
+          success_icon: "Correcto"
+          warning_icon: "Aviso"
+          error_icon: "Error"

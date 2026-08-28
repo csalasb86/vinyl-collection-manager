@@ -28,6 +28,10 @@ class User < ApplicationRecord
     end
   end
 
+  def discogs_synced?
+    discogs_synced_at.present?
+  end
+
   def discogs_authenticated?
     discogs_authenticated_at.present? && discogs_authenticated_at > 30.days.ago
   end

@@ -23,6 +23,10 @@
         </div>
       <% end %>
 
+      <div class="hidden sm:block">
+        <%= render "shared/locale_picker" %>
+      </div>
+
       <button type="button"
               data-controller="theme"
               data-action="click->theme#toggle"
@@ -71,6 +75,8 @@
                     turbo_submits_with: t("vinyl_collection.nav.syncing")
                   },
                   class: "w-full text-left px-3 py-2 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg" %>
+
+            <p class="px-3 pb-2 -mt-1 font-mono text-xs text-fg-subtle"><%= last_sync_label(current_user) %></p>
 
             <%= link_to t("vinyl_collection.nav.account"), edit_user_registration_path,
                   role: "menuitem",
@@ -134,7 +140,9 @@
 
         <div class="px-3 pb-2 text-fg-muted">
           <%= render "shared/discogs_status" %>
-          <p class="mt-2 text-xs text-fg-subtle truncate"><%= current_user.email %></p>
+          <p class="mt-2 font-mono text-xs text-fg-subtle"><%= last_sync_label(current_user) %></p>
+          <p class="mt-1 text-xs text-fg-subtle truncate"><%= current_user.email %></p>
+          <div class="mt-3 sm:hidden"><%= render "shared/locale_picker" %></div>
         </div>
       <% end %>
     </div>

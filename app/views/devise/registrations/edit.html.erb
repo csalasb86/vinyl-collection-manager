@@ -5,7 +5,7 @@
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <div>
-      <%= f.label :email, class: "field-label" %>
+      <%= f.label :email, t("vinyl_collection.auth.email"), class: "field-label" %>
       <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "field", "aria-describedby": "email-help" %>
     </div>
 
@@ -18,7 +18,7 @@
     <% end %>
 
     <div>
-      <%= f.label :password, class: "field-label" %>
+      <%= f.label :password, t("vinyl_collection.auth.password"), class: "field-label" %>
       <p class="text-xs text-fg-subtle mb-1" id="password-help"><%= t('vinyl_collection.account.edit.help.password_blank') %></p>
       <%= f.password_field :password, autocomplete: "new-password", class: "field", "aria-describedby": "password-help" %>
       <% if @minimum_password_length %>
@@ -27,12 +27,12 @@
     </div>
 
     <div>
-      <%= f.label :password_confirmation, class: "field-label" %>
+      <%= f.label :password_confirmation, t("vinyl_collection.auth.password_confirmation"), class: "field-label" %>
       <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "field" %>
     </div>
 
     <div>
-      <%= f.label :current_password, class: "field-label" %>
+      <%= f.label :current_password, t("vinyl_collection.auth.current_password"), class: "field-label" %>
       <p class="text-xs text-fg-subtle mb-1" id="current-password-help"><%= t('vinyl_collection.account.edit.help.current_password') %></p>
       <%= f.password_field :current_password, autocomplete: "current-password", class: "field", "aria-describedby": "current-password-help" %>
     </div>

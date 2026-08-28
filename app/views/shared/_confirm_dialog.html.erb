@@ -1,0 +1,21 @@
+<%# Replaces the browser's own confirm() for data-turbo-confirm. A native
+    <dialog> is used on purpose: showModal() brings the focus trap, Escape and
+    the inert backdrop with it, so none of that has to be hand-rolled. %>
+<dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-dialog-title">
+  <form method="dialog" class="flex flex-col gap-4 p-5">
+    <h2 id="confirm-dialog-title" class="font-display text-lg font-bold">
+      <%= t("vinyl_collection.confirm.title") %>
+    </h2>
+
+    <p data-confirm-message class="text-sm text-fg-muted"></p>
+
+    <div class="flex justify-end gap-2">
+      <button value="cancel" class="btn btn-ghost" data-confirm-cancel>
+        <%= t("vinyl_collection.confirm.cancel") %>
+      </button>
+      <button value="confirm" class="btn btn-primary" data-confirm-accept autofocus>
+        <%= t("vinyl_collection.confirm.accept") %>
+      </button>
+    </div>
+  </form>
+</dialog>

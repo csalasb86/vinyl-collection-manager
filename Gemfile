@@ -29,6 +29,10 @@ gem "faraday", "~> 2.13"
 # Pagination
 gem "pagy", "~> 9.3"
 
+# Spanish for Rails' own strings: ActiveRecord validation messages and the
+# relative times used by the "last synced" label.
+gem "rails-i18n", "~> 8.0"
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 

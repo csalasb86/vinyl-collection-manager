@@ -217,6 +217,18 @@
     @apply border-l-danger;
   }
 
+  /* Confirmation dialog, replacing the browser's unstyleable confirm(). */
+  .confirm-dialog {
+    @apply w-[min(92vw,26rem)] p-0 rounded-sleeve border border-line bg-surface
+           text-fg shadow-md;
+    /* Tailwind's preflight zeroes margin on everything, which takes away the
+       `margin: auto` a modal <dialog> relies on to centre itself. */
+    margin: auto;
+  }
+  .confirm-dialog::backdrop {
+    background-color: rgb(0 0 0 / 0.5);
+  }
+
   /* Pagy pagination nav — pagy_nav emits bare .pagy links with no styles. */
   .pagy {
     @apply flex justify-center gap-1 text-sm font-medium;

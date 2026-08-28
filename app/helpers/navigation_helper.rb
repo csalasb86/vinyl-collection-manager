@@ -21,6 +21,16 @@ module NavigationHelper
     end
   end
 
+  # "Last synced 3 hours ago" — the sync runs in the background now, so this is
+  # the only signal that it finished.
+  def last_sync_label(user)
+    if user.discogs_synced?
+      t("vinyl_collection.sync.last", time: time_ago_in_words(user.discogs_synced_at))
+    else
+      t("vinyl_collection.sync.never")
+    end
+  end
+
   def avatar_initials(user)
     user.email.to_s.strip.first(2).upcase
   end

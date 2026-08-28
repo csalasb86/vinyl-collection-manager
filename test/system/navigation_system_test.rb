@@ -114,9 +114,11 @@ class NavigationSystemTest < ApplicationSystemTestCase
     assert_selector "html[data-theme=dark]", visible: :all
   end
 
-  # setup just signed in, so the landing page still carries that notice — a
-  # later visit would have consumed the flash already.
-  test "a notice can be dismissed" do
+  # Also the one place the real login form is exercised.
+  test "signing in through the form announces it in a toast that can be dismissed" do
+    logout(:user)
+    sign_in_through_the_form(@user)
+
     assert_selector "[role=status]", text: "Signed in successfully"
 
     find("[role=status] button[data-action='toast#dismiss']").click
@@ -124,9 +126,10 @@ class NavigationSystemTest < ApplicationSystemTestCase
     assert_no_selector "[role=status]"
   end
 
-  test "the toast floats over the page instead of pushing it down" do
-    assert_selector ".toast-region"
+  test "the toast region floats over the page instead of pushing it down" do
+    visit albums_path
 
+    assert_selector ".toast-region"
     position = page.evaluate_script(
       "getComputedStyle(document.querySelector('.toast-region')).position"
     )

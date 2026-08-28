@@ -4,4 +4,5 @@
 //= link_directory ../javascripts .js
 //= link_directory ../stylesheets .css
 //= link application.js
+//= link confirm_dialog.js
 //= link_directory ../../javascript/controllers .js

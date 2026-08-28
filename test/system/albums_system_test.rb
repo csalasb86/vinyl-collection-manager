@@ -73,16 +73,32 @@ class AlbumsSystemTest < ApplicationSystemTestCase
     assert_selector "h1", text: "Blue Train (Reissue)"
   end
 
-  test "deleting a record asks first" do
+  # data-turbo-confirm goes through the app's own <dialog> now, not the
+  # browser's confirm(), so accept_confirm would find nothing.
+  test "deleting a record asks first, in the app's own dialog" do
     visit album_path(@album)
 
-    accept_confirm do
-      click_on "Delete"
+    click_on "Delete"
+
+    within "#confirm-dialog" do
+      assert_text "Are you sure?"
+      click_on "Yes, continue"
     end
 
     assert_text "Album was successfully destroyed"
     assert_current_path albums_path
     assert_no_text "Blue Train"
+  end
+
+  test "cancelling the dialog leaves the record alone" do
+    visit album_path(@album)
+
+    click_on "Delete"
+    within("#confirm-dialog") { click_on "Cancel" }
+
+    assert_no_selector "#confirm-dialog", visible: true
+    assert_selector "h1", text: "Blue Train"
+    assert Album.exists?(@album.id)
   end
 
   test "a genre on the detail page filters the collection by it" do

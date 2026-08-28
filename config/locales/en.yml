@@ -38,9 +38,24 @@ en:
     flash:
       dismiss: "Dismiss"
 
+    confirm:
+      title: "Are you sure?"
+      accept: "Yes, continue"
+      cancel: "Cancel"
+
     sync:
       started: "Syncing your Discogs collection in the background. Records will appear here as they import — reload in a minute."
       not_connected: "Connect your Discogs account before syncing."
+      last: "Last synced %{time} ago"
+      never: "Never synced"
+      finished:
+        one: "Sync finished. 1 record imported from Discogs."
+        other: "Sync finished. %{count} records imported from Discogs."
+      failed: "Discogs sync failed: %{error}"
+
+    languages:
+      en: "English"
+      es: "Spanish"
 
     nav:
       brand: "Vinyl Collection"
@@ -56,6 +71,8 @@ en:
       switch_theme: "Switch theme"
       discogs_connected: "Discogs connected"
       discogs_not_connected: "Discogs not connected"
+      language: "Language"
+      switch_language: "Switch to %{language}"
 
     albums:
       unknown_year: "Unknown"
@@ -178,6 +195,27 @@ en:
           delete_album: "Delete %{title} from collection"
           album_tracklist: "Album tracklist"
     
+    auth:
+      log_in: "Log in"
+      sign_up: "Sign up"
+      email: "Email"
+      password: "Password"
+      password_confirmation: "Password confirmation"
+      current_password: "Current password"
+      remember_me: "Remember me"
+      forgot_password: "Forgot your password?"
+      send_reset: "Send me reset password instructions"
+      change_password: "Change my password"
+      resend_confirmation: "Resend confirmation instructions"
+      resend_unlock: "Resend unlock instructions"
+      new_password: "New password"
+      confirm_new_password: "Confirm new password"
+      minimum_characters: "%{count} characters minimum"
+      sign_in_with: "Sign in with %{provider}"
+      errors:
+        one: "1 error stopped this from going through"
+        other: "%{count} errors stopped this from going through"
+
     account:
       edit:
         title: "Edit Account"

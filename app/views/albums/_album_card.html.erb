@@ -18,7 +18,7 @@
   </div>
 
   <div class="pt-2.5">
-    <h3 class="text-sm font-semibold leading-snug truncate" title="<%= album.title %>"><%= album.title %></h3>
+    <h3 class="text-sm font-semibold leading-snug truncate transition-colors group-hover:text-accent" title="<%= album.title %>"><%= album.title %></h3>
     <p class="text-sm text-fg-muted truncate"><%= album.display_artists %></p>
     <p class="mt-0.5 font-mono text-xs text-fg-subtle tabular-nums">
       <%= [ album.year, album.format ].compact_blank.join(" · ") %>

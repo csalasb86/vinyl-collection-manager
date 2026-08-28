@@ -58,6 +58,8 @@
         <%= yield %>
       </main>
     <% elsif show_authenticated_layout? %>
+      <%# Lets the sync job push a toast in when it finishes. %>
+      <%= turbo_stream_from current_user %>
       <%= link_to "Skip to content", "#main", class: "skip-link" %>
       <%= render 'shared/navbar' %>
       <%= render 'shared/flash_messages' %>
@@ -65,6 +67,8 @@
       <main id="main" class="container mx-auto px-4 py-6">
         <%= yield %>
       </main>
+
+      <%= render "shared/confirm_dialog" %>
 
       <footer class="mt-12 border-t border-line py-6 text-fg-subtle">
         <div class="container mx-auto px-4">

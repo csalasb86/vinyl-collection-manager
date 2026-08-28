@@ -1,0 +1,28 @@
+<%# One toast, shared by the flash on page load and by the live broadcast the
+    sync job sends when it finishes. `kind` is :ok or :error. %>
+<div class="toast toast-<%= kind == :error ? "error" : "ok" %> pointer-events-auto"
+     role="<%= kind == :error ? "alert" : "status" %>"
+     data-controller="toast"
+     <%= "data-toast-dismiss-after-value=#{dismiss_after}" if defined?(dismiss_after) && dismiss_after %>
+     data-action="mouseenter->toast#hold">
+  <% if kind == :error %>
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="text-danger shrink-0 mt-0.5" aria-hidden="true">
+      <circle cx="12" cy="12" r="9"/><path d="M12 7.5v5M12 16.5h.01"/>
+    </svg>
+  <% else %>
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" class="text-ok shrink-0 mt-0.5" aria-hidden="true">
+      <path d="M4 12.5l5 5L20 6.5"/>
+    </svg>
+  <% end %>
+
+  <p class="flex-1 text-fg"><%= message %></p>
+
+  <button type="button"
+          data-action="toast#dismiss"
+          aria-label="<%= t("vinyl_collection.flash.dismiss") %>"
+          class="shrink-0 -m-1 p-1 leading-none text-fg-subtle hover:text-fg">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+  </button>
+</div>

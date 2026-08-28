@@ -1,45 +1,13 @@
-<% if notice.present? || alert.present? %>
-  <div class="toast-region">
-    <% if notice.present? %>
-      <%# role=status is announced politely and, unlike the old inline bar,
-          reaches a screen reader at all. %>
-      <div class="toast toast-ok"
-           role="status"
-           data-controller="toast"
-           data-toast-dismiss-after-value="6000"
-           data-action="mouseenter->toast#hold">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" class="text-ok shrink-0 mt-0.5" aria-hidden="true">
-          <path d="M4 12.5l5 5L20 6.5"/>
-        </svg>
-        <p class="flex-1 text-fg"><%= notice %></p>
-        <button type="button"
-                data-action="toast#dismiss"
-                aria-label="<%= t("vinyl_collection.flash.dismiss") %>"
-                class="shrink-0 -m-1 p-1 leading-none text-fg-subtle hover:text-fg">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
-      </div>
-    <% end %>
+<%# Always rendered, even empty: the sync job appends into #toasts over a Turbo
+    Stream when it finishes, so the container has to already be on the page.
+    pointer-events-none keeps the empty fixed box from swallowing clicks. %>
+<div id="toasts" class="toast-region pointer-events-none">
+  <% if notice.present? %>
+    <%= render "shared/toast", kind: :ok, message: notice, dismiss_after: 6000 %>
+  <% end %>
 
-    <% if alert.present? %>
-      <%# role=alert interrupts: this one needs acting on, and it does not
-          auto-dismiss for the same reason. %>
-      <div class="toast toast-error" role="alert" data-controller="toast">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="text-danger shrink-0 mt-0.5" aria-hidden="true">
-          <circle cx="12" cy="12" r="9"/><path d="M12 7.5v5M12 16.5h.01"/>
-        </svg>
-        <p class="flex-1 text-fg"><%= alert %></p>
-        <button type="button"
-                data-action="toast#dismiss"
-                aria-label="<%= t("vinyl_collection.flash.dismiss") %>"
-                class="shrink-0 -m-1 p-1 leading-none text-fg-subtle hover:text-fg">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
-      </div>
-    <% end %>
-  </div>
-<% end %>
+  <% if alert.present? %>
+    <%# No timeout: this one carries something still to act on. %>
+    <%= render "shared/toast", kind: :error, message: alert %>
+  <% end %>
+</div>

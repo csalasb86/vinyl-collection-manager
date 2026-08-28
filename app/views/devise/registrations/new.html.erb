@@ -1,16 +1,16 @@
 <div class="max-w-md mx-auto bg-surface rounded-sleeve shadow-md p-6">
-  <h2 class="text-2xl font-bold mb-6 text-center text-fg">Sign up</h2>
+  <h2 class="text-2xl font-bold mb-6 text-center text-fg"><%= t("vinyl_collection.auth.sign_up") %></h2>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-4" }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <div>
-      <%= f.label :email, class: "field-label" %>
+      <%= f.label :email, t("vinyl_collection.auth.email"), class: "field-label" %>
       <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "field" %>
     </div>
 
     <div>
-      <%= f.label :password, class: "field-label" %>
+      <%= f.label :password, t("vinyl_collection.auth.password"), class: "field-label" %>
       <% if @minimum_password_length %>
         <p class="text-xs text-fg-subtle mb-1">(<%= @minimum_password_length %> characters minimum)</p>
       <% end %>
@@ -18,12 +18,12 @@
     </div>
 
     <div>
-      <%= f.label :password_confirmation, class: "field-label" %>
+      <%= f.label :password_confirmation, t("vinyl_collection.auth.password_confirmation"), class: "field-label" %>
       <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "field" %>
     </div>
 
     <div>
-      <%= f.submit "Sign up", class: "btn btn-primary btn-block" %>
+      <%= f.submit t("vinyl_collection.auth.sign_up"), class: "btn btn-primary btn-block" %>
     </div>
   <% end %>
 
