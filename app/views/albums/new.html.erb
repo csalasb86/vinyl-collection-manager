@@ -1,5 +1,7 @@
-<div class="bg-surface rounded-sleeve shadow p-6">
-  <h1 class="text-2xl font-bold mb-6">Add New Album</h1>
-  
-  <%= render 'form', album: @album %>
+<div class="max-w-3xl">
+  <h1 class="font-display text-3xl font-extrabold tracking-tight mb-6">Add a record</h1>
+
+  <div class="bg-surface border border-line rounded-sleeve p-6">
+    <%= render "form", album: @album %>
+  </div>
 </div>

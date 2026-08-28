@@ -24,6 +24,22 @@ module AlbumsHelper
     params.permit(:q, :year, :genre, :format, :artist_id, :sort).to_h.compact_blank
   end
 
+  # Discogs notes come back with BBCode: [url=...]label[/url] for releases,
+  # [a=Artist] / [l=Label] / [m=123] for entities, plus [b] and friends. Shown
+  # raw it reads as markup, so unwrap the readable part and drop the tags.
+  # Plain text on purpose — it goes through simple_format, which escapes.
+  DISCOGS_URL_TAG = %r{\[url(?:=[^\]]+)?\](.*?)\[/url\]}im
+  DISCOGS_NAMED_TAG = /\[[almr]=([^\]]+)\]/i
+  DISCOGS_ANY_TAG = %r{\[/?(?:url|b|i|u|s|q|quote|code|center|strike)\b[^\]]*\]}i
+
+  def discogs_notes(text)
+    return if text.blank?
+
+    text.gsub(DISCOGS_URL_TAG) { Regexp.last_match(1) }
+        .gsub(DISCOGS_NAMED_TAG) { Regexp.last_match(1) }
+        .gsub(DISCOGS_ANY_TAG, "")
+  end
+
   def cover_alt(album)
     artists = album.display_artists
     artists.present? ? "Cover of #{album.title} by #{artists}" : "Cover of #{album.title}"

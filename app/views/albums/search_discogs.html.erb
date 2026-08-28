@@ -1,74 +1,90 @@
-<div class="bg-surface rounded-sleeve shadow p-6">
-  <h1 class="text-2xl font-bold mb-6">Search Discogs</h1>
-  
-  <% if !current_user.discogs_authenticated? %>
-    <div class="bg-accent-soft p-4 rounded-sleeve mb-6">
-      <p class="text-fg">
-        You need to connect your Discogs account before searching.
-        <%= link_to "Go to your account settings", edit_user_registration_path, class: "font-medium underline" %>
-        to add your Discogs username and personal access token.
-      </p>
-    </div>
-  <% end %>
-  
-  <%= form_with url: search_discogs_albums_path, method: :get, class: "mb-6" do |f| %>
-    <div class="flex">
-      <%= f.text_field :query, value: @query, placeholder: "Search albums on Discogs...", class: "flex-grow px-3 py-2 border border-line rounded-l-sleeve", required: true %>
-      <%= f.submit "Search", class: "px-4 py-2 bg-accent text-accent-fg rounded-r-sleeve hover:bg-accent-hover" %>
-    </div>
-  <% end %>
-  
-  <% if @results && @results.respond_to?(:results) && @results.results.any? %>
-    <h2 class="text-lg font-semibold mb-4">Search Results</h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <% @results.results.each do |result| %>
-        <div class="border rounded-sleeve overflow-hidden flex">
-          <% if result.thumb.present? %>
-            <%= image_tag result.thumb, alt: result.title, class: "w-20 h-20 object-cover" %>
-          <% else %>
-            <div class="w-20 h-20 bg-surface-3 flex items-center justify-center">
-              <span class="text-fg-subtle text-xs">No Cover</span>
-            </div>
-          <% end %>
-          
-          <div class="p-3 flex-grow">
-            <h3 class="font-medium text-sm"><%= h result.title %></h3>
-            <p class="text-xs text-fg-muted">
-              <% if result.year.present? %>
-                <%= result.year %> · 
-              <% end %>
-              <% if result.format.present? %>
-                <%= result.format.join(", ") %>
-              <% end %>
-            </p>
-            
-            <%= link_to "Import", import_from_discogs_albums_path(discogs_id: result.id, query: @query), data: { turbo_method: :post }, class: "mt-2 inline-block px-3 py-1 bg-ok text-surface text-xs rounded-sleeve hover:bg-ok-hover" %>
+<h1 class="font-display text-3xl font-extrabold tracking-tight mb-1">Search Discogs</h1>
+<p class="text-fg-muted mb-6">Find a release in the Discogs database and import it into your crate.</p>
+
+<% unless current_user.discogs_authenticated? %>
+  <div role="status" class="flex items-start gap-3 p-4 mb-6 rounded-sleeve border border-line bg-surface-2">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-fg-subtle shrink-0 mt-0.5" aria-hidden="true">
+      <circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/>
+    </svg>
+    <p class="text-sm text-fg-muted">
+      Connect your Discogs account before searching.
+      <%= link_to "Add your username and personal token", edit_user_registration_path, class: "text-accent hover:underline" %>
+      in your account settings.
+    </p>
+  </div>
+<% end %>
+
+<%= form_with url: search_discogs_albums_path, method: :get, class: "flex flex-wrap gap-2 mb-6" do |f| %>
+  <label class="flex items-center gap-2 flex-1 min-w-56 px-3 py-2 bg-surface border border-line rounded-sleeve focus-within:border-accent">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="text-fg-subtle shrink-0" aria-hidden="true">
+      <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
+    </svg>
+    <span class="sr-only">Search the Discogs database</span>
+    <%= f.search_field :query, value: @query, required: true,
+          placeholder: "Artist, album or catalog number…",
+          class: "w-full bg-transparent text-fg placeholder:text-fg-subtle focus:outline-none" %>
+  </label>
+  <%= f.submit "Search", class: "px-4 py-2 rounded-sleeve bg-accent text-accent-fg font-medium hover:bg-accent-hover cursor-pointer" %>
+<% end %>
+
+<% if @results.respond_to?(:results) && @results.results.any? %>
+  <h2 class="font-display text-[11px] tracking-widest uppercase text-fg-subtle mb-3">Results</h2>
+
+  <ul class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+    <% @results.results.each do |result| %>
+      <li class="flex gap-3 p-3 bg-surface border border-line rounded-sleeve">
+        <% if result.thumb.present? %>
+          <%= image_tag result.thumb, alt: "", aria: { hidden: true }, loading: "lazy",
+                class: "w-20 h-20 object-cover rounded-sleeve border border-line shrink-0" %>
+        <% else %>
+          <div class="w-20 h-20 shrink-0 grid place-items-center bg-surface-2 border border-line rounded-sleeve">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" class="text-line-strong" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.4"/>
+              <circle cx="12" cy="12" r="1.6" fill="currentColor"/>
+            </svg>
           </div>
-        </div>
-      <% end %>
-    </div>
-    
-    <% if @results.pagination.pages > 1 %>
-      <div class="mt-6 flex justify-center">
-        <div class="inline-flex rounded-sleeve shadow">
-          <% if @results.pagination.page > 1 %>
-            <%= link_to "Previous", search_discogs_albums_path(query: @query, page: @results.pagination.page - 1), class: "px-4 py-2 bg-surface text-fg-muted rounded-l-sleeve border border-line hover:bg-surface-2" %>
-          <% end %>
-          
-          <span class="px-4 py-2 bg-surface-2 text-fg-muted border-t border-b border-line">
-            Page <%= @results.pagination.page %> of <%= @results.pagination.pages %>
-          </span>
-          
-          <% if @results.pagination.page < @results.pagination.pages %>
-            <%= link_to "Next", search_discogs_albums_path(query: @query, page: @results.pagination.page + 1), class: "px-4 py-2 bg-surface text-fg-muted rounded-r-sleeve border border-line hover:bg-surface-2" %>
+        <% end %>
+
+        <div class="min-w-0 flex-1 flex flex-col">
+          <h3 class="text-sm font-semibold leading-snug line-clamp-2"><%= result.title %></h3>
+          <p class="mt-1 font-mono text-xs text-fg-subtle tabular-nums">
+            <%= [ result.year.presence, Array(result.format).presence&.join(", ") ].compact.join(" · ") %>
+          </p>
+
+          <%= button_to import_from_discogs_albums_path(discogs_id: result.id, query: @query),
+                form_class: "mt-auto pt-2",
+                data: { turbo_submits_with: "Importing…" },
+                class: "px-3 py-1.5 rounded-sleeve bg-accent text-accent-fg text-xs font-medium hover:bg-accent-hover",
+                aria: { label: "Import #{result.title}" } do %>
+            Import
           <% end %>
         </div>
-      </div>
+      </li>
     <% end %>
-  <% elsif @query.present? %>
-    <div class="bg-surface-2 p-6 rounded-sleeve text-center">
-      <p class="text-fg-muted">No results found for "<%= h @query %>".</p>
-    </div>
+  </ul>
+
+  <% if @results.pagination.pages > 1 %>
+    <nav class="flex justify-center items-center gap-1 mt-8 text-sm font-medium" aria-label="Search results pages">
+      <% if @results.pagination.page > 1 %>
+        <%= link_to "Previous", search_discogs_albums_path(query: @query, page: @results.pagination.page - 1),
+              class: "px-3 py-2 rounded-sleeve border border-line bg-surface text-fg hover:bg-surface-2" %>
+      <% end %>
+      <span class="px-3 py-2 font-mono text-xs text-fg-subtle tabular-nums">
+        Page <%= @results.pagination.page %> of <%= @results.pagination.pages %>
+      </span>
+      <% if @results.pagination.page < @results.pagination.pages %>
+        <%= link_to "Next", search_discogs_albums_path(query: @query, page: @results.pagination.page + 1),
+              class: "px-3 py-2 rounded-sleeve border border-line bg-surface text-fg hover:bg-surface-2" %>
+      <% end %>
+    </nav>
   <% end %>
-</div>
+
+<% elsif @query.present? && current_user.discogs_authenticated? %>
+  <div class="flex flex-col items-center text-center py-16 px-6 border border-line border-dashed rounded-sleeve">
+    <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-fg-subtle mb-4" aria-hidden="true">
+      <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
+    </svg>
+    <h2 class="font-display text-2xl font-bold">No releases found</h2>
+    <p class="mt-2 text-fg-muted max-w-prose">Nothing on Discogs matches &ldquo;<%= @query %>&rdquo;. Try the artist name, or a catalog number from the sleeve.</p>
+  </div>
+<% end %>

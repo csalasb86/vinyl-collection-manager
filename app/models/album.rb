@@ -1,7 +1,7 @@
 class Album < ApplicationRecord
   has_many :album_artists, dependent: :destroy
   has_many :artists, through: :album_artists
-  has_many :tracks, dependent: :destroy
+  has_many :tracks, -> { order(:position_index) }, dependent: :destroy
 
   has_one_attached :cover
 
