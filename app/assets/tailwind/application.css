@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+/* Pagy pagination nav — pagy_nav renders bare links (.pagy classes) with no
+   styles of its own, so without these rules it shows as plain "< 1 2 3 4 >" */
+.pagy {
+  @apply flex justify-center gap-1 text-sm font-medium;
+}
+.pagy a:not(.gap) {
+  @apply px-3 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50;
+}
+.pagy a:not([href]) {
+  @apply text-gray-400 bg-gray-100 cursor-default hover:bg-gray-100;
+}
+.pagy a.current {
+  @apply bg-blue-600 text-white border-blue-600 hover:bg-blue-600;
+}
+.pagy a.gap {
+  @apply px-2 py-2 text-gray-400 border-0 bg-transparent;
+}
