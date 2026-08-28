@@ -223,6 +223,10 @@ bin/rails db:setup
 bin/dev
 ```
 
+## Security
+
+Found a vulnerability? Please report it privately — see [SECURITY.md](SECURITY.md).
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
