@@ -5,7 +5,6 @@
       with the filters that are actually applied. %>
   <% active_filters.each do |filter| %>
     <%= link_to path_without_filter(filter[:param]),
-          data: { turbo_frame: "_top" },
           class: "inline-flex items-center gap-2 pl-3 pr-2 py-1 rounded-full border border-line-strong bg-surface text-sm text-fg hover:border-accent",
           aria: { label: "Remove filter #{filter[:label]}: #{filter[:value]}" } do %>
       <span class="text-fg-muted"><%= filter[:label] %></span>
@@ -16,7 +15,6 @@
 
   <% if active_filters.size > 1 %>
     <%= link_to "Clear all", path_without_filters,
-          data: { turbo_frame: "_top" },
           class: "px-3 py-1 rounded-full border border-line border-dashed text-sm text-fg-muted hover:text-fg" %>
   <% end %>
 </div>
@@ -28,7 +26,9 @@
 
   <% if @pagy.pages > 1 %>
     <div class="mt-8">
-      <%== pagy_nav(@pagy) %>
+      <%# The frame targets _top, so pagination has to opt back in explicitly —
+          otherwise paging would reload the whole page. %>
+      <%== pagy_nav(@pagy, anchor_string: %(data-turbo-frame="albums")) %>
     </div>
   <% end %>
 
@@ -53,7 +53,6 @@
     <h2 class="font-display text-2xl font-bold">Nothing matches these filters</h2>
     <p class="mt-2 mb-6 text-fg-muted max-w-prose">Try a different search, or drop one of the filters above.</p>
     <%= link_to "Clear all filters", path_without_filters,
-          data: { turbo_frame: "_top" },
           class: "px-4 py-2 rounded-sleeve bg-accent text-accent-fg font-medium hover:bg-accent-hover" %>
   </div>
 <% end %>

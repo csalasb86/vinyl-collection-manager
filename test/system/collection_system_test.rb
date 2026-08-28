@@ -64,6 +64,24 @@ class CollectionSystemTest < ApplicationSystemTestCase
     assert_selector "a[aria-label='Remove filter Genre: Jazz']"
   end
 
+  # The grid lives in a turbo frame, so without target="_top" clicking a record
+  # tried to render the detail page inside the frame and Turbo gave up with
+  # "Content missing".
+  test "clicking a record in the grid opens its page" do
+    visit albums_path
+
+    find("a[href$='/albums/#{Album.find_by(title: "Blue Train").id}']").click
+
+    assert_selector "h1", text: "Blue Train"
+    assert_no_text "Content missing"
+  end
+
+  test "pagination stays inside the frame instead of reloading the page" do
+    visit albums_path
+
+    assert_selector "turbo-frame#albums[target='_top']"
+  end
+
   test "the filter panel never pushes the page sideways" do
     [ 1400, 768, 390 ].each do |width|
       page.driver.browser.manage.window.resize_to(width, 900)

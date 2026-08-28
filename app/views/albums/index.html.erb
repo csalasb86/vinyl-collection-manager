@@ -88,6 +88,9 @@
   <% end %>
 </div>
 
-<%= turbo_frame_tag "albums", data: { turbo_action: "advance" } do %>
+<%# target: "_top" so a link inside the results navigates the page rather than
+    trying to render the next page inside this frame. Pagination opts back in
+    through Pagy's link_extra in the controller. %>
+<%= turbo_frame_tag "albums", target: "_top", data: { turbo_action: "advance" } do %>
   <%= render "albums/results" %>
 <% end %>
