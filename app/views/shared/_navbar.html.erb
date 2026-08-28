@@ -1,39 +1,28 @@
-<nav class="bg-surface border-b border-line">
+<nav class="bg-surface border-b border-line" data-controller="drawer">
   <div class="container mx-auto px-4">
-    <div class="flex items-center justify-between h-16 gap-4">
-      <div class="shrink-0">
-        <%= link_to "Vinyl Collection", root_path, class: "font-display text-xl font-extrabold tracking-tight text-fg" %>
+    <div class="flex items-center h-16 gap-3">
+      <%= link_to root_path, class: "flex items-center gap-2 shrink-0 font-display text-xl font-extrabold tracking-tight text-fg" do %>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="10" cy="10" r="5.5" stroke="currentColor" stroke-width="1" opacity="0.45"/>
+          <circle cx="10" cy="10" r="1.6" fill="currentColor"/>
+        </svg>
+        Vinyl Collection
+      <% end %>
+
+      <div class="hidden md:flex items-center gap-1 ml-4">
+        <%= nav_link_to "Collection", albums_path %>
+        <%= nav_link_to "Search Discogs", search_discogs_albums_path %>
       </div>
-      <div class="hidden md:block">
-        <div class="ml-10 flex items-baseline space-x-1">
-          <%= link_to "Albums", albums_path, class: "px-3 py-2 rounded-sleeve text-fg-muted hover:bg-surface-2 hover:text-fg" %>
-          <%= link_to "Search Discogs", search_discogs_albums_path, class: "px-3 py-2 rounded-sleeve text-fg-muted hover:bg-surface-2 hover:text-fg" %>
-          <%= link_to "Sync Collection", sync_collection_albums_path, data: { turbo_method: :post }, class: "px-3 py-2 rounded-sleeve text-fg-muted hover:bg-surface-2 hover:text-fg" %>
 
-          <% if user_signed_in? %>
-            <% if current_user.discogs_authenticated? %>
-              <span class="inline-flex items-center gap-2 px-3 py-1 text-sm text-fg-muted border border-line rounded-full">
-                <span class="w-2 h-2 rounded-full bg-ok" aria-hidden="true"></span>
-                <%= current_user.email %> (Discogs connected)
-              </span>
-            <% else %>
-              <span class="inline-flex items-center gap-2 px-3 py-1 text-sm text-fg-muted border border-line rounded-full">
-                <span class="w-2 h-2 rounded-full bg-fg-subtle" aria-hidden="true"></span>
-                <%= current_user.email %> (Discogs not connected)
-              </span>
-            <% end %>
+      <div class="flex-1"></div>
 
-            <%= link_to "Account", edit_user_registration_path, class: "px-3 py-2 rounded-sleeve text-fg-muted hover:bg-surface-2 hover:text-fg" %>
-            <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete }, class: "px-3 py-2 rounded-sleeve text-fg-muted hover:bg-surface-2 hover:text-fg" %>
-          <% else %>
-            <%= link_to "Login", new_user_session_path, class: "px-3 py-2 rounded-sleeve text-fg-muted hover:bg-surface-2 hover:text-fg" %>
-            <%= link_to "Sign Up", new_user_registration_path, class: "px-3 py-2 rounded-sleeve text-fg-muted hover:bg-surface-2 hover:text-fg" %>
-          <% end %>
+      <% if user_signed_in? %>
+        <div class="hidden lg:block">
+          <%= render "shared/discogs_status" %>
         </div>
-      </div>
+      <% end %>
 
-      <%# Kept outside the md:block wrapper so the toggle is reachable on
-          phones too, until the mobile menu lands in the next phase. %>
       <button type="button"
               data-controller="theme"
               data-action="click->theme#toggle"
@@ -49,6 +38,105 @@
         </svg>
         <span data-theme-target="label" class="text-sm">Light</span>
       </button>
+
+      <% if user_signed_in? %>
+        <%# The email lives in this menu instead of the bar, where a long
+            address used to stretch the layout. %>
+        <div class="relative hidden md:block" data-controller="dropdown">
+          <button type="button"
+                  data-dropdown-target="button"
+                  data-action="dropdown#toggle"
+                  aria-haspopup="menu"
+                  aria-expanded="false"
+                  aria-label="Account menu"
+                  class="flex items-center justify-center w-9 h-9 rounded-full border border-line bg-accent-soft text-accent text-xs font-semibold hover:border-accent">
+            <%= avatar_initials(current_user) %>
+          </button>
+
+          <div data-dropdown-target="menu" hidden role="menu"
+               class="absolute right-0 mt-2 w-64 bg-surface border border-line rounded-sleeve shadow-md z-50 py-1">
+            <p class="px-3 py-2 border-b border-line text-xs text-fg-subtle truncate" title="<%= current_user.email %>">
+              <%= current_user.email %>
+            </p>
+
+            <div class="lg:hidden px-3 py-2 border-b border-line">
+              <%= render "shared/discogs_status" %>
+            </div>
+
+            <%= button_to "Sync collection", sync_collection_albums_path,
+                  form_class: "contents",
+                  role: "menuitem",
+                  data: {
+                    turbo_confirm: "Sync your whole Discogs collection now? This can take a few minutes.",
+                    turbo_submits_with: "Syncing…"
+                  },
+                  class: "w-full text-left px-3 py-2 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg" %>
+
+            <%= link_to "Account", edit_user_registration_path,
+                  role: "menuitem",
+                  class: "block px-3 py-2 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg" %>
+
+            <%= button_to "Log out", destroy_user_session_path,
+                  method: :delete,
+                  form_class: "contents",
+                  role: "menuitem",
+                  class: "w-full text-left px-3 py-2 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg" %>
+          </div>
+        </div>
+      <% end %>
+
+      <%# Below md this is the only way into the rest of the app. %>
+      <button type="button"
+              data-drawer-target="button"
+              data-action="drawer#toggle"
+              aria-expanded="false"
+              aria-controls="mobile-menu"
+              aria-label="Open menu"
+              class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-sleeve border border-line text-fg-muted hover:bg-surface-2 hover:text-fg">
+        <svg data-drawer-target="iconOpen" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+        <svg data-drawer-target="iconClose" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" hidden>
+          <path d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu"
+       data-drawer-target="panel"
+       data-action="click->drawer#closeOnNavigate"
+       hidden
+       class="md:hidden border-t border-line bg-surface">
+    <div class="container mx-auto px-4 py-3 flex flex-col gap-1">
+      <%= nav_link_to "Collection", albums_path, mobile: true %>
+      <%= nav_link_to "Search Discogs", search_discogs_albums_path, mobile: true %>
+
+      <% if user_signed_in? %>
+        <hr class="my-2 border-line">
+
+        <%= button_to "Sync collection", sync_collection_albums_path,
+              form_class: "contents",
+              data: {
+                turbo_confirm: "Sync your whole Discogs collection now? This can take a few minutes.",
+                turbo_submits_with: "Syncing…"
+              },
+              class: "flex items-center min-h-11 px-3 py-2 rounded-sleeve text-base text-fg-muted hover:bg-surface-2 hover:text-fg" %>
+
+        <%= nav_link_to "Account", edit_user_registration_path, mobile: true %>
+
+        <%= button_to "Log out", destroy_user_session_path,
+              method: :delete,
+              form_class: "contents",
+              class: "flex items-center min-h-11 px-3 py-2 rounded-sleeve text-base text-fg-muted hover:bg-surface-2 hover:text-fg" %>
+
+        <hr class="my-2 border-line">
+
+        <div class="px-3 pb-2 text-fg-muted">
+          <%= render "shared/discogs_status" %>
+          <p class="mt-2 text-xs text-fg-subtle truncate"><%= current_user.email %></p>
+        </div>
+      <% end %>
     </div>
   </div>
 </nav>

@@ -1,0 +1,18 @@
+<%# Connection state carried by a dot, an icon and words — never colour alone. %>
+<% connected = current_user.discogs_authenticated? %>
+
+<span class="inline-flex items-center gap-2 px-3 py-1 border border-line rounded-full text-sm text-fg-muted whitespace-nowrap">
+  <span class="w-2 h-2 rounded-full <%= connected ? "bg-ok" : "bg-fg-subtle" %>" aria-hidden="true"></span>
+
+  <% if connected %>
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+      <path d="M3 8.5l3.5 3.5L13 4.5"/>
+    </svg>
+    Discogs connected
+  <% else %>
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+      <path d="M4 8h8"/>
+    </svg>
+    Discogs not connected
+  <% end %>
+</span>

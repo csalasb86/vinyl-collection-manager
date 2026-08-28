@@ -36,9 +36,10 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <% unless Rails.env.test? %>
-      <link rel="stylesheet" href="<%= asset_path('tailwind.css') %>" data-turbo-track="reload">
-    <% end %>
+    <%# Loaded in test too: without it system tests run unstyled, so breakpoints
+        and anything hidden by CSS silently behave differently than in a browser.
+        tailwindcss-rails builds the file as part of test:prepare. %>
+    <link rel="stylesheet" href="<%= asset_path('tailwind.css') %>" data-turbo-track="reload">
     <%= javascript_importmap_tags %>
   </head>
 

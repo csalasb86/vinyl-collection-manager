@@ -41,11 +41,17 @@ export default class extends Controller {
     if (this.hasLabelTarget) {
       this.labelTarget.textContent = dark ? "Dark" : "Light"
     }
-    if (this.hasIconLightTarget) {
-      this.iconLightTarget.hidden = dark
-    }
-    if (this.hasIconDarkTarget) {
-      this.iconDarkTarget.hidden = !dark
+    if (this.hasIconLightTarget) this.setHidden(this.iconLightTarget, dark)
+    if (this.hasIconDarkTarget) this.setHidden(this.iconDarkTarget, !dark)
+  }
+
+  // `hidden` is an HTMLElement property; assigning it on an <svg> silently does
+  // nothing. Go through the attribute so it works for both.
+  setHidden(element, hidden) {
+    if (hidden) {
+      element.setAttribute("hidden", "")
+    } else {
+      element.removeAttribute("hidden")
     }
   }
 
