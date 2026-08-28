@@ -9,7 +9,14 @@ import { Controller } from "@hotwired/stimulus"
 // Turbo keeps the <html> element across navigations, so the theme survives page
 // changes without any extra work here.
 export default class extends Controller {
+  // The wording comes from the view: a controller cannot reach I18n.
   static targets = ["label", "iconLight", "iconDark"]
+  static values = {
+    lightLabel: { type: String, default: "Light" },
+    darkLabel: { type: String, default: "Dark" },
+    toLightLabel: { type: String, default: "Switch to light theme" },
+    toDarkLabel: { type: String, default: "Switch to dark theme" }
+  }
 
   connect() {
     this.render()
@@ -35,11 +42,11 @@ export default class extends Controller {
     this.element.setAttribute("aria-pressed", String(dark))
     this.element.setAttribute(
       "aria-label",
-      dark ? "Switch to light theme" : "Switch to dark theme"
+      dark ? this.toLightLabelValue : this.toDarkLabelValue
     )
 
     if (this.hasLabelTarget) {
-      this.labelTarget.textContent = dark ? "Dark" : "Light"
+      this.labelTarget.textContent = dark ? this.darkLabelValue : this.lightLabelValue
     }
     if (this.hasIconLightTarget) this.setHidden(this.iconLightTarget, dark)
     if (this.hasIconDarkTarget) this.setHidden(this.iconDarkTarget, !dark)

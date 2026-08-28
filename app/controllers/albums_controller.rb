@@ -129,6 +129,13 @@ class AlbumsController < ApplicationController
                          alert: t("vinyl_collection.sync.not_connected")
     end
 
+    if current_user.discogs_syncing?
+      return redirect_to albums_path, notice: t("vinyl_collection.sync.already_running")
+    end
+
+    # Claimed before enqueueing, so a second click cannot slip past while the
+    # job is still waiting to start.
+    current_user.update_column(:discogs_sync_started_at, Time.current)
     SyncDiscogsCollectionJob.perform_later(current_user)
 
     redirect_to albums_path, notice: t("vinyl_collection.sync.started")

@@ -61,6 +61,26 @@ class NavigationSystemTest < ApplicationSystemTestCase
     assert_selector "[data-drawer-target=iconClose]", visible: true
   end
 
+  # The controllers write these labels themselves, so they only follow the
+  # locale if the view hands them over as Stimulus values.
+  test "the theme and menu labels follow the chosen language" do
+    resize_window_to(*PHONE)
+    visit albums_path(locale: "es")
+
+    theme = find("button[data-controller=theme]")
+    assert_equal "Claro", find("[data-theme-target=label]").text
+    assert_equal "Cambiar al tema oscuro", theme[:"aria-label"]
+
+    theme.click
+    assert_equal "Oscuro", find("[data-theme-target=label]").text
+    assert_equal "Cambiar al tema claro", theme[:"aria-label"]
+
+    menu = find("button[aria-controls=mobile-menu]")
+    assert_equal "Abrir menú", menu[:"aria-label"]
+    menu.click
+    assert_equal "Cerrar menú", menu[:"aria-label"]
+  end
+
   test "the theme button swaps between the sun and the moon" do
     resize_window_to(*DESKTOP)
     visit albums_path

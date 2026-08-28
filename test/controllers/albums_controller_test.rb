@@ -233,6 +233,37 @@ class AlbumsControllerTest < ActionDispatch::IntegrationTest
     assert_match(/in the background/, flash[:notice])
   end
 
+  # Two syncs meant two "finished" toasts, and with no progress indicator a
+  # second click while the first runs is the natural thing to do.
+  test "a second sync is refused while one is already running" do
+    @user.update!(
+      discogs_token: "test_token",
+      discogs_username: "test_user",
+      discogs_authenticated_at: Time.current
+    )
+
+    post sync_collection_albums_url
+    assert_not_nil @user.reload.discogs_sync_started_at
+
+    assert_no_enqueued_jobs only: SyncDiscogsCollectionJob do
+      post sync_collection_albums_url
+    end
+    assert_match(/already running/, flash[:notice])
+  end
+
+  test "a sync abandoned long ago does not block a new one forever" do
+    @user.update!(
+      discogs_token: "test_token",
+      discogs_username: "test_user",
+      discogs_authenticated_at: Time.current,
+      discogs_sync_started_at: 2.hours.ago
+    )
+
+    assert_enqueued_with(job: SyncDiscogsCollectionJob) do
+      post sync_collection_albums_url
+    end
+  end
+
   test "should not sync collection without authentication" do
     assert_no_enqueued_jobs only: SyncDiscogsCollectionJob do
       post sync_collection_albums_url

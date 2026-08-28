@@ -7,6 +7,10 @@ import { Controller } from "@hotwired/stimulus"
 // and the tab order stays correct on its own.
 export default class extends Controller {
   static targets = ["panel", "button", "iconOpen", "iconClose"]
+  static values = {
+    openLabel: { type: String, default: "Open menu" },
+    closeLabel: { type: String, default: "Close menu" }
+  }
 
   connect() {
     this.onKeydown = this.onKeydown.bind(this)
@@ -49,7 +53,7 @@ export default class extends Controller {
   sync(open) {
     if (this.hasButtonTarget) {
       this.buttonTarget.setAttribute("aria-expanded", String(open))
-      this.buttonTarget.setAttribute("aria-label", open ? "Close menu" : "Open menu")
+      this.buttonTarget.setAttribute("aria-label", open ? this.closeLabelValue : this.openLabelValue)
     }
     if (this.hasIconOpenTarget) this.setHidden(this.iconOpenTarget, open)
     if (this.hasIconCloseTarget) this.setHidden(this.iconCloseTarget, !open)

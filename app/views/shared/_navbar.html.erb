@@ -1,4 +1,7 @@
-<nav class="bg-surface border-b border-line" data-controller="drawer">
+<nav class="bg-surface border-b border-line"
+     data-controller="drawer"
+     data-drawer-open-label-value="<%= t("vinyl_collection.nav.open_menu") %>"
+     data-drawer-close-label-value="<%= t("vinyl_collection.nav.close_menu") %>">
   <div class="container mx-auto px-4">
     <div class="flex items-center h-16 gap-3">
       <%= link_to root_path, class: "flex items-center gap-2 shrink-0 font-display text-xl font-extrabold tracking-tight text-fg" do %>
@@ -30,6 +33,10 @@
       <button type="button"
               data-controller="theme"
               data-action="click->theme#toggle"
+              data-theme-light-label-value="<%= t("vinyl_collection.nav.theme_light") %>"
+              data-theme-dark-label-value="<%= t("vinyl_collection.nav.theme_dark") %>"
+              data-theme-to-light-label-value="<%= t("vinyl_collection.nav.switch_to_light") %>"
+              data-theme-to-dark-label-value="<%= t("vinyl_collection.nav.switch_to_dark") %>"
               aria-pressed="false"
               aria-label="<%= t("vinyl_collection.nav.switch_theme") %>"
               class="inline-flex items-center gap-2 px-3 py-2 rounded-sleeve border border-line text-fg-muted hover:bg-surface-2 hover:text-fg">
@@ -40,7 +47,7 @@
         <svg data-theme-target="iconDark" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" hidden>
           <path d="M20 14.5A8.3 8.3 0 019.5 4a8.5 8.5 0 1010.5 10.5z"/>
         </svg>
-        <span data-theme-target="label" class="text-sm">Light</span>
+        <span data-theme-target="label" class="text-sm"><%= t("vinyl_collection.nav.theme_light") %></span>
       </button>
 
       <% if user_signed_in? %>

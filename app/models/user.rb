@@ -28,6 +28,16 @@ class User < ApplicationRecord
     end
   end
 
+  # A sync takes minutes, and with no progress indicator it is natural to click
+  # again. Treat one as running until it reports back — or until it is old
+  # enough that the process behind it is clearly gone.
+  SYNC_ASSUMED_DEAD_AFTER = 30.minutes
+
+  def discogs_syncing?
+    discogs_sync_started_at.present? &&
+      discogs_sync_started_at > SYNC_ASSUMED_DEAD_AFTER.ago
+  end
+
   def discogs_synced?
     discogs_synced_at.present?
   end

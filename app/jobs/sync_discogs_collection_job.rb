@@ -5,7 +5,7 @@ class SyncDiscogsCollectionJob < ApplicationJob
   queue_as :default
 
   def perform(user)
-    return unless user.discogs_authenticated?
+    return user.update_column(:discogs_sync_started_at, nil) unless user.discogs_authenticated?
 
     result = DiscogsService.new(user).sync_collection
 
@@ -19,6 +19,9 @@ class SyncDiscogsCollectionJob < ApplicationJob
     end
 
     result
+  ensure
+    # Released whatever happened, so a crash cannot leave syncing wedged on.
+    user.update_column(:discogs_sync_started_at, nil)
   end
 
   private

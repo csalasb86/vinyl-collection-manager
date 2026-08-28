@@ -16,24 +16,26 @@ class SyncDiscogsCollectionJobTest < ActiveJob::TestCase
 
   test "it runs the sync for a connected user" do
     service = Minitest::Mock.new
-    service.expect :sync_collection, { success: true, albums_count: 3 }
+    service.expect :sync_collection, { success: true, albums_count: 42 }
 
-    DiscogsService.stub :new, service do
+    result = DiscogsService.stub :new, service do
       SyncDiscogsCollectionJob.perform_now(@user)
     end
 
+    assert_equal 42, result[:albums_count]
     service.verify
   end
 
-  test "a disconnected user is skipped rather than failing the job" do
-    @user.update!(discogs_authenticated_at: nil)
+  test "a disconnected user is skipped, and does not stay marked as syncing" do
+    @user.update!(discogs_authenticated_at: nil, discogs_sync_started_at: Time.current)
 
     called = false
     DiscogsService.stub :new, ->(*) { called = true } do
-      assert_nil SyncDiscogsCollectionJob.perform_now(@user)
+      SyncDiscogsCollectionJob.perform_now(@user)
     end
 
-    assert_not called
+    assert_not called, "no sync should have been attempted"
+    assert_nil @user.reload.discogs_sync_started_at
   end
 
   test "a failed sync is logged, not raised" do
@@ -95,5 +97,28 @@ class SyncDiscogsCollectionJobTest < ActiveJob::TestCase
     end
 
     assert_not_nil @user.reload.discogs_synced_at
+  end
+
+  test "the running flag is released even when the sync blows up" do
+    @user.update!(discogs_sync_started_at: Time.current)
+
+    DiscogsService.stub :new, ->(*) { raise "Discogs exploded" } do
+      assert_raises(RuntimeError) { SyncDiscogsCollectionJob.perform_now(@user) }
+    end
+
+    assert_nil @user.reload.discogs_sync_started_at,
+               "a crashed sync must not leave the user wedged as syncing"
+  end
+
+  test "a finished sync releases the flag" do
+    @user.update!(discogs_sync_started_at: Time.current)
+    service = Minitest::Mock.new
+    service.expect :sync_collection, { success: true, albums_count: 1 }
+
+    DiscogsService.stub :new, service do
+      SyncDiscogsCollectionJob.perform_now(@user)
+    end
+
+    assert_nil @user.reload.discogs_sync_started_at
   end
 end

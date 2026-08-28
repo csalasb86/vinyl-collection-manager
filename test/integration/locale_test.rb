@@ -65,4 +65,27 @@ class LocaleTest < ActionDispatch::IntegrationTest
     get albums_path(locale: "es")
     assert_match "Última sincronización hace alrededor de 3 horas", response.body
   end
+
+  # Anything a Stimulus controller writes has to be handed to it from the view;
+  # a string baked into the JS would stay English whatever the locale.
+  test "labels written by JavaScript are handed over translated" do
+    get albums_path(locale: "es")
+
+    assert_select "button[data-controller=theme][data-theme-light-label-value=?]", "Claro"
+    assert_select "button[data-controller=theme][data-theme-dark-label-value=?]", "Oscuro"
+    assert_select "nav[data-controller=drawer][data-drawer-open-label-value=?]", "Abrir menú"
+    assert_select "nav[data-controller=drawer][data-drawer-close-label-value=?]", "Cerrar menú"
+  end
+
+  test "no Stimulus controller carries user-facing English of its own" do
+    offenders = Dir.glob("app/javascript/**/*.js").filter_map do |file|
+      body = File.read(file)
+      # Strings assigned to textContent or an aria-label, not read from a value.
+      hits = body.scan(/(?:textContent\s*=|"aria-label",)\s*[^\n]*"[A-Z][a-z][^"]{2,}"/)
+      "#{File.basename(file)}: #{hits.join(', ')}" if hits.any?
+    end
+
+    assert_empty offenders,
+                 "these would stay English in Spanish: #{offenders.join('; ')}"
+  end
 end
