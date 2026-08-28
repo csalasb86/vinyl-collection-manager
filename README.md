@@ -2,8 +2,8 @@
 
 [![CI](https://github.com/csalasb86/vinyl-collection-manager/workflows/CI/badge.svg)](https://github.com/csalasb86/vinyl-collection-manager/actions)
 [![Ruby](https://img.shields.io/badge/ruby-3.3.5-red.svg)](https://ruby-lang.org)
-[![Rails](https://img.shields.io/badge/rails-8.0.2-red.svg)](https://rubyonrails.org)
-[![Test Coverage](https://img.shields.io/badge/coverage-86.84%25-brightgreen.svg)](https://github.com/csalasb86/vinyl-collection-manager)
+[![Rails](https://img.shields.io/badge/rails-8.0.5-red.svg)](https://rubyonrails.org)
+[![Test Coverage](https://img.shields.io/badge/coverage-90.58%25-brightgreen.svg)](https://github.com/csalasb86/vinyl-collection-manager)
 [![Code Style](https://img.shields.io/badge/code_style-rubocop_rails_omakase-blue.svg)](https://github.com/rails/rubocop-rails-omakase)
 [![Security](https://img.shields.io/badge/security-brakeman-green.svg)](https://brakemanscanner.org)
 
@@ -16,7 +16,8 @@
 - **🔐 User Authentication**: Secure Devise-based authentication with session management
 - **📱 Responsive Design**: Modern TailwindCSS interface optimized for all devices
 - **🎧 Discogs Integration**:
-  - OAuth authentication with Discogs API
+  - Personal access token authentication with the Discogs API
+  - In-house lightweight API client (Faraday) with rate-limit handling
   - Full collection synchronization
   - Individual album import from Discogs database
   - Automatic artist and track metadata import
@@ -33,7 +34,7 @@
 ### Prerequisites
 
 - **Ruby**: 3.3.5 (see `.ruby-version`)
-- **Rails**: 8.0.2 or higher
+- **Rails**: 8.0.5 or higher
 - **PostgreSQL**: 12+ recommended
 - **Node.js**: For asset compilation (if needed)
 
@@ -85,7 +86,7 @@ bin/jobs              # Start Solid Queue processor
 
 ### Running Tests
 
-The project uses **SimpleCov** for test coverage analysis with an **80% minimum threshold**. Current coverage: **86.84%**.
+The project uses **SimpleCov** for test coverage analysis with an **80% minimum threshold**. Current coverage: **90.58%**.
 
 ```bash
 # Run all tests with coverage report
@@ -157,10 +158,10 @@ The application includes Docker configuration and can be deployed to any contain
 
 ### Backend
 
-- **Framework**: Ruby on Rails 8.0.2
+- **Framework**: Ruby on Rails 8.0.5
 - **Ruby Version**: 3.3.5
 - **Database**: PostgreSQL with Active Record
-- **Authentication**: Devise (~> 4.9)
+- **Authentication**: Devise (~> 5.0)
 - **Background Jobs**: Solid Queue
 - **Caching**: Solid Cache
 - **Real-time**: Solid Cable
@@ -175,13 +176,13 @@ The application includes Docker configuration and can be deployed to any contain
 
 ### APIs & Integrations
 
-- **Discogs API**: discogs-wrapper (~> 2.5)
+- **Discogs API**: in-house `DiscogsClient` (`app/services/discogs_client.rb`) — personal access token auth, built on Faraday with rate-limit handling
 - **HTTP Client**: Faraday (~> 2.13)
 - **Pagination**: Pagy (~> 9.3)
 
 ### Development & Testing
 
-- **Testing**: Minitest with SimpleCov (86.84% coverage)
+- **Testing**: Minitest with SimpleCov (90.58% coverage)
 - **System Testing**: Capybara + Selenium WebDriver
 - **Code Style**: RuboCop Rails Omakase
 - **Security**: Brakeman static analysis
@@ -197,7 +198,7 @@ Contributions are welcome! Please follow these guidelines:
    - Run `bin/rubocop --autocorrect` for style compliance
    - Run `bin/brakeman` for security scanning
    - Ensure tests pass with `bin/rails test`
-   - Maintain or improve test coverage (currently 86.84%)
+   - Maintain or improve test coverage (currently 90.58%)
 
 3. **Write tests** for new features and bug fixes
 

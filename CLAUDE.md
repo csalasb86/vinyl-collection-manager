@@ -28,7 +28,7 @@ bin/rails db:reset               # Drop and recreate database
 ### Testing & Coverage
 
 ```bash
-bin/rails test                   # Run all tests with SimpleCov coverage (86.84%)
+bin/rails test                   # Run all tests with SimpleCov coverage (90.58%)
 bin/rails test:system            # Run system tests (Capybara + Selenium)
 ```
 
@@ -88,7 +88,7 @@ User (separate, manages Discogs integration)
 ### Controllers & Routes
 
 - **AlbumsController**: CRUD operations with Discogs import/sync features (`search_discogs`, `import_from_discogs`, `sync_collection`)
-- **DiscogsController**: OAuth authentication with Discogs API
+- **DiscogsController**: Discogs personal-token validation
 - **ApplicationController**: Base controller with Devise integration
 
 ### Services
@@ -97,8 +97,8 @@ User (separate, manages Discogs integration)
 
 ### Key Gems & Dependencies
 
-- **Authentication**: Devise (~> 4.9)
-- **API Integration**: discogs-wrapper (~> 2.5), faraday (~> 2.7)
+- **Authentication**: Devise (~> 5.0)
+- **API Integration**: in-house DiscogsClient (app/services/discogs_client.rb) built on faraday (~> 2.13)
 - **Frontend**: TailwindCSS, Stimulus, Turbo
 - **Background Jobs**: Solid Queue (Rails 8.0 default)
 - **Pagination**: Pagy (~> 9.3)
@@ -113,7 +113,7 @@ User (separate, manages Discogs integration)
 
 ### Discogs Integration Features
 
-- OAuth authentication with 30-day token expiry
+- Personal access token authentication with 30-day re-validation
 - Full collection synchronization
 - Individual album import from Discogs database
 - Automatic artist and track creation
@@ -144,7 +144,7 @@ The project uses RuboCop Rails Omakase configuration for consistent code style.
 ### Test Coverage & Requirements
 
 - **Coverage Tool**: SimpleCov with 80% minimum threshold
-- **Current Coverage**: 86.84% (198/228 lines)
+- **Current Coverage**: 90.58% (250/276 lines)
 - **Reports**: Generated in `/coverage/index.html` after test runs
 - **System Tests**: Require Selenium WebDriver (Capybara + Selenium gems)
 - **Parallel Tests**: Disabled for SimpleCov compatibility
