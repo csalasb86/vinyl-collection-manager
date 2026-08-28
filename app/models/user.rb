@@ -12,7 +12,7 @@ class User < ApplicationRecord
   def discogs_client
     return nil unless discogs_token.present?
 
-    @discogs_client ||= Discogs::Wrapper.new("VinylCollectionManager", user_token: discogs_token)
+    @discogs_client ||= DiscogsClient.new(discogs_token)
   end
 
   def authenticate_discogs

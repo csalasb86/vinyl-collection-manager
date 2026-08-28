@@ -103,7 +103,6 @@ GEM
     concurrent-ruby (1.3.8)
     connection_pool (3.0.2)
     crass (1.0.6)
-    csv (3.3.5)
     date (3.5.1)
     debug (1.11.1)
       irb (~> 1.10)
@@ -114,10 +113,6 @@ GEM
       railties (>= 7.0)
       responders
       warden (~> 1.2.3)
-    discogs-wrapper (2.5.1)
-      hashie (~> 3.0)
-      httparty (~> 0.14)
-      oauth (~> 0.5.1)
     docile (1.4.1)
     dotenv (3.2.0)
     dotenv-rails (3.2.0)
@@ -148,11 +143,6 @@ GEM
       raabro (~> 1.4)
     globalid (1.3.0)
       activesupport (>= 6.1)
-    hashie (3.6.0)
-    httparty (0.24.2)
-      csv
-      mini_mime (>= 1.0.0)
-      multi_xml (>= 0.5.2)
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     image_processing (1.14.0)
@@ -202,8 +192,6 @@ GEM
     mini_mime (1.1.5)
     minitest (5.27.0)
     msgpack (1.8.4)
-    multi_xml (0.8.1)
-      bigdecimal (>= 3.1, < 5)
     net-http (0.9.1)
       uri (>= 0.11.1)
     net-imap (0.6.6)
@@ -237,7 +225,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.19.4-x86_64-linux-musl)
       racc (~> 1.4)
-    oauth (0.5.14)
     orm_adapter (0.5.0)
     ostruct (0.6.3)
     pagy (9.4.0)
@@ -461,7 +448,6 @@ DEPENDENCIES
   capybara
   debug
   devise (~> 5.0)
-  discogs-wrapper (~> 2.5)
   dotenv-rails
   faraday (~> 2.13)
   image_processing (~> 1.2)

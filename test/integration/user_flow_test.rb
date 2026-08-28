@@ -109,9 +109,28 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     user.reload
     user.update!(discogs_authenticated_at: Time.current)
 
-    # Now user can search Discogs (would require mocking in real tests)
-    get search_discogs_albums_path(query: "Beatles")
-    assert_response :success
+    # Search with a stubbed client so the test never hits the real API
+    fake_client = Object.new
+    def fake_client.search(_query, _options = {})
+      OpenStruct.new(results: [], pagination: OpenStruct.new(page: 1, pages: 0))
+    end
+
+    DiscogsClient.stub :new, fake_client do
+      get search_discogs_albums_path(query: "Beatles")
+      assert_response :success
+    end
+
+    # An API failure renders the page with an alert instead of a 500
+    failing_client = Object.new
+    def failing_client.search(_query, _options = {})
+      raise DiscogsClient::Error, "Discogs API error (401): Invalid token"
+    end
+
+    DiscogsClient.stub :new, failing_client do
+      get search_discogs_albums_path(query: "Beatles")
+      assert_response :success
+      assert_match "Discogs search failed", flash[:alert]
+    end
   end
 
   test "album filtering and search functionality" do

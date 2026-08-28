@@ -64,10 +64,10 @@ class UserTest < ActiveSupport::TestCase
     assert_nil @user.discogs_client
   end
 
-  test "discogs_client should return wrapper with token" do
+  test "discogs_client should return client with token" do
     @user.discogs_token = "test_token"
     client = @user.discogs_client
-    assert_instance_of Discogs::Wrapper, client
+    assert_instance_of DiscogsClient, client
   end
 
   test "discogs_authenticated? should return false without authentication date" do

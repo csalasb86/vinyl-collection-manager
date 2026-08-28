@@ -63,7 +63,13 @@ class AlbumsController < ApplicationController
 
     if @query.present? && current_user.discogs_authenticated?
       discogs_service = DiscogsService.new(current_user)
-      @results = discogs_service.search_release(@query, per_page: 10)
+      begin
+        @results = discogs_service.search_release(@query, per_page: 10)
+      rescue DiscogsClient::Error => e
+        Rails.logger.error("Discogs search failed: #{e.message}")
+        @results = nil
+        flash.now[:alert] = "Discogs search failed. Please check your Discogs credentials and try again."
+      end
     else
       @results = nil
     end

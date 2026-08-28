@@ -26,9 +26,6 @@ gem "devise", "~> 5.0"
 # HTTP requests
 gem "faraday", "~> 2.13"
 
-# Discogs API client
-gem "discogs-wrapper", "~> 2.5"
-
 # Pagination
 gem "pagy", "~> 9.3"
 
