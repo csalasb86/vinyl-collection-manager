@@ -1,5 +1,5 @@
-<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
-  <h2 class="text-2xl font-bold mb-6 text-center text-gray-800"><%= t('vinyl_collection.account.edit.title') %></h2>
+<div class="max-w-2xl mx-auto bg-surface rounded-sleeve shadow-md p-6">
+  <h2 class="text-2xl font-bold mb-6 text-center text-fg"><%= t('vinyl_collection.account.edit.title') %></h2>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-6", role: "form", "aria-label": t('vinyl_collection.account.edit.aria.form') }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
@@ -10,8 +10,8 @@
     </div>
 
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-      <div class="bg-yellow-50 border border-yellow-200 rounded-md p-3">
-        <p class="text-sm text-yellow-800">
+      <div class="bg-accent-soft border border-line rounded-sleeve p-3">
+        <p class="text-sm text-fg">
           <span class="font-medium">Pending confirmation:</span> Currently waiting confirmation for <%= resource.unconfirmed_email %>
         </p>
       </div>
@@ -19,10 +19,10 @@
 
     <div>
       <%= f.label :password, class: form_label_classes %>
-      <p class="text-xs text-gray-500 mb-1" id="password-help"><%= t('vinyl_collection.account.edit.help.password_blank') %></p>
+      <p class="text-xs text-fg-subtle mb-1" id="password-help"><%= t('vinyl_collection.account.edit.help.password_blank') %></p>
       <%= f.password_field :password, autocomplete: "new-password", class: form_input_classes, "aria-describedby": "password-help" %>
       <% if @minimum_password_length %>
-        <p class="text-xs text-gray-500 mt-1"><%= @minimum_password_length %> characters minimum</p>
+        <p class="text-xs text-fg-subtle mt-1"><%= @minimum_password_length %> characters minimum</p>
       <% end %>
     </div>
 
@@ -33,13 +33,13 @@
 
     <div>
       <%= f.label :current_password, class: form_label_classes %>
-      <p class="text-xs text-gray-500 mb-1" id="current-password-help"><%= t('vinyl_collection.account.edit.help.current_password') %></p>
+      <p class="text-xs text-fg-subtle mb-1" id="current-password-help"><%= t('vinyl_collection.account.edit.help.current_password') %></p>
       <%= f.password_field :current_password, autocomplete: "current-password", class: form_input_classes, "aria-describedby": "current-password-help" %>
     </div>
 
     <!-- Discogs Configuration Section -->
-    <div class="bg-gray-50 border border-gray-200 rounded-md p-4">
-      <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('vinyl_collection.account.edit.discogs_integration') %></h3>
+    <div class="bg-surface-2 border border-line rounded-sleeve p-4">
+      <h3 class="text-lg font-medium text-fg mb-4"><%= t('vinyl_collection.account.edit.discogs_integration') %></h3>
       
       <div class="space-y-4">
         <div>
@@ -51,35 +51,35 @@
         <div>
           <%= f.label :discogs_token, t('vinyl_collection.account.edit.discogs_token'), class: form_label_classes %>
           <%= f.password_field :discogs_token, class: form_input_classes, placeholder: t('vinyl_collection.account.edit.placeholders.discogs_token'), "aria-describedby": "discogs-token-help" %>
-          <p class="<%= help_text_classes %>" id="discogs-token-help"><%= t('vinyl_collection.account.edit.help.discogs_token', link: link_to(t('vinyl_collection.account.edit.links.discogs_settings'), "https://www.discogs.com/settings/developers", target: "_blank", rel: "noopener noreferrer", class: "text-blue-600 hover:text-blue-800 underline", "aria-label": t('vinyl_collection.account.edit.aria.discogs_settings'))).html_safe %></p>
+          <p class="<%= help_text_classes %>" id="discogs-token-help"><%= t('vinyl_collection.account.edit.help.discogs_token', link: link_to(t('vinyl_collection.account.edit.links.discogs_settings'), "https://www.discogs.com/settings/developers", target: "_blank", rel: "noopener noreferrer", class: "text-accent hover:text-accent underline", "aria-label": t('vinyl_collection.account.edit.aria.discogs_settings'))).html_safe %></p>
         </div>
 
         <% if resource.discogs_username.present? && resource.discogs_token.present? %>
           <% if current_user.discogs_authenticated? %>
-            <div class="bg-green-50 border border-green-200 rounded-md p-3">
+            <div class="bg-ok-soft border border-line rounded-sleeve p-3">
               <div class="flex">
-                <div class="flex-shrink-0">
-                  <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor" aria-label="<%= t('vinyl_collection.account.edit.aria.success_icon') %>" role="img">
+                <div class="shrink-0">
+                  <svg class="h-5 w-5 text-ok" viewBox="0 0 20 20" fill="currentColor" aria-label="<%= t('vinyl_collection.account.edit.aria.success_icon') %>" role="img">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                   </svg>
                 </div>
                 <div class="ml-3">
-                  <p class="text-sm text-green-800">
+                  <p class="text-sm text-ok">
                     <span class="font-medium"><%= t('vinyl_collection.account.edit.status.connected', username: resource.discogs_username) %></span>
                   </p>
                 </div>
               </div>
             </div>
           <% else %>
-            <div class="bg-yellow-50 border border-yellow-200 rounded-md p-3">
+            <div class="bg-accent-soft border border-line rounded-sleeve p-3">
               <div class="flex">
-                <div class="flex-shrink-0">
-                  <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-label="<%= t('vinyl_collection.account.edit.aria.warning_icon') %>" role="img">
+                <div class="shrink-0">
+                  <svg class="h-5 w-5 text-fg-subtle" viewBox="0 0 20 20" fill="currentColor" aria-label="<%= t('vinyl_collection.account.edit.aria.warning_icon') %>" role="img">
                     <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                   </svg>
                 </div>
                 <div class="ml-3">
-                  <p class="text-sm text-yellow-800">
+                  <p class="text-sm text-fg">
                     <span class="font-medium"><%= t('vinyl_collection.account.edit.status.not_connected') %></span>
                   </p>
                 </div>
@@ -88,18 +88,18 @@
           <% end %>
           
           <div class="mt-3">
-            <%= link_to t('vinyl_collection.account.edit.test_connection'), authenticate_discogs_path, data: { turbo_method: :post }, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200" %>
+            <%= link_to t('vinyl_collection.account.edit.test_connection'), authenticate_discogs_path, data: { turbo_method: :post }, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-sleeve text-accent-fg bg-accent hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent transition duration-200" %>
           </div>
         <% else %>
-          <div class="bg-yellow-50 border border-yellow-200 rounded-md p-3">
+          <div class="bg-accent-soft border border-line rounded-sleeve p-3">
             <div class="flex">
-              <div class="flex-shrink-0">
-                <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-label="<%= t('vinyl_collection.account.edit.aria.warning_icon') %>" role="img">
+              <div class="shrink-0">
+                <svg class="h-5 w-5 text-fg-subtle" viewBox="0 0 20 20" fill="currentColor" aria-label="<%= t('vinyl_collection.account.edit.aria.warning_icon') %>" role="img">
                   <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                 </svg>
               </div>
               <div class="ml-3">
-                <p class="text-sm text-yellow-800">
+                <p class="text-sm text-fg">
                   <span class="font-medium"><%= t('vinyl_collection.account.edit.status.not_configured') %></span> <%= t('vinyl_collection.account.edit.status.not_configured_help') %>
                 </p>
               </div>
@@ -114,26 +114,26 @@
     </div>
   <% end %>
 
-  <div class="mt-8 pt-6 border-t border-gray-200">
-    <h3 class="text-lg font-medium text-gray-900 mb-4"><%= t('vinyl_collection.account.edit.danger_zone') %></h3>
+  <div class="mt-8 pt-6 border-t border-line">
+    <h3 class="text-lg font-medium text-fg mb-4"><%= t('vinyl_collection.account.edit.danger_zone') %></h3>
     
-    <div class="bg-red-50 border border-red-200 rounded-md p-4">
+    <div class="bg-danger-soft border border-line rounded-sleeve p-4">
       <div class="flex">
-        <div class="flex-shrink-0">
-          <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-label="<%= t('vinyl_collection.account.edit.aria.error_icon') %>" role="img">
+        <div class="shrink-0">
+          <svg class="h-5 w-5 text-danger" viewBox="0 0 20 20" fill="currentColor" aria-label="<%= t('vinyl_collection.account.edit.aria.error_icon') %>" role="img">
             <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
           </svg>
         </div>
         <div class="ml-3">
-          <h4 class="text-sm font-medium text-red-800"><%= t('vinyl_collection.account.edit.delete_account') %></h4>
-          <div class="mt-2 text-sm text-red-700">
+          <h4 class="text-sm font-medium text-danger"><%= t('vinyl_collection.account.edit.delete_account') %></h4>
+          <div class="mt-2 text-sm text-danger">
             <p><%= t('vinyl_collection.account.edit.help.delete_warning') %></p>
           </div>
           <div class="mt-4">
             <%= button_to t('vinyl_collection.account.edit.cancel_account'), registration_path(resource_name), 
                 data: { turbo_confirm: t('vinyl_collection.account.edit.confirm.delete_account') }, 
                 method: :delete,
-                class: "bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200",
+                class: "bg-danger text-surface py-2 px-4 rounded-sleeve hover:bg-danger-hover focus:outline-none focus:ring-2 focus:ring-danger focus:ring-offset-2 transition duration-200",
                 "aria-label": t('vinyl_collection.account.edit.aria.delete_account') %>
           </div>
         </div>
@@ -142,6 +142,6 @@
   </div>
 
   <div class="mt-6 text-center">
-    <%= link_to t('vinyl_collection.account.edit.links.back'), :back, class: "text-gray-600 hover:text-gray-800 underline" %>
+    <%= link_to t('vinyl_collection.account.edit.links.back'), :back, class: "text-fg-muted hover:text-fg underline" %>
   </div>
 </div>

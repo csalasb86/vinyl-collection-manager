@@ -7,6 +7,24 @@
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta name="color-scheme" content="light dark">
+
+    <%# Applies the saved theme before first paint so the page never flashes
+        the wrong palette. Must stay inline and ahead of the stylesheet. %>
+    <script>
+      (function () {
+        var stored;
+        try { stored = localStorage.getItem("theme"); } catch (e) {}
+        if (stored !== "light" && stored !== "dark") {
+          stored = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.dataset.theme = stored;
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400..600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 
     <%= yield :head %>
 
@@ -31,16 +49,17 @@
         <%= yield %>
       </main>
     <% elsif show_authenticated_layout? %>
+      <%= link_to "Skip to content", "#main", class: "skip-link" %>
       <%= render 'shared/navbar' %>
       <%= render 'shared/flash_messages' %>
-      
-      <main class="container mx-auto px-4 py-6">
+
+      <main id="main" class="container mx-auto px-4 py-6">
         <%= yield %>
       </main>
-      
-      <footer class="bg-gray-900 text-white p-6 mt-12">
-        <div class="container mx-auto">
-          <p class="text-center">Vinyl Collection Manager</p>
+
+      <footer class="mt-12 border-t border-line py-6 text-fg-subtle">
+        <div class="container mx-auto px-4">
+          <p class="text-center text-sm">Vinyl Collection Manager</p>
         </div>
       </footer>
     <% else %>

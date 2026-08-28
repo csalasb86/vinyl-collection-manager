@@ -1,5 +1,5 @@
-<div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-  <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Sign up</h2>
+<div class="max-w-md mx-auto bg-surface rounded-sleeve shadow-md p-6">
+  <h2 class="text-2xl font-bold mb-6 text-center text-fg">Sign up</h2>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-4" }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
@@ -12,7 +12,7 @@
     <div>
       <%= f.label :password, class: form_label_classes %>
       <% if @minimum_password_length %>
-        <p class="text-xs text-gray-500 mb-1">(<%= @minimum_password_length %> characters minimum)</p>
+        <p class="text-xs text-fg-subtle mb-1">(<%= @minimum_password_length %> characters minimum)</p>
       <% end %>
       <%= f.password_field :password, autocomplete: "new-password", class: form_input_classes %>
     </div>
