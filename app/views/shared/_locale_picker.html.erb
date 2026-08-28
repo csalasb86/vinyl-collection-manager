@@ -5,7 +5,7 @@
   <% I18n.available_locales.each do |locale| %>
     <% current = I18n.locale == locale %>
     <%= link_to url_for(locale: locale),
-          class: [ "px-2.5 py-2 text-xs font-semibold uppercase tracking-wide",
+          class: [ "inline-flex items-center min-h-11 px-3 text-xs font-semibold uppercase tracking-wide",
                    current ? "bg-accent text-accent-fg" : "text-fg-muted hover:bg-surface-2 hover:text-fg" ],
           aria: { current: ("true" if current),
                   label: t("vinyl_collection.nav.switch_language", language: t("vinyl_collection.languages.#{locale}")) } do %>

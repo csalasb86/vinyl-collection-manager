@@ -4,7 +4,7 @@
      data-drawer-close-label-value="<%= t("vinyl_collection.nav.close_menu") %>">
   <div class="container mx-auto px-4">
     <div class="flex items-center h-16 gap-3">
-      <%= link_to root_path, class: "flex items-center gap-2 shrink-0 font-display text-xl font-extrabold tracking-tight text-fg" do %>
+      <%= link_to root_path, class: "flex items-center gap-2 shrink-0 min-h-11 font-display text-xl font-extrabold tracking-tight text-fg" do %>
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
           <circle cx="10" cy="10" r="5.5" stroke="currentColor" stroke-width="1" opacity="0.45"/>
@@ -39,7 +39,7 @@
               data-theme-to-dark-label-value="<%= t("vinyl_collection.nav.switch_to_dark") %>"
               aria-pressed="false"
               aria-label="<%= t("vinyl_collection.nav.switch_theme") %>"
-              class="inline-flex items-center gap-2 px-3 py-2 rounded-sleeve border border-line text-fg-muted hover:bg-surface-2 hover:text-fg">
+              class="control border border-line text-fg-muted hover:bg-surface-2 hover:text-fg">
         <svg data-theme-target="iconLight" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <circle cx="12" cy="12" r="4.2"/>
           <path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>
@@ -60,7 +60,7 @@
                   aria-haspopup="menu"
                   aria-expanded="false"
                   aria-label="<%= t("vinyl_collection.nav.account_menu") %>"
-                  class="flex items-center justify-center w-9 h-9 rounded-full border border-line bg-accent-soft text-accent text-xs font-semibold hover:border-accent">
+                  class="flex items-center justify-center w-11 h-11 rounded-full border border-line bg-accent-soft text-accent text-xs font-semibold hover:border-accent">
             <%= avatar_initials(current_user) %>
           </button>
 
@@ -81,19 +81,19 @@
                     turbo_confirm: t("vinyl_collection.nav.sync_confirm"),
                     turbo_submits_with: t("vinyl_collection.nav.syncing")
                   },
-                  class: "w-full text-left px-3 py-2 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg" %>
+                  class: "flex items-center w-full min-h-11 text-left px-3 py-2 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg" %>
 
             <p class="px-3 pb-2 -mt-1 font-mono text-xs text-fg-subtle"><%= last_sync_label(current_user) %></p>
 
             <%= link_to t("vinyl_collection.nav.account"), edit_user_registration_path,
                   role: "menuitem",
-                  class: "block px-3 py-2 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg" %>
+                  class: "flex items-center min-h-11 px-3 py-2 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg" %>
 
             <%= button_to t("vinyl_collection.nav.log_out"), destroy_user_session_path,
                   method: :delete,
                   form_class: "contents",
                   role: "menuitem",
-                  class: "w-full text-left px-3 py-2 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg" %>
+                  class: "flex items-center w-full min-h-11 text-left px-3 py-2 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg" %>
           </div>
         </div>
       <% end %>
@@ -105,7 +105,7 @@
               aria-expanded="false"
               aria-controls="mobile-menu"
               aria-label="<%= t("vinyl_collection.nav.open_menu") %>"
-              class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-sleeve border border-line text-fg-muted hover:bg-surface-2 hover:text-fg">
+              class="md:hidden control-icon border border-line text-fg-muted hover:bg-surface-2 hover:text-fg">
         <svg data-drawer-target="iconOpen" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M4 7h16M4 12h16M4 17h16"/>
         </svg>

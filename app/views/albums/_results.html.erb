@@ -5,7 +5,7 @@
       with the filters that are actually applied. %>
   <% active_filters.each do |filter| %>
     <%= link_to path_without_filter(filter[:param]),
-          class: "inline-flex items-center gap-2 pl-3 pr-2 py-1 rounded-full border border-line-strong bg-surface text-sm text-fg hover:border-accent",
+          class: "inline-flex items-center gap-2 min-h-11 pl-4 pr-3 rounded-full border border-line-strong bg-surface text-sm text-fg hover:border-accent",
           aria: { label: t("vinyl_collection.albums.results.remove_filter", label: filter[:label], value: filter[:value]) } do %>
       <span class="text-fg-muted"><%= filter[:label] %></span>
       <b class="font-semibold"><%= filter[:value] %></b>
@@ -15,7 +15,7 @@
 
   <% if active_filters.size > 1 %>
     <%= link_to t("vinyl_collection.albums.results.clear_all"), path_without_filters,
-          class: "px-3 py-1 rounded-full border border-line border-dashed text-sm text-fg-muted hover:text-fg" %>
+          class: "inline-flex items-center min-h-11 px-4 rounded-full border border-line border-dashed text-sm text-fg-muted hover:text-fg" %>
   <% end %>
 </div>
 

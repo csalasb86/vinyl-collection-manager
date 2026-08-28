@@ -9,7 +9,7 @@
                 data: { controller: "autosubmit", turbo_frame: "albums" },
                 class: "contents" do |f| %>
 
-    <label class="flex items-center gap-2 basis-full sm:basis-auto sm:flex-1 min-w-0 px-3 py-2 bg-surface border border-line rounded-sleeve focus-within:border-accent">
+    <label class="flex items-center gap-2 basis-full sm:basis-auto sm:flex-1 min-w-0 min-h-11 px-3 bg-surface border border-line rounded-sleeve focus-within:border-accent">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="text-fg-subtle shrink-0" aria-hidden="true">
         <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
       </svg>
@@ -24,7 +24,7 @@
     <%# Not auto-opened on a filtered URL: the panel overlays the results, so it
         would land right on top of the chips it is meant to explain. %>
     <details>
-      <summary class="flex items-center gap-2 px-3 py-2 rounded-sleeve border border-line bg-surface text-sm text-fg cursor-pointer select-none hover:bg-surface-2 marker:content-none [&::-webkit-details-marker]:hidden">
+      <summary class="flex items-center gap-2 min-h-11 px-3 rounded-sleeve border border-line bg-surface text-sm text-fg cursor-pointer select-none hover:bg-surface-2 marker:content-none [&::-webkit-details-marker]:hidden">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M3 5h18M6 12h12M10 19h4"/>
         </svg>
@@ -72,14 +72,14 @@
       <%= f.select :sort, options_for_select(sort_options, @sort), {},
             id: "sort",
             data: { action: "change->autosubmit#now" },
-            class: "max-w-40 sm:max-w-none px-3 py-2 bg-surface border border-line rounded-sleeve text-sm text-fg" %>
+            class: "max-w-40 sm:max-w-none min-h-11 px-3 bg-surface border border-line rounded-sleeve text-sm text-fg" %>
     </div>
   <% end %>
 
   <%# Icon only on a phone, where the label costs a whole toolbar row. The
       accessible name stays either way. %>
   <%= link_to new_album_path, aria: { label: t("vinyl_collection.albums.index.add") },
-        class: "inline-flex items-center gap-2 ml-auto px-3 py-2 rounded-sleeve bg-accent text-accent-fg text-sm font-medium hover:bg-accent-hover" do %>
+        class: "btn btn-primary ml-auto px-3" do %>
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
       <path d="M12 5v14M5 12h14"/>
     </svg>

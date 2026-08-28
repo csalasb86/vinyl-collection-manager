@@ -168,9 +168,11 @@
 
   /* Buttons carry weight, not variety: one filled primary, an outlined
      secondary, and a destructive that never looks like either. */
+  /* min-h-11 is 44px: the touch target the design promised, applied once here
+     rather than remembered at every call site. */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-sleeve
-           text-sm font-medium cursor-pointer transition;
+    @apply inline-flex items-center justify-center gap-2 min-h-11 px-4 py-2
+           rounded-sleeve text-sm font-medium cursor-pointer transition;
   }
   .btn-primary {
     @apply bg-accent text-accent-fg hover:bg-accent-hover;
@@ -190,8 +192,20 @@
 
   /* Form fields */
   .field {
-    @apply w-full px-3 py-2 bg-surface border border-line rounded-sleeve
+    @apply w-full min-h-11 px-3 py-2 bg-surface border border-line rounded-sleeve
            text-fg placeholder:text-fg-subtle;
+  }
+  /* A multi-select sizes itself by its rows; the minimum would stretch it. */
+  select.field[multiple] {
+    @apply min-h-0;
+  }
+
+  /* Bar and toolbar controls that are not .btn but are just as tappable. */
+  .control {
+    @apply inline-flex items-center gap-2 min-h-11 px-3 rounded-sleeve;
+  }
+  .control-icon {
+    @apply inline-flex items-center justify-center w-11 h-11 rounded-sleeve;
   }
   .field-label {
     @apply block text-sm font-medium text-fg-muted mb-1;
@@ -234,7 +248,8 @@
     @apply flex justify-center gap-1 text-sm font-medium;
   }
   .pagy a:not(.gap) {
-    @apply rounded-sleeve border border-line bg-surface px-3 py-2 text-fg hover:bg-surface-2;
+    @apply inline-flex items-center min-h-11 rounded-sleeve border border-line
+           bg-surface px-3 py-2 text-fg hover:bg-surface-2;
   }
   .pagy a:not([href]) {
     @apply cursor-default bg-surface-2 text-fg-subtle hover:bg-surface-2;

@@ -155,4 +155,22 @@ class NavigationSystemTest < ApplicationSystemTestCase
     )
     assert_equal "fixed", position
   end
+
+  # The one promise from the design proposal that had never been measured.
+  test "every tappable thing is at least 44px tall on a phone" do
+    resize_window_to(*PHONE)
+    visit albums_path
+
+    find("button[aria-controls=mobile-menu]").click
+
+    small = page.all(
+      "nav a, nav button, #mobile-menu a, #mobile-menu button, main .btn, main summary, main select",
+      visible: true
+    ).filter_map do |el|
+      height = el.evaluate_script("Math.round(this.getBoundingClientRect().height)")
+      "#{el.text.split("\n").first || el.tag_name} (#{height}px)" if height < 44
+    end
+
+    assert_empty small, "under the 44px touch target: #{small.join(', ')}"
+  end
 end
