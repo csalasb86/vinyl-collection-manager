@@ -2,7 +2,7 @@ module AlbumsHelper
   # The filters currently narrowing the collection, as { label:, param:, value: }.
   # Rendered as chips so what is applied is visible without opening the panel.
   def active_filters
-    [
+    @active_filters ||= [
       { param: :q,         key: :search, value: params[:q] },
       { param: :year,      key: :year,   value: params[:year] },
       { param: :genre,     key: :genre,  value: params[:genre] },

@@ -104,7 +104,8 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
         run: |
-          bin/rails test test/controllers/ test/models/ test/integration/ test/services/
+          bin/rails test
+          bin/rails test:system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4

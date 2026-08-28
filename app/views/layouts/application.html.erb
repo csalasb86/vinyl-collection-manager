@@ -46,6 +46,14 @@
   <body class="<%= body_css_classes %>">
     <% if show_auth_layout? %>
       <main class="w-full max-w-md">
+        <p class="flex items-center justify-center gap-2 mb-6 font-display text-xl font-extrabold tracking-tight text-fg">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="10" cy="10" r="5.5" stroke="currentColor" stroke-width="1" opacity="0.45"/>
+            <circle cx="10" cy="10" r="1.6" fill="currentColor"/>
+          </svg>
+          <%= t("vinyl_collection.nav.brand") %>
+        </p>
         <%= render 'shared/flash_messages' %>
         <%= yield %>
       </main>

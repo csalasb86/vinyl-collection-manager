@@ -60,7 +60,7 @@ class AlbumsControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_response :success
+    assert_response :unprocessable_entity
   end
 
   test "should get edit" do
@@ -86,7 +86,7 @@ class AlbumsControllerTest < ActionDispatch::IntegrationTest
         title: ""
       }
     }
-    assert_response :success
+    assert_response :unprocessable_entity
   end
 
   test "should destroy album" do
@@ -216,30 +216,30 @@ class AlbumsControllerTest < ActionDispatch::IntegrationTest
     assert_match(/no Discogs ID/, flash[:alert])
   end
 
-  test "should sync collection when authenticated" do
+  # A collection sync is one Discogs call per release against a 60/min limit, so
+  # it is queued rather than held open in the request.
+  test "syncing queues the job and answers immediately" do
     @user.update!(
       discogs_token: "test_token",
       discogs_username: "test_user",
       discogs_authenticated_at: Time.current
     )
 
-    # Mock the service
-    mock_service = Minitest::Mock.new
-    mock_service.expect :sync_collection, { success: true, albums_count: 5 }
-
-    DiscogsService.stub :new, mock_service do
+    assert_enqueued_with(job: SyncDiscogsCollectionJob, args: [ @user ]) do
       post sync_collection_albums_url
     end
 
     assert_redirected_to albums_url
-    assert_match(/Successfully synchronized 5 albums/, flash[:notice])
-    mock_service.verify
+    assert_match(/in the background/, flash[:notice])
   end
 
   test "should not sync collection without authentication" do
-    post sync_collection_albums_url
+    assert_no_enqueued_jobs only: SyncDiscogsCollectionJob do
+      post sync_collection_albums_url
+    end
+
     assert_redirected_to edit_user_registration_url
-    assert_match(/authenticate with Discogs first/, flash[:alert])
+    assert_match(/Connect your Discogs account/, flash[:alert])
   end
 
   private

@@ -1,4 +1,4 @@
-<div class="text-center space-y-2">
+<div class="flex flex-col items-center gap-2 text-center text-sm">
   <%- if controller_name != 'sessions' %>
     <%= link_to "Log in", new_session_path(resource_name), class: "text-accent hover:text-accent underline" %>
   <% end %>

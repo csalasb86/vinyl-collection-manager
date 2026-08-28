@@ -1,79 +1,80 @@
 require "application_system_test_case"
 
+# Rewritten against the interface that actually exists. The previous version was
+# written speculatively — it looked for an "Albums" heading, an album-card
+# Stimulus controller and a "Search" button that none of the views ever had, and
+# had never run because there was no browser installed.
 class AlbumsSystemTest < ApplicationSystemTestCase
   setup do
     @user = User.create!(
-      email: "test@example.com",
+      email: "albums@example.com",
       password: "password123",
       password_confirmation: "password123"
     )
-    @album = Album.create!(title: "Test Album", year: 1990, format: "Vinyl")
-    @artist = Artist.create!(name: "Test Artist")
+    @artist = Artist.create!(name: "John Coltrane")
+    @album = Album.create!(title: "Blue Train", year: 1957, format: "LP", genre: [ "Jazz" ])
     @album.artists << @artist
-    sign_in_user(@user)
+
+    sign_in_as(@user)
   end
 
-  test "visiting the albums index" do
-    visit albums_url
+  test "the collection lists the records" do
+    visit albums_path
 
-    assert_selector "h1", text: "Albums"
-    assert_selector "div[data-controller='album-card']"
+    assert_text "Blue Train"
+    assert_text "John Coltrane"
+    assert_text "1 album"
   end
 
-  test "searching albums" do
-    visit albums_url
+  test "opening a record shows its details" do
+    visit albums_path
+    click_on "Blue Train"
 
-    fill_in "Search albums...", with: "Test"
-    click_on "Search"
-
-    assert_text @album.title
+    assert_selector "h1", text: "Blue Train"
+    assert_text "John Coltrane"
+    assert_text "1957"
+    assert_text "LP"
   end
 
-  test "filtering albums by year" do
-    visit albums_url
+  test "adding a record by hand" do
+    visit albums_path
+    find("a[aria-label='Add album']").click
 
-    select "1990", from: "year"
-    click_on "Search"
-
-    assert_text @album.title
-  end
-
-  test "creating a new album" do
-    visit albums_url
-    click_on "Add Album"
-
-    fill_in "Title", with: "New System Test Album"
-    fill_in "Year", with: "2020"
-    select "Vinyl", from: "Format"
-
-    click_on "Create Album"
+    assert_selector "h1", text: "Add a record"
+    fill_in "Title", with: "A Love Supreme"
+    fill_in "Year", with: "1965"
+    select "LP", from: "Format"
+    click_on "Add to collection"
 
     assert_text "Album was successfully created"
-    assert_text "New System Test Album"
+    assert_selector "h1", text: "A Love Supreme"
   end
 
-  test "viewing an album" do
-    visit album_url(@album)
+  test "a record with no title is rejected with a reason" do
+    visit new_album_path
 
-    assert_selector "h1", text: @album.title
-    assert_text @artist.name
-    assert_text @album.year.to_s
-    assert_text @album.format
+    # Bypass the browser's own required-field check to reach the server side.
+    page.execute_script("document.querySelector('#album_title').removeAttribute('required')")
+    click_on "Add to collection"
+
+    assert_text "stopped this from saving"
+    assert_text "Title can't be blank"
   end
 
-  test "editing an album" do
-    visit album_url(@album)
+  test "editing a record" do
+    visit album_path(@album)
     click_on "Edit"
 
-    fill_in "Title", with: "Updated Album Title"
-    click_on "Update Album"
+    assert_selector "h1", text: "Edit record"
+    fill_in "Title", with: "Blue Train (Reissue)"
+    click_on "Save changes"
 
     assert_text "Album was successfully updated"
-    assert_text "Updated Album Title"
+    assert_selector "h1", text: "Blue Train (Reissue)"
   end
 
-  test "deleting an album" do
-    visit album_url(@album)
+  test "deleting a record asks first" do
+    visit album_path(@album)
 
     accept_confirm do
       click_on "Delete"
@@ -81,47 +82,22 @@ class AlbumsSystemTest < ApplicationSystemTestCase
 
     assert_text "Album was successfully destroyed"
     assert_current_path albums_path
+    assert_no_text "Blue Train"
   end
 
-  test "searching discogs" do
-    @user.update!(
-      discogs_token: "test_token",
-      discogs_username: "test_user",
-      discogs_authenticated_at: Time.current
-    )
+  test "a genre on the detail page filters the collection by it" do
+    visit album_path(@album)
 
-    visit albums_url
-    click_on "Search Discogs"
+    click_on "Jazz"
 
-    assert_text "Search Discogs Database"
-
-    fill_in "Search for albums...", with: "Beatles"
-    click_on "Search"
-
-    # Note: This would require mocking the Discogs API in a real test
-    assert_current_path search_discogs_albums_path
+    assert_current_path(/genre=Jazz/)
+    assert_selector "a[aria-label='Remove filter Genre: Jazz']"
   end
 
-  test "user authentication flow for discogs features" do
-    visit albums_url
-    click_on "Search Discogs"
+  test "Discogs search asks for credentials before searching" do
+    visit search_discogs_albums_path
 
-    # Should show search form but results require authentication
-    assert_text "Search Discogs Database"
-
-    fill_in "Search for albums...", with: "Test"
-    click_on "Search"
-
-    # Without authentication, no results should be shown
-    assert_no_text "Import"
-  end
-
-  private
-
-  def sign_in_user(user)
-    visit new_user_session_path
-    fill_in "Email", with: user.email
-    fill_in "Password", with: "password123"
-    click_on "Log in"
+    assert_selector "h1", text: "Search Discogs"
+    assert_text "Connect your Discogs account before searching"
   end
 end

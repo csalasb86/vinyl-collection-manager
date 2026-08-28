@@ -12,11 +12,7 @@ class CollectionSystemTest < ApplicationSystemTestCase
       .artists << @coltrane
     Album.create!(title: "Remain in Light", year: 1980, format: "LP", genre: [ "Rock" ])
 
-    visit new_user_session_path
-    fill_in "Email", with: @user.email
-    fill_in "Password", with: "password123"
-    find("input[type=submit]").click
-    assert_no_current_path new_user_session_path, wait: 5
+    sign_in_as(@user)
   end
 
   # The toolbar lives outside the turbo frame precisely so this holds: replacing
@@ -84,7 +80,7 @@ class CollectionSystemTest < ApplicationSystemTestCase
 
   test "the filter panel never pushes the page sideways" do
     [ 1400, 768, 390 ].each do |width|
-      page.driver.browser.manage.window.resize_to(width, 900)
+      resize_window_to(width, 900)
       visit albums_path
       find("details summary").click
 

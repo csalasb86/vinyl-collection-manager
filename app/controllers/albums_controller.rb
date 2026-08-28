@@ -45,7 +45,8 @@ class AlbumsController < ApplicationController
     if @album.save
       redirect_to @album, notice: "Album was successfully created."
     else
-      render :new
+      # Turbo discards a 200 here, so the errors never reached the page.
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -56,7 +57,7 @@ class AlbumsController < ApplicationController
     if @album.update(album_params)
       redirect_to @album, notice: "Album was successfully updated."
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -123,18 +124,14 @@ class AlbumsController < ApplicationController
   end
 
   def sync_collection
-    if current_user.discogs_authenticated?
-      discogs_service = DiscogsService.new(current_user)
-      result = discogs_service.sync_collection
-
-      if result[:success]
-        redirect_to albums_path, notice: "Successfully synchronized #{result[:albums_count]} albums from your Discogs collection."
-      else
-        redirect_to albums_path, alert: "Failed to sync collection: #{result[:error]}"
-      end
-    else
-      redirect_to edit_user_registration_path, alert: "Please authenticate with Discogs first."
+    unless current_user.discogs_authenticated?
+      return redirect_to edit_user_registration_path,
+                         alert: t("vinyl_collection.sync.not_connected")
     end
+
+    SyncDiscogsCollectionJob.perform_later(current_user)
+
+    redirect_to albums_path, notice: t("vinyl_collection.sync.started")
   end
 
   private

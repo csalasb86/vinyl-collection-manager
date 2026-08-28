@@ -13,11 +13,11 @@ class NavigationSystemTest < ApplicationSystemTestCase
       password: "password123",
       password_confirmation: "password123"
     )
-    sign_in_through_the_form
+    sign_in_as(@user)
   end
 
   test "a phone can reach the rest of the app through the menu" do
-    resize_to(*PHONE)
+    resize_window_to(*PHONE)
     visit albums_path
 
     # Closed by default, and the desktop links really are out of reach.
@@ -36,7 +36,7 @@ class NavigationSystemTest < ApplicationSystemTestCase
   end
 
   test "a link in the menu navigates and the menu does not stay open" do
-    resize_to(*PHONE)
+    resize_window_to(*PHONE)
     visit albums_path
 
     find("button[aria-controls=mobile-menu]").click
@@ -49,7 +49,7 @@ class NavigationSystemTest < ApplicationSystemTestCase
   # `hidden` is an HTMLElement property, so assigning it on an <svg> is a no-op:
   # the icon silently never swapped. Both toggles go through the attribute now.
   test "the menu button swaps its icon between the bars and the cross" do
-    resize_to(*PHONE)
+    resize_window_to(*PHONE)
     visit albums_path
 
     assert_selector "[data-drawer-target=iconOpen]", visible: true
@@ -62,7 +62,7 @@ class NavigationSystemTest < ApplicationSystemTestCase
   end
 
   test "the theme button swaps between the sun and the moon" do
-    resize_to(*DESKTOP)
+    resize_window_to(*DESKTOP)
     visit albums_path
 
     assert_selector "[data-theme-target=iconLight]", visible: true
@@ -76,7 +76,7 @@ class NavigationSystemTest < ApplicationSystemTestCase
   end
 
   test "escape closes the menu" do
-    resize_to(*PHONE)
+    resize_window_to(*PHONE)
     visit albums_path
 
     find("button[aria-controls=mobile-menu]").click
@@ -88,7 +88,7 @@ class NavigationSystemTest < ApplicationSystemTestCase
   end
 
   test "the account menu opens on desktop and closes on an outside click" do
-    resize_to(*DESKTOP)
+    resize_window_to(*DESKTOP)
     visit albums_path
 
     assert_no_selector "[data-dropdown-target=menu]", visible: true
@@ -103,7 +103,7 @@ class NavigationSystemTest < ApplicationSystemTestCase
   end
 
   test "the theme survives a full page load" do
-    resize_to(*DESKTOP)
+    resize_window_to(*DESKTOP)
     visit albums_path
 
     find("button[data-controller=theme]").click
@@ -131,19 +131,5 @@ class NavigationSystemTest < ApplicationSystemTestCase
       "getComputedStyle(document.querySelector('.toast-region')).position"
     )
     assert_equal "fixed", position
-  end
-
-  private
-
-  def resize_to(width, height)
-    page.driver.browser.manage.window.resize_to(width, height)
-  end
-
-  def sign_in_through_the_form
-    visit new_user_session_path
-    fill_in "Email", with: @user.email
-    fill_in "Password", with: "password123"
-    find("input[type=submit]").click
-    assert_no_current_path new_user_session_path, wait: 5
   end
 end

@@ -38,6 +38,10 @@ en:
     flash:
       dismiss: "Dismiss"
 
+    sync:
+      started: "Syncing your Discogs collection in the background. Records will appear here as they import — reload in a minute."
+      not_connected: "Connect your Discogs account before syncing."
+
     nav:
       brand: "Vinyl Collection"
       collection: "Collection"
