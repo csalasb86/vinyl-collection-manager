@@ -3,12 +3,19 @@ module AlbumsHelper
   # Rendered as chips so what is applied is visible without opening the panel.
   def active_filters
     [
-      { param: :q,         label: "Search",  value: params[:q] },
-      { param: :year,      label: "Year",    value: params[:year] },
-      { param: :genre,     label: "Genre",   value: params[:genre] },
-      { param: :format,    label: "Format",  value: params[:format] },
-      { param: :artist_id, label: "Artist",  value: artist_name(params[:artist_id]) }
+      { param: :q,         key: :search, value: params[:q] },
+      { param: :year,      key: :year,   value: params[:year] },
+      { param: :genre,     key: :genre,  value: params[:genre] },
+      { param: :format,    key: :format, value: params[:format] },
+      { param: :artist_id, key: :artist, value: artist_name(params[:artist_id]) }
     ].select { |filter| filter[:value].present? }
+     .map { |filter| filter.merge(label: t("vinyl_collection.albums.results.filter_#{filter[:key]}")) }
+  end
+
+  # [[label, key]] for the sort select — the whitelist is Album::SORTS, the
+  # wording lives in the locale file.
+  def sort_options
+    Album::SORTS.map { |key| [ t("vinyl_collection.albums.sorts.#{key}"), key ] }
   end
 
   # The same page with one filter dropped — the chip's remove link.
@@ -42,7 +49,12 @@ module AlbumsHelper
 
   def cover_alt(album)
     artists = album.display_artists
-    artists.present? ? "Cover of #{album.title} by #{artists}" : "Cover of #{album.title}"
+
+    if artists.present?
+      t("vinyl_collection.albums.card.cover_alt", title: album.title, artists: artists)
+    else
+      t("vinyl_collection.albums.card.cover_alt_untitled", title: album.title)
+    end
   end
 
   private

@@ -34,12 +34,8 @@ class Album < ApplicationRecord
   }
 
   # Whitelisted so an ORDER BY can never come from a request parameter.
-  SORTS = {
-    "recent" => "Recently added",
-    "title"  => "Title A\u2013Z",
-    "newest" => "Year, newest first",
-    "oldest" => "Year, oldest first"
-  }.freeze
+  # Labels live in the locale file, not here.
+  SORTS = %w[recent title newest oldest].freeze
 
   scope :sorted_by, ->(key) {
     case key

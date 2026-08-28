@@ -1,12 +1,12 @@
 <div class="flex flex-wrap items-center gap-2 mb-4">
-  <p class="text-sm text-fg-muted font-mono tabular-nums"><%= pluralize(@pagy.count, "album") %></p>
+  <p class="text-sm text-fg-muted font-mono tabular-nums"><%= t("vinyl_collection.albums.results.count", count: @pagy.count) %></p>
 
   <%# Chips do a full navigation so the toolbar's selects re-render in step
       with the filters that are actually applied. %>
   <% active_filters.each do |filter| %>
     <%= link_to path_without_filter(filter[:param]),
           class: "inline-flex items-center gap-2 pl-3 pr-2 py-1 rounded-full border border-line-strong bg-surface text-sm text-fg hover:border-accent",
-          aria: { label: "Remove filter #{filter[:label]}: #{filter[:value]}" } do %>
+          aria: { label: t("vinyl_collection.albums.results.remove_filter", label: filter[:label], value: filter[:value]) } do %>
       <span class="text-fg-muted"><%= filter[:label] %></span>
       <b class="font-semibold"><%= filter[:value] %></b>
       <span class="text-fg-subtle" aria-hidden="true">&times;</span>
@@ -14,7 +14,7 @@
   <% end %>
 
   <% if active_filters.size > 1 %>
-    <%= link_to "Clear all", path_without_filters,
+    <%= link_to t("vinyl_collection.albums.results.clear_all"), path_without_filters,
           class: "px-3 py-1 rounded-full border border-line border-dashed text-sm text-fg-muted hover:text-fg" %>
   <% end %>
 </div>
@@ -37,11 +37,11 @@
     <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-fg-subtle mb-4" aria-hidden="true">
       <rect x="3" y="7" width="18" height="13" rx="1"/><path d="M3 11h18M8 7V4h8v3"/>
     </svg>
-    <h2 class="font-display text-2xl font-bold">Your crate is empty</h2>
-    <p class="mt-2 mb-6 text-fg-muted max-w-prose">Import your Discogs collection in one go, or add the first record by hand.</p>
+    <h2 class="font-display text-2xl font-bold"><%= t("vinyl_collection.albums.results.empty_title") %></h2>
+    <p class="mt-2 mb-6 text-fg-muted max-w-prose"><%= t("vinyl_collection.albums.results.empty_body") %></p>
     <div class="flex flex-wrap justify-center gap-2">
-      <%= link_to "Search Discogs", search_discogs_albums_path, class: "px-4 py-2 rounded-sleeve bg-accent text-accent-fg font-medium hover:bg-accent-hover" %>
-      <%= link_to "Add by hand", new_album_path, class: "px-4 py-2 rounded-sleeve border border-line text-fg hover:bg-surface-2" %>
+      <%= link_to t("vinyl_collection.albums.results.empty_import"), search_discogs_albums_path, class: "btn btn-primary" %>
+      <%= link_to t("vinyl_collection.albums.results.empty_manual"), new_album_path, class: "btn btn-secondary" %>
     </div>
   </div>
 
@@ -50,9 +50,9 @@
     <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-fg-subtle mb-4" aria-hidden="true">
       <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
     </svg>
-    <h2 class="font-display text-2xl font-bold">Nothing matches these filters</h2>
-    <p class="mt-2 mb-6 text-fg-muted max-w-prose">Try a different search, or drop one of the filters above.</p>
-    <%= link_to "Clear all filters", path_without_filters,
-          class: "px-4 py-2 rounded-sleeve bg-accent text-accent-fg font-medium hover:bg-accent-hover" %>
+    <h2 class="font-display text-2xl font-bold"><%= t("vinyl_collection.albums.results.no_results_title") %></h2>
+    <p class="mt-2 mb-6 text-fg-muted max-w-prose"><%= t("vinyl_collection.albums.results.no_results_body") %></p>
+    <%= link_to t("vinyl_collection.albums.results.no_results_clear"), path_without_filters,
+          class: "btn btn-primary" %>
   </div>
 <% end %>

@@ -23,15 +23,15 @@ class AlbumDetailTest < ActionDispatch::IntegrationTest
   test "the actions read as a hierarchy, with delete apart from the rest" do
     get album_path(@album)
 
-    # Primary carries the accent fill, the secondary only an outline.
-    assert_select "a[href=?].bg-accent", edit_album_path(@album)
-    assert_select "a[href=?].border-line", refresh_from_discogs_album_path(@album)
-    assert_select "a[href=?].bg-accent", refresh_from_discogs_album_path(@album), false,
+    # One filled primary, one outlined secondary — never two of the same weight.
+    assert_select "a[href=?].btn-primary", edit_album_path(@album)
+    assert_select "a[href=?].btn-secondary", refresh_from_discogs_album_path(@album)
+    assert_select "a[href=?].btn-primary", refresh_from_discogs_album_path(@album), false,
                   "refresh must not compete with edit"
 
-    # Destructive is danger-coloured and pushed away from the other two.
+    # Destructive reads as destructive and sits away from the other two.
     assert_select "form.ml-auto[action=?]", album_path(@album) do
-      assert_select "button.text-danger"
+      assert_select "button.btn-danger"
       assert_select "button[data-turbo-confirm]"
     end
   end

@@ -35,8 +35,120 @@ en:
       error_icon: "Error"
   
   vinyl_collection:
+    flash:
+      dismiss: "Dismiss"
+
+    nav:
+      brand: "Vinyl Collection"
+      collection: "Collection"
+      search_discogs: "Search Discogs"
+      sync: "Sync collection"
+      sync_confirm: "Sync your whole Discogs collection now? This can take a few minutes."
+      syncing: "Syncing…"
+      account: "Account"
+      log_out: "Log out"
+      open_menu: "Open menu"
+      account_menu: "Account menu"
+      switch_theme: "Switch theme"
+      discogs_connected: "Discogs connected"
+      discogs_not_connected: "Discogs not connected"
+
     albums:
       unknown_year: "Unknown"
+
+      sorts:
+        recent: "Recently added"
+        title: "Title A–Z"
+        newest: "Year, newest first"
+        oldest: "Year, oldest first"
+
+      index:
+        heading: "Your Vinyl Collection"
+        search_label: "Search the collection"
+        search_placeholder: "Search title or artist…"
+        filters: "Filters"
+        sort_label: "Sort by"
+        apply: "Apply filters"
+        clear_all: "Clear all"
+        add: "Add album"
+        all_years: "All years"
+        all_genres: "All genres"
+        all_artists: "All artists"
+        all_formats: "All formats"
+        year: "Year"
+        genre: "Genre"
+        artist: "Artist"
+        format: "Format"
+
+      results:
+        count:
+          one: "1 album"
+          other: "%{count} albums"
+        remove_filter: "Remove filter %{label}: %{value}"
+        filter_search: "Search"
+        filter_year: "Year"
+        filter_genre: "Genre"
+        filter_format: "Format"
+        filter_artist: "Artist"
+        clear_all: "Clear all"
+        empty_title: "Your crate is empty"
+        empty_body: "Import your Discogs collection in one go, or add the first record by hand."
+        empty_import: "Search Discogs"
+        empty_manual: "Add by hand"
+        no_results_title: "Nothing matches these filters"
+        no_results_body: "Try a different search, or drop one of the filters above."
+        no_results_clear: "Clear all filters"
+
+      card:
+        no_cover: "No cover"
+        cover_alt: "Cover of %{title} by %{artists}"
+        cover_alt_untitled: "Cover of %{title}"
+
+      form:
+        title: "Title"
+        year: "Year"
+        year_help: "Leave blank if the pressing year is unknown."
+        format: "Format"
+        select_format: "Select format"
+        catalog_number: "Catalog number"
+        artists: "Artists"
+        genres: "Genres"
+        multiple_help: "Hold Ctrl or Cmd to pick more than one."
+        cover: "Cover art"
+        cover_replace: "Choosing a file replaces the current cover."
+        cover_hint: "JPEG or PNG, square works best."
+        notes: "Notes"
+        create: "Add to collection"
+        update: "Save changes"
+        cancel: "Cancel"
+        errors:
+          one: "1 problem stopped this from saving"
+          other: "%{count} problems stopped this from saving"
+
+      new:
+        heading: "Add a record"
+
+      edit:
+        heading: "Edit record"
+
+      discogs:
+        heading: "Search Discogs"
+        subtitle: "Find a release in the Discogs database and import it into your crate."
+        not_connected_html: "Connect your Discogs account before searching. %{link} in your account settings."
+        not_connected_link: "Add your username and personal token"
+        search_label: "Search the Discogs database"
+        search_placeholder: "Artist, album or catalog number…"
+        search: "Search"
+        results: "Results"
+        import: "Import"
+        importing: "Importing…"
+        import_aria: "Import %{title}"
+        pages_label: "Search results pages"
+        previous: "Previous"
+        next: "Next"
+        page_of: "Page %{page} of %{pages}"
+        empty_title: "No releases found"
+        empty_body: "Nothing on Discogs matches “%{query}”. Try the artist name, or a catalog number from the sleeve."
       show:
         edit: "Edit"
         delete: "Delete"

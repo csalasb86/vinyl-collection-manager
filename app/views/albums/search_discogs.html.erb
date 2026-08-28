@@ -1,5 +1,5 @@
-<h1 class="font-display text-3xl font-extrabold tracking-tight mb-1">Search Discogs</h1>
-<p class="text-fg-muted mb-6">Find a release in the Discogs database and import it into your crate.</p>
+<h1 class="font-display text-3xl font-extrabold tracking-tight mb-1"><%= t("vinyl_collection.albums.discogs.heading") %></h1>
+<p class="text-fg-muted mb-6"><%= t("vinyl_collection.albums.discogs.subtitle") %></p>
 
 <% unless current_user.discogs_authenticated? %>
   <div role="status" class="flex items-start gap-3 p-4 mb-6 rounded-sleeve border border-line bg-surface-2">
@@ -7,9 +7,11 @@
       <circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/>
     </svg>
     <p class="text-sm text-fg-muted">
-      Connect your Discogs account before searching.
-      <%= link_to "Add your username and personal token", edit_user_registration_path, class: "text-accent hover:underline" %>
-      in your account settings.
+      <%# The _html suffix makes Rails treat this key as safe and escape the
+          interpolations, so no html_safe call is needed here. %>
+      <%= t("vinyl_collection.albums.discogs.not_connected_html",
+            link: link_to(t("vinyl_collection.albums.discogs.not_connected_link"),
+                          edit_user_registration_path, class: "text-accent hover:underline")) %>
     </p>
   </div>
 <% end %>
@@ -19,16 +21,16 @@
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="text-fg-subtle shrink-0" aria-hidden="true">
       <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
     </svg>
-    <span class="sr-only">Search the Discogs database</span>
+    <span class="sr-only"><%= t("vinyl_collection.albums.discogs.search_label") %></span>
     <%= f.search_field :query, value: @query, required: true,
-          placeholder: "Artist, album or catalog number…",
+          placeholder: t("vinyl_collection.albums.discogs.search_placeholder"),
           class: "w-full bg-transparent text-fg placeholder:text-fg-subtle focus:outline-none" %>
   </label>
-  <%= f.submit "Search", class: "px-4 py-2 rounded-sleeve bg-accent text-accent-fg font-medium hover:bg-accent-hover cursor-pointer" %>
+  <%= f.submit t("vinyl_collection.albums.discogs.search"), class: "btn btn-primary" %>
 <% end %>
 
 <% if @results.respond_to?(:results) && @results.results.any? %>
-  <h2 class="font-display text-[11px] tracking-widest uppercase text-fg-subtle mb-3">Results</h2>
+  <h2 class="font-display text-[11px] tracking-widest uppercase text-fg-subtle mb-3"><%= t("vinyl_collection.albums.discogs.results") %></h2>
 
   <ul class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
     <% @results.results.each do |result| %>
@@ -53,10 +55,10 @@
 
           <%= button_to import_from_discogs_albums_path(discogs_id: result.id, query: @query),
                 form_class: "mt-auto pt-2",
-                data: { turbo_submits_with: "Importing…" },
-                class: "px-3 py-1.5 rounded-sleeve bg-accent text-accent-fg text-xs font-medium hover:bg-accent-hover",
-                aria: { label: "Import #{result.title}" } do %>
-            Import
+                data: { turbo_submits_with: t("vinyl_collection.albums.discogs.importing") },
+                class: "btn btn-primary px-3 py-1.5 text-xs",
+                aria: { label: t("vinyl_collection.albums.discogs.import_aria", title: result.title) } do %>
+            <%= t("vinyl_collection.albums.discogs.import") %>
           <% end %>
         </div>
       </li>
@@ -64,17 +66,17 @@
   </ul>
 
   <% if @results.pagination.pages > 1 %>
-    <nav class="flex justify-center items-center gap-1 mt-8 text-sm font-medium" aria-label="Search results pages">
+    <nav class="flex justify-center items-center gap-1 mt-8 text-sm font-medium" aria-label="<%= t("vinyl_collection.albums.discogs.pages_label") %>">
       <% if @results.pagination.page > 1 %>
-        <%= link_to "Previous", search_discogs_albums_path(query: @query, page: @results.pagination.page - 1),
-              class: "px-3 py-2 rounded-sleeve border border-line bg-surface text-fg hover:bg-surface-2" %>
+        <%= link_to t("vinyl_collection.albums.discogs.previous"), search_discogs_albums_path(query: @query, page: @results.pagination.page - 1),
+              class: "btn btn-secondary" %>
       <% end %>
       <span class="px-3 py-2 font-mono text-xs text-fg-subtle tabular-nums">
-        Page <%= @results.pagination.page %> of <%= @results.pagination.pages %>
+        <%= t("vinyl_collection.albums.discogs.page_of", page: @results.pagination.page, pages: @results.pagination.pages) %>
       </span>
       <% if @results.pagination.page < @results.pagination.pages %>
-        <%= link_to "Next", search_discogs_albums_path(query: @query, page: @results.pagination.page + 1),
-              class: "px-3 py-2 rounded-sleeve border border-line bg-surface text-fg hover:bg-surface-2" %>
+        <%= link_to t("vinyl_collection.albums.discogs.next"), search_discogs_albums_path(query: @query, page: @results.pagination.page + 1),
+              class: "btn btn-secondary" %>
       <% end %>
     </nav>
   <% end %>
@@ -84,7 +86,7 @@
     <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="text-fg-subtle mb-4" aria-hidden="true">
       <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
     </svg>
-    <h2 class="font-display text-2xl font-bold">No releases found</h2>
-    <p class="mt-2 text-fg-muted max-w-prose">Nothing on Discogs matches &ldquo;<%= @query %>&rdquo;. Try the artist name, or a catalog number from the sleeve.</p>
+    <h2 class="font-display text-2xl font-bold"><%= t("vinyl_collection.albums.discogs.empty_title") %></h2>
+    <p class="mt-2 text-fg-muted max-w-prose"><%= t("vinyl_collection.albums.discogs.empty_body", query: @query) %></p>
   </div>
 <% end %>

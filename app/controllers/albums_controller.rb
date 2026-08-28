@@ -9,7 +9,7 @@ class AlbumsController < ApplicationController
     @artist_id = params[:artist_id]
     @format = params[:format]
 
-    @sort = Album::SORTS.key?(params[:sort]) ? params[:sort] : "recent"
+    @sort = Album::SORTS.include?(params[:sort]) ? params[:sort] : "recent"
 
     albums = Album.all
       .by_query(@q)

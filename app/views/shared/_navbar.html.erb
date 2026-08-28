@@ -7,12 +7,12 @@
           <circle cx="10" cy="10" r="5.5" stroke="currentColor" stroke-width="1" opacity="0.45"/>
           <circle cx="10" cy="10" r="1.6" fill="currentColor"/>
         </svg>
-        Vinyl Collection
+        <%= t("vinyl_collection.nav.brand") %>
       <% end %>
 
       <div class="hidden md:flex items-center gap-1 ml-4">
-        <%= nav_link_to "Collection", albums_path %>
-        <%= nav_link_to "Search Discogs", search_discogs_albums_path %>
+        <%= nav_link_to t("vinyl_collection.nav.collection"), albums_path %>
+        <%= nav_link_to t("vinyl_collection.nav.search_discogs"), search_discogs_albums_path %>
       </div>
 
       <div class="flex-1"></div>
@@ -27,7 +27,7 @@
               data-controller="theme"
               data-action="click->theme#toggle"
               aria-pressed="false"
-              aria-label="Switch theme"
+              aria-label="<%= t("vinyl_collection.nav.switch_theme") %>"
               class="inline-flex items-center gap-2 px-3 py-2 rounded-sleeve border border-line text-fg-muted hover:bg-surface-2 hover:text-fg">
         <svg data-theme-target="iconLight" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <circle cx="12" cy="12" r="4.2"/>
@@ -48,7 +48,7 @@
                   data-action="dropdown#toggle"
                   aria-haspopup="menu"
                   aria-expanded="false"
-                  aria-label="Account menu"
+                  aria-label="<%= t("vinyl_collection.nav.account_menu") %>"
                   class="flex items-center justify-center w-9 h-9 rounded-full border border-line bg-accent-soft text-accent text-xs font-semibold hover:border-accent">
             <%= avatar_initials(current_user) %>
           </button>
@@ -63,20 +63,20 @@
               <%= render "shared/discogs_status" %>
             </div>
 
-            <%= button_to "Sync collection", sync_collection_albums_path,
+            <%= button_to t("vinyl_collection.nav.sync"), sync_collection_albums_path,
                   form_class: "contents",
                   role: "menuitem",
                   data: {
-                    turbo_confirm: "Sync your whole Discogs collection now? This can take a few minutes.",
-                    turbo_submits_with: "Syncing…"
+                    turbo_confirm: t("vinyl_collection.nav.sync_confirm"),
+                    turbo_submits_with: t("vinyl_collection.nav.syncing")
                   },
                   class: "w-full text-left px-3 py-2 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg" %>
 
-            <%= link_to "Account", edit_user_registration_path,
+            <%= link_to t("vinyl_collection.nav.account"), edit_user_registration_path,
                   role: "menuitem",
                   class: "block px-3 py-2 text-sm text-fg-muted hover:bg-surface-2 hover:text-fg" %>
 
-            <%= button_to "Log out", destroy_user_session_path,
+            <%= button_to t("vinyl_collection.nav.log_out"), destroy_user_session_path,
                   method: :delete,
                   form_class: "contents",
                   role: "menuitem",
@@ -91,7 +91,7 @@
               data-action="drawer#toggle"
               aria-expanded="false"
               aria-controls="mobile-menu"
-              aria-label="Open menu"
+              aria-label="<%= t("vinyl_collection.nav.open_menu") %>"
               class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-sleeve border border-line text-fg-muted hover:bg-surface-2 hover:text-fg">
         <svg data-drawer-target="iconOpen" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M4 7h16M4 12h16M4 17h16"/>
@@ -109,23 +109,23 @@
        hidden
        class="md:hidden border-t border-line bg-surface">
     <div class="container mx-auto px-4 py-3 flex flex-col gap-1">
-      <%= nav_link_to "Collection", albums_path, mobile: true %>
-      <%= nav_link_to "Search Discogs", search_discogs_albums_path, mobile: true %>
+      <%= nav_link_to t("vinyl_collection.nav.collection"), albums_path, mobile: true %>
+      <%= nav_link_to t("vinyl_collection.nav.search_discogs"), search_discogs_albums_path, mobile: true %>
 
       <% if user_signed_in? %>
         <hr class="my-2 border-line">
 
-        <%= button_to "Sync collection", sync_collection_albums_path,
+        <%= button_to t("vinyl_collection.nav.sync"), sync_collection_albums_path,
               form_class: "contents",
               data: {
-                turbo_confirm: "Sync your whole Discogs collection now? This can take a few minutes.",
-                turbo_submits_with: "Syncing…"
+                turbo_confirm: t("vinyl_collection.nav.sync_confirm"),
+                turbo_submits_with: t("vinyl_collection.nav.syncing")
               },
               class: "flex items-center min-h-11 px-3 py-2 rounded-sleeve text-base text-fg-muted hover:bg-surface-2 hover:text-fg" %>
 
-        <%= nav_link_to "Account", edit_user_registration_path, mobile: true %>
+        <%= nav_link_to t("vinyl_collection.nav.account"), edit_user_registration_path, mobile: true %>
 
-        <%= button_to "Log out", destroy_user_session_path,
+        <%= button_to t("vinyl_collection.nav.log_out"), destroy_user_session_path,
               method: :delete,
               form_class: "contents",
               class: "flex items-center min-h-11 px-3 py-2 rounded-sleeve text-base text-fg-muted hover:bg-surface-2 hover:text-fg" %>

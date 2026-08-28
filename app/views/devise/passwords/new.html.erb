@@ -5,12 +5,12 @@
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <div>
-      <%= f.label :email, class: form_label_classes %>
-      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: form_input_classes %>
+      <%= f.label :email, class: "field-label" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "field" %>
     </div>
 
     <div>
-      <%= f.submit "Send Reset Instructions", class: primary_button_classes %>
+      <%= f.submit "Send Reset Instructions", class: "btn btn-primary btn-block" %>
     </div>
   <% end %>
 

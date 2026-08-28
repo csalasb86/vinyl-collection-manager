@@ -166,6 +166,57 @@
     @apply not-sr-only fixed top-3 left-3 z-50 rounded-sleeve bg-accent px-4 py-2 font-medium text-accent-fg;
   }
 
+  /* Buttons carry weight, not variety: one filled primary, an outlined
+     secondary, and a destructive that never looks like either. */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-sleeve
+           text-sm font-medium cursor-pointer transition;
+  }
+  .btn-primary {
+    @apply bg-accent text-accent-fg hover:bg-accent-hover;
+  }
+  .btn-secondary {
+    @apply border border-line bg-surface text-fg hover:bg-surface-2;
+  }
+  .btn-danger {
+    @apply border border-line text-danger hover:bg-danger-soft hover:border-danger;
+  }
+  .btn-ghost {
+    @apply text-fg-muted hover:bg-surface-2 hover:text-fg;
+  }
+  .btn-block {
+    @apply w-full;
+  }
+
+  /* Form fields */
+  .field {
+    @apply w-full px-3 py-2 bg-surface border border-line rounded-sleeve
+           text-fg placeholder:text-fg-subtle;
+  }
+  .field-label {
+    @apply block text-sm font-medium text-fg-muted mb-1;
+  }
+  .field-help {
+    @apply text-xs text-fg-subtle mt-1;
+  }
+
+  /* Toasts: fixed, so an announcement never shoves the page down the way the
+     old inline flash bar did. */
+  .toast-region {
+    @apply fixed inset-x-3 bottom-3 z-50 flex flex-col gap-2
+           sm:inset-x-auto sm:right-4 sm:bottom-4 sm:w-96;
+  }
+  .toast {
+    @apply flex items-start gap-3 p-3 pl-4 rounded-sleeve border border-line
+           border-l-[3px] bg-surface shadow-md text-sm;
+  }
+  .toast-ok {
+    @apply border-l-ok;
+  }
+  .toast-error {
+    @apply border-l-danger;
+  }
+
   /* Pagy pagination nav — pagy_nav emits bare .pagy links with no styles. */
   .pagy {
     @apply flex justify-center gap-1 text-sm font-medium;

@@ -5,8 +5,8 @@
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <div>
-      <%= f.label :email, class: form_label_classes %>
-      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: form_input_classes, "aria-describedby": "email-help" %>
+      <%= f.label :email, class: "field-label" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "field", "aria-describedby": "email-help" %>
     </div>
 
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -18,23 +18,23 @@
     <% end %>
 
     <div>
-      <%= f.label :password, class: form_label_classes %>
+      <%= f.label :password, class: "field-label" %>
       <p class="text-xs text-fg-subtle mb-1" id="password-help"><%= t('vinyl_collection.account.edit.help.password_blank') %></p>
-      <%= f.password_field :password, autocomplete: "new-password", class: form_input_classes, "aria-describedby": "password-help" %>
+      <%= f.password_field :password, autocomplete: "new-password", class: "field", "aria-describedby": "password-help" %>
       <% if @minimum_password_length %>
         <p class="text-xs text-fg-subtle mt-1"><%= @minimum_password_length %> characters minimum</p>
       <% end %>
     </div>
 
     <div>
-      <%= f.label :password_confirmation, class: form_label_classes %>
-      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: form_input_classes %>
+      <%= f.label :password_confirmation, class: "field-label" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "field" %>
     </div>
 
     <div>
-      <%= f.label :current_password, class: form_label_classes %>
+      <%= f.label :current_password, class: "field-label" %>
       <p class="text-xs text-fg-subtle mb-1" id="current-password-help"><%= t('vinyl_collection.account.edit.help.current_password') %></p>
-      <%= f.password_field :current_password, autocomplete: "current-password", class: form_input_classes, "aria-describedby": "current-password-help" %>
+      <%= f.password_field :current_password, autocomplete: "current-password", class: "field", "aria-describedby": "current-password-help" %>
     </div>
 
     <!-- Discogs Configuration Section -->
@@ -43,15 +43,15 @@
       
       <div class="space-y-4">
         <div>
-          <%= f.label :discogs_username, t('vinyl_collection.account.edit.discogs_username'), class: form_label_classes %>
-          <%= f.text_field :discogs_username, class: form_input_classes, placeholder: t('vinyl_collection.account.edit.placeholders.discogs_username'), "aria-describedby": "discogs-username-help" %>
-          <p class="<%= help_text_classes %>" id="discogs-username-help"><%= t('vinyl_collection.account.edit.help.discogs_username') %></p>
+          <%= f.label :discogs_username, t('vinyl_collection.account.edit.discogs_username'), class: "field-label" %>
+          <%= f.text_field :discogs_username, class: "field", placeholder: t('vinyl_collection.account.edit.placeholders.discogs_username'), "aria-describedby": "discogs-username-help" %>
+          <p class="field-help" id="discogs-username-help"><%= t('vinyl_collection.account.edit.help.discogs_username') %></p>
         </div>
 
         <div>
-          <%= f.label :discogs_token, t('vinyl_collection.account.edit.discogs_token'), class: form_label_classes %>
-          <%= f.password_field :discogs_token, class: form_input_classes, placeholder: t('vinyl_collection.account.edit.placeholders.discogs_token'), "aria-describedby": "discogs-token-help" %>
-          <p class="<%= help_text_classes %>" id="discogs-token-help"><%= t('vinyl_collection.account.edit.help.discogs_token', link: link_to(t('vinyl_collection.account.edit.links.discogs_settings'), "https://www.discogs.com/settings/developers", target: "_blank", rel: "noopener noreferrer", class: "text-accent hover:text-accent underline", "aria-label": t('vinyl_collection.account.edit.aria.discogs_settings'))).html_safe %></p>
+          <%= f.label :discogs_token, t('vinyl_collection.account.edit.discogs_token'), class: "field-label" %>
+          <%= f.password_field :discogs_token, class: "field", placeholder: t('vinyl_collection.account.edit.placeholders.discogs_token'), "aria-describedby": "discogs-token-help" %>
+          <p class="field-help" id="discogs-token-help"><%= t('vinyl_collection.account.edit.help.discogs_token', link: link_to(t('vinyl_collection.account.edit.links.discogs_settings'), "https://www.discogs.com/settings/developers", target: "_blank", rel: "noopener noreferrer", class: "text-accent hover:text-accent underline", "aria-label": t('vinyl_collection.account.edit.aria.discogs_settings'))).html_safe %></p>
         </div>
 
         <% if resource.discogs_username.present? && resource.discogs_token.present? %>
@@ -110,7 +110,7 @@
     </div>
 
     <div>
-      <%= f.submit t('vinyl_collection.account.edit.update_account'), class: primary_button_classes %>
+      <%= f.submit t('vinyl_collection.account.edit.update_account'), class: "btn btn-primary btn-block" %>
     </div>
   <% end %>
 
