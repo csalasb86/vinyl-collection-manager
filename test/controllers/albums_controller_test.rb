@@ -178,10 +178,15 @@ class AlbumsControllerTest < ActionDispatch::IntegrationTest
 
     # Mock the service
     mock_service = Minitest::Mock.new
-    mock_release = Struct.new(:id, :title, :year, :artists, :tracklist, :images).new(
+    mock_release = Struct.new(:id, :title, :year, :formats, :genres, :uri, :labels, :notes, :artists, :tracklist, :images).new(
       123,
       "Refreshed Album",
       1990,
+      [ { "name" => "LP" } ],
+      [ "Rock" ],
+      "https://discogs.com/release/123",
+      [ { "catno" => "REF123" } ],
+      "Refreshed notes",
       [],
       [],
       []
@@ -195,6 +200,12 @@ class AlbumsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to album_url(@album)
     assert_equal "Album was successfully refreshed from Discogs.", flash[:notice]
     mock_service.verify
+
+    # The whole point of the action: the record actually changed
+    @album.reload
+    assert_equal "Refreshed Album", @album.title
+    assert_equal 1990, @album.year
+    assert_equal "REF123", @album.catalog_number
   end
 
   test "should not refresh album without discogs_id" do

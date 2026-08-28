@@ -220,4 +220,71 @@ class AlbumTest < ActiveSupport::TestCase
     assert_nil album.year, "Discogs year 0 means unknown and must not be stored as 0"
     assert_equal "Unknown", album.year_label
   end
+
+
+  # --- Discogs import vs. refresh -------------------------------------------
+
+  def discogs_release(id: 777, title: "Original Title", year: 1970,
+                      catno: "CAT-1", tracks: [ [ "A1", "Opener", "3:00" ] ])
+    Struct.new(:id, :title, :year, :formats, :genres, :uri, :labels, :notes, :artists, :tracklist, :images).new(
+      id, title, year,
+      [ { "name" => "LP" } ], [ "Rock" ],
+      "https://discogs.com/release/#{id}",
+      [ { "catno" => catno } ], "Discogs notes", [],
+      tracks.map { |pos, t, dur| Struct.new(:position, :title, :duration).new(pos, t, dur) },
+      []
+    )
+  end
+
+  test "refresh overwrites the Discogs fields of an existing album" do
+    album = Album.find_or_create_from_discogs(discogs_release)
+    album.update!(title: "Edited By Hand", catalog_number: "LOCAL-1")
+
+    refreshed = Album.find_or_create_from_discogs(
+      discogs_release(title: "Corrected Title", year: 1971, catno: "CAT-2"), refresh: true
+    )
+
+    assert_equal album.id, refreshed.id
+    assert_equal "Corrected Title", refreshed.title
+    assert_equal 1971, refreshed.year
+    assert_equal "CAT-2", refreshed.catalog_number
+  end
+
+  test "import and sync never clobber local edits on an existing album" do
+    album = Album.find_or_create_from_discogs(discogs_release)
+    album.update!(title: "Edited By Hand", catalog_number: "LOCAL-1")
+
+    same = Album.find_or_create_from_discogs(discogs_release(title: "Corrected Title", catno: "CAT-2"))
+
+    assert_equal album.id, same.id
+    assert_equal "Edited By Hand", same.reload.title
+    assert_equal "LOCAL-1", same.catalog_number
+  end
+
+  test "refresh mirrors the tracklist: updates, adds and removes" do
+    album = Album.find_or_create_from_discogs(
+      discogs_release(tracks: [ [ "A1", "Old Name", "3:00" ], [ "A2", "Dropped Track", "4:00" ] ])
+    )
+    assert_equal 2, album.tracks.count
+
+    Album.find_or_create_from_discogs(
+      discogs_release(tracks: [ [ "A1", "New Name", "3:30" ], [ "B1", "Added Track", "5:00" ] ]),
+      refresh: true
+    )
+
+    album.reload
+    assert_equal [ "A1", "B1" ], album.tracks.order(:position).pluck(:position)
+    assert_equal "New Name", album.tracks.find_by(position: "A1").title
+    assert_equal "3:30", album.tracks.find_by(position: "A1").duration
+    assert_nil album.tracks.find_by(position: "A2")
+  end
+
+  test "sync backfills a tracklist that never made it in" do
+    album = Album.find_or_create_from_discogs(discogs_release(tracks: []))
+    assert_empty album.tracks
+
+    Album.find_or_create_from_discogs(discogs_release(tracks: [ [ "A1", "Opener", "3:00" ] ]))
+
+    assert_equal [ "A1" ], album.reload.tracks.pluck(:position)
+  end
 end

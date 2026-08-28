@@ -104,7 +104,7 @@ class AlbumsController < ApplicationController
 
       begin
         release = discogs_service.get_release(@album.discogs_id)
-        @album = Album.find_or_create_from_discogs(release)
+        @album = Album.find_or_create_from_discogs(release, refresh: true)
 
         redirect_to @album, notice: "Album was successfully refreshed from Discogs."
       rescue => e

@@ -21,55 +21,81 @@ class Album < ApplicationRecord
     .joins(:artists) if query.present?
   }
 
-  def self.find_or_create_from_discogs(discogs_release)
-    album = find_or_create_by(discogs_id: discogs_release.id) do |album|
-      album.title = discogs_release.title
-      album.year = discogs_release.year.to_i.positive? ? discogs_release.year : nil
-      album.format = discogs_release.formats&.first&.dig("name") || "Vinyl"
-      album.genre = discogs_release.genres || []
-      album.discogs_url = discogs_release.uri
-      album.catalog_number = discogs_release.labels&.first&.dig("catno")
-      album.notes = discogs_release.notes
-    end
+  # Imports a Discogs release.
+  #
+  # refresh: false (import and collection sync) creates albums that are new and
+  # leaves existing ones untouched, only backfilling a tracklist or cover that
+  # never made it in. Every Discogs field is editable in the album form, so a
+  # sync must not silently overwrite what the user typed.
+  #
+  # refresh: true ("Refresh from Discogs") is the user explicitly asking for the
+  # Discogs version, so attributes, tracklist and cover are all overwritten.
+  def self.find_or_create_from_discogs(discogs_release, refresh: false)
+    album = find_or_initialize_by(discogs_id: discogs_release.id)
+    overwrite = album.new_record? || refresh
 
-    # Associate artists
-    discogs_release.artists&.each do |discogs_artist|
-      artist = Artist.find_or_create_from_discogs(discogs_artist)
-      album.artists << artist unless album.artists.include?(artist)
-    end
+    assign_discogs_attributes(album, discogs_release) if overwrite
+    album.save!
 
-    # Create tracks
-    discogs_release.tracklist&.each_with_index do |discogs_track, index|
-      next if discogs_track.position.blank? || discogs_track.title.blank?
-
-      album.tracks.find_or_create_by(position: discogs_track.position) do |track|
-        track.title = discogs_track.title
-        track.duration = discogs_track.duration
-        track.position_index = index + 1
-      end
-    end
-
-    # Download cover image if available
-    if discogs_release.images&.any?
-      primary_image = discogs_release.images.find { |img| img.type == "primary" } || discogs_release.images.first
-      if primary_image&.uri.present?
-        begin
-          response = Faraday.get(primary_image.uri)
-          if response.success?
-            album.cover.attach(
-              io: StringIO.new(response.body),
-              filename: "#{album.title.parameterize}.jpg",
-              content_type: "image/jpeg"
-            )
-          end
-        rescue => e
-          Rails.logger.error("Failed to download cover for album #{album.id}: #{e.message}")
-        end
-      end
-    end
+    assign_discogs_artists(album, discogs_release.artists) if overwrite
+    sync_discogs_tracks(album, discogs_release.tracklist) if overwrite || album.tracks.empty?
+    attach_discogs_cover(album, discogs_release.images) if overwrite || !album.cover.attached?
 
     album
   end
+
+  def self.assign_discogs_attributes(album, discogs_release)
+    album.title = discogs_release.title
+    album.year = discogs_release.year.to_i.positive? ? discogs_release.year : nil
+    album.format = discogs_release.formats&.first&.dig("name") || "Vinyl"
+    album.genre = discogs_release.genres || []
+    album.discogs_url = discogs_release.uri
+    album.catalog_number = discogs_release.labels&.first&.dig("catno")
+    album.notes = discogs_release.notes
+  end
+  private_class_method :assign_discogs_attributes
+
+  def self.assign_discogs_artists(album, discogs_artists)
+    album.artists = Array(discogs_artists).map do |discogs_artist|
+      Artist.find_or_create_from_discogs(discogs_artist)
+    end.uniq
+  end
+  private_class_method :assign_discogs_artists
+
+  # Mirrors the Discogs tracklist: updates tracks whose position already exists,
+  # adds the new ones and drops the ones the release no longer has.
+  def self.sync_discogs_tracks(album, discogs_tracklist)
+    kept_ids = Array(discogs_tracklist).each_with_index.filter_map do |discogs_track, index|
+      next if discogs_track.position.blank? || discogs_track.title.blank?
+
+      track = album.tracks.find_or_initialize_by(position: discogs_track.position)
+      track.title = discogs_track.title
+      track.duration = discogs_track.duration
+      track.position_index = index + 1
+      track.save!
+      track.id
+    end
+
+    album.tracks.where.not(id: kept_ids).destroy_all
+  end
+  private_class_method :sync_discogs_tracks
+
+  def self.attach_discogs_cover(album, images)
+    primary_image = Array(images).find { |img| img.type == "primary" } || Array(images).first
+    return if primary_image&.uri.blank?
+
+    response = Faraday.get(primary_image.uri)
+    return unless response.success?
+
+    album.cover.attach(
+      io: StringIO.new(response.body),
+      filename: "#{album.title.parameterize}.jpg",
+      content_type: "image/jpeg"
+    )
+  rescue => e
+    Rails.logger.error("Failed to download cover for album #{album.id}: #{e.message}")
+  end
+  private_class_method :attach_discogs_cover
 
   def display_artists
     artists.map(&:name).join(", ")
