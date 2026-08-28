@@ -61,7 +61,7 @@
             <div class="p-3">
               <h3 class="font-semibold text-sm truncate"><%= album.title %></h3>
               <p class="text-xs text-gray-600 truncate"><%= album.display_artists %></p>
-              <p class="text-xs text-gray-500 mt-1"><%= album.year %> · <%= album.format %></p>
+              <p class="text-xs text-gray-500 mt-1"><%= [ album.year, album.format ].compact_blank.join(" · ") %></p>
             </div>
           <% end %>
         </div>

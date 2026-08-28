@@ -183,4 +183,41 @@ class AlbumTest < ActiveSupport::TestCase
       assert_equal existing_album, found_album
     end
   end
+
+  test "year of zero is stored as nil, not zero" do
+    album = Album.create!(title: "Unknown Year LP", year: 0)
+
+    assert_nil album.year
+  end
+
+  test "blank year stays nil" do
+    album = Album.create!(title: "No Year LP", year: nil)
+
+    assert_nil album.year
+  end
+
+  test "valid year is left untouched" do
+    album = Album.create!(title: "Dated LP", year: 1977)
+
+    assert_equal 1977, album.year
+  end
+
+  test "year_label falls back to Unknown when year is missing" do
+    assert_equal "Unknown", Album.new(title: "X").year_label
+    assert_equal 1977, Album.new(title: "X", year: 1977).year_label
+  end
+
+  test "find_or_create_from_discogs stores unknown Discogs year as nil" do
+    discogs_release = Struct.new(:id, :title, :year, :formats, :genres, :uri, :labels, :notes, :artists, :tracklist, :images).new(
+      999, "Yearless Release", 0,
+      [ { "name" => "Vinyl" } ], [ "Rock" ],
+      "https://discogs.com/release/999",
+      [ { "catno" => "ZZZ999" } ], nil, [], [], []
+    )
+
+    album = Album.find_or_create_from_discogs(discogs_release)
+
+    assert_nil album.year, "Discogs year 0 means unknown and must not be stored as 0"
+    assert_equal "Unknown", album.year_label
+  end
 end

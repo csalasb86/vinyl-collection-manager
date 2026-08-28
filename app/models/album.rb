@@ -8,6 +8,10 @@ class Album < ApplicationRecord
   validates :title, presence: true
   validates :discogs_id, uniqueness: true, allow_nil: true
 
+  # Discogs sends year: 0 for releases with no known year, and the form can
+  # submit a blank that casts to 0. Unknown is NULL, never zero.
+  before_validation :normalize_unknown_year
+
   scope :by_year, ->(year) { where(year: year) if year.present? }
   scope :by_genre, ->(genre) { where("genre && ARRAY[?]::varchar[]", [ genre ]) if genre.present? }
   scope :by_artist, ->(artist_id) { joins(:artists).where(artists: { id: artist_id }) if artist_id.present? }
@@ -20,7 +24,7 @@ class Album < ApplicationRecord
   def self.find_or_create_from_discogs(discogs_release)
     album = find_or_create_by(discogs_id: discogs_release.id) do |album|
       album.title = discogs_release.title
-      album.year = discogs_release.year
+      album.year = discogs_release.year.to_i.positive? ? discogs_release.year : nil
       album.format = discogs_release.formats&.first&.dig("name") || "Vinyl"
       album.genre = discogs_release.genres || []
       album.discogs_url = discogs_release.uri
@@ -77,5 +81,16 @@ class Album < ApplicationRecord
     else
       ActionController::Base.helpers.asset_path("placeholder_album.png")
     end
+  end
+
+  # Year for display: releases with no known year read as "Unknown", not "0".
+  def year_label
+    year.presence || I18n.t("vinyl_collection.albums.unknown_year")
+  end
+
+  private
+
+  def normalize_unknown_year
+    self.year = nil unless year.to_i.positive?
   end
 end

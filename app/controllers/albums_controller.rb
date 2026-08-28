@@ -19,7 +19,7 @@ class AlbumsController < ApplicationController
 
     @pagy, @albums = pagy(albums, items: 24)
 
-    @years = Album.distinct.pluck(:year).compact.sort.reverse
+    @years = Album.where.not(year: nil).distinct.pluck(:year).sort.reverse
     @genres = Album.pluck(:genre).flatten.uniq.sort
     @artists = Artist.order(:name)
     @formats = Album.distinct.pluck(:format).compact.sort

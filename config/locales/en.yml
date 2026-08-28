@@ -36,6 +36,7 @@ en:
   
   vinyl_collection:
     albums:
+      unknown_year: "Unknown"
       show:
         edit: "Edit"
         delete: "Delete"
